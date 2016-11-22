@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# Depends: golang curl libtool gettext m4 autoconf
+
 KERNEL_VERSION="4.7.2"
 KERNEL_CHECKSUM="ae493473d074185205a54bc8ad49c3b4"
 
@@ -331,9 +333,10 @@ install_cores() {
 }
 
 build_cores() {
+    # We need to prepare first to download code
+    prepare_cores
     pushd $GOPATH/src/github.com/g8os
 
-    prepare_cores
     compile_cores
     install_cores
 
