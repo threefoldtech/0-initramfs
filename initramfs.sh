@@ -3,7 +3,7 @@ set -e
 
 # Host dependancies (ubuntu 16.04):
 #  - golang 1.7.1
-#  - curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev
+#  - curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc
 
 KERNEL_VERSION="4.7.2"
 KERNEL_CHECKSUM="ae493473d074185205a54bc8ad49c3b4"
@@ -345,7 +345,7 @@ compile_cores() {
     echo "[+] compiling coreX"
     pushd coreX && go build && popd
 
-    echo "[+] compiling coreX"
+    echo "[+] compiling core0"
     pushd core0 && go build && popd
 }
 
@@ -467,7 +467,7 @@ ensure_libs() {
 
     # Copiyng ld-dependancy
     ld=$(ldd /bin/bash | grep ld-linux | awk '{ print $1 }')
-    cp -La $ld lib/
+    cp -aL $ld lib/
 
     for file in $(find -type f -executable); do
         # Looking for dynamic libraries shared
@@ -483,7 +483,7 @@ ensure_libs() {
             fi
 
             # Grabbing library from host
-            cp -La $lib usr/lib/
+            cp -aL $lib usr/lib/
         done
     done
 
