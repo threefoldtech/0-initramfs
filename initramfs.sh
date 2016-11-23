@@ -518,7 +518,7 @@ clean_root() {
     chmod +x "${ROOTDIR}/init"
 
     # ensure minimal /dev and /mnt
-    mknod -m 622 "${ROOTDIR}"/dev/onsole c 5 1
+    mknod -m 622 "${ROOTDIR}"/dev/console c 5 1
     mkdir "${ROOTDIR}"/mnt/root
 }
 
