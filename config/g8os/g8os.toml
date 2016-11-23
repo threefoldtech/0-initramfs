@@ -1,0 +1,35 @@
+#leave /tmp and /opt/jumpscale8 in this file, gets replaced during installation
+
+[main]
+max_jobs = 200
+include = "/root/conf"
+network = "/etc/g8os/network.toml"
+
+[sink.main]
+url = "redis://127.0.0.1:6379"
+password = ""
+
+[channel]
+cmds = [] # empty for long polling from all defined controllers, or specif controllers keys
+
+[extension.bash]
+binary = "/bin/ash"
+args = ['-c', 'T=`mktemp` && cat > $T && bash $T; EXIT=$?; rm -rf $T; exit $EXIT']
+
+[logging]
+    [logging.db]
+    type = "DB"
+    address = "/var/log/g8os"
+    levels = [2, 4, 7, 8, 9, 11]  # (all error messages + debug) empty for all
+
+    [logging.console]
+    type = "console"
+    levels = [1, 2, 4, 7, 8, 9]
+
+[stats]
+interval = 60000 # milliseconds (1 min)
+
+[stats.redis]
+enabled = false
+flush_interval = 100 # millisecond
+address = "127.0.0.1:6379"

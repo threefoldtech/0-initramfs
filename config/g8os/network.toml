@@ -1,0 +1,8 @@
+[network]
+auto = true
+
+[interface.lo]
+protocol = "static"
+
+[static.lo]
+ip = "127.0.0.1/8"
