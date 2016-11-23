@@ -152,7 +152,7 @@ download_file() {
     fi
 
     # Download the file
-    curl -L --progress-bar -C - -o "${output}" $1
+    curl -L -k --progress-bar -C - -o "${output}" $1
 
     # Checksum the downloaded file
     checksum ${output} $2 || false
@@ -337,8 +337,8 @@ compile_kernel() {
 }
 
 install_kernel() {
-    ls -alh arch/x86/boot/bzImage
-    return
+    cp arch/x86/boot/bzImage "${WORKDIR}"/vmlinuz.efi
+    echo "[+] kernel installed: ${WORKDIR}/vmlinuz.efi"
 }
 
 build_kernel() {
