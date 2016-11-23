@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 
-# Depends: golang curl libtool gettext m4 autoconf
+# Host dependancies (ubuntu 16.04):
+#  - golang 1.7.1
+#  - curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev
 
 KERNEL_VERSION="4.7.2"
 KERNEL_CHECKSUM="ae493473d074185205a54bc8ad49c3b4"
@@ -467,7 +469,7 @@ ensure_libs() {
 
     for file in $(find -type f -executable); do
         # Looking for dynamic libraries shared
-        libs=$(ldd $file 2>&1 | grep '=>' | awk '{ print $3 }' || true)
+        libs=$(ldd $file 2>&1 | grep '=>' | grep -v '=>  (' | awk '{ print $3 }' || true)
 
         # Checking each libraries
         for lib in $libs; do
