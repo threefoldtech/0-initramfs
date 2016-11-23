@@ -465,7 +465,9 @@ ensure_libs() {
     if [ ! -e lib64 ]; then ln -s usr/lib lib64; fi
     if [ ! -e lib ]; then ln -s lib64 lib; fi
 
-    cp -a /lib64/ld-* lib64/
+    # Copiyng ld-dependancy
+    ld=$(ldd /bin/bash | grep ld-linux | awk '{ print $1 }')
+    cp -La $ld lib/
 
     for file in $(find -type f -executable); do
         # Looking for dynamic libraries shared
@@ -481,8 +483,7 @@ ensure_libs() {
             fi
 
             # Grabbing library from host
-            basename=$(echo $lib | awk -F'.so' '{ print $1 }')
-            cp -a $basename* usr/lib/
+            cp -La $lib usr/lib/
         done
     done
 
