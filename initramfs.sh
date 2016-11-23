@@ -458,6 +458,22 @@ build_linuxutil() {
 #
 # Dynamic libraries management
 #
+resolv_libs() {
+    paths=$(grep -hr ^/ /etc/ld.so.conf*)
+    for path in $paths; do
+        if [ ! -e "$path/libresolv.so.2" ]; then
+            continue
+        fi
+
+        cp -aL $path/libresolv* "${ROOTDIR}/usr/lib/"
+        cp -a $path/libnss_{compat,dns,files}* "${ROOTDIR}/usr/lib/"
+        return
+    done
+
+    echo "[-] warning: no libs found for resolving names"
+    echo "[-] you will probably not be able to do dns request"
+}
+
 ensure_libs() {
     echo "[+] verifing libraries dependancies"
     pushd "${ROOTDIR}"
@@ -468,6 +484,9 @@ ensure_libs() {
     # Copiyng ld-dependancy
     ld=$(ldd /bin/bash | grep ld-linux | awk '{ print $1 }')
     cp -aL $ld lib/
+
+    # Copying resolv libraries
+    resolv_libs
 
     for file in $(find -type f -executable); do
         # Looking for dynamic libraries shared
@@ -493,6 +512,14 @@ ensure_libs() {
 #
 # Cleaner
 #
+mknod_die() {
+    echo "[-] mknod need root access, please run this command as root:"
+    echo "[-]   mknod -m 622 "${ROOTDIR}"/dev/console c 5 1"
+    echo "[-] and try again."
+
+    exit 1
+}
+
 clean_root() {
     echo "[+] cleaning initramfs"
 
@@ -512,14 +539,27 @@ clean_root() {
     rm -rf usr/lib/pkgconfig
     rm -rf usr/include
     popd
+}
 
+g8os_root() {
     # copy init
+    echo "[+] installing init script"
     cp "${CONFDIR}/init" "${ROOTDIR}/init"
     chmod +x "${ROOTDIR}/init"
 
     # ensure minimal /dev and /mnt
-    mknod -m 622 "${ROOTDIR}"/dev/console c 5 1
-    mkdir "${ROOTDIR}"/mnt/root
+    echo "[+] creating default directories and files"
+    mkdir -p "${ROOTDIR}"/mnt/root
+
+    if [ ! -e "${ROOTDIR}"/dev/console ]; then
+        # mknod need to be run as root
+        mknod -m 622 "${ROOTDIR}"/dev/console c 5 1 || mknod_die
+    fi
+
+    echo "[+] installing g8os configuration"
+    cp -a "${CONFDIR}"/g8os "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/root "${ROOTDIR}"/root/conf
+    cp -a "${CONFDIR}"/udhcp "${ROOTDIR}"/usr/share/
 }
 
 main() {
@@ -559,7 +599,10 @@ main() {
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]]; then
         ensure_libs
         clean_root
+        g8os_root
         build_kernel
+
+
     fi
 }
 
