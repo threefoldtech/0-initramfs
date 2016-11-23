@@ -23,6 +23,11 @@ PARTED_CHECKSUM="0247b6a7b314f8edeb618159fa95f9cb"
 LINUXUTILS_VERSION="2.29"
 LINUXUTILS_CHECKSUM="07b6845f48a421ad5844aa9d58edb837"
 
+REDIS_VERSION="3.2.5"
+REDIS_CHECKSUM="d3d2b4dd4b2a3e07ee6f63c526b66b08"
+
+IPFS_VERSION="0.4.4"
+IPFS_CHECKSUM="928a943e2af339b30f93fade59cfe0d4"
 
 
 # You need to use absolutes path
@@ -39,6 +44,8 @@ FUSE_LINK="https://github.com/libfuse/libfuse/archive/fuse-${FUSE_VERSION}.tar.g
 CERTS_LINK="http://ftp.fr.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_${CERTS_VERSION}_all.deb"
 PARTED_LINK="http://ftp.gnu.org/gnu/parted/parted-${PARTED_VERSION}.tar.xz"
 LINUXUTILS_LINK="https://www.kernel.org/pub/linux/utils/util-linux/v2.29/util-linux-${LINUXUTILS_VERSION}.tar.xz"
+REDIS_LINK="http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz"
+IPFS_LINK="https://dist.ipfs.io/go-ipfs/v0.4.4/go-ipfs_v${IPFS_VERSION}_linux-amd64.tar.gz"
 
 #
 # Flags
@@ -164,6 +171,8 @@ download() {
     download_file $CERTS_LINK $CERTS_CHECKSUM
     download_file $PARTED_LINK $PARTED_CHECKSUM
     download_file $LINUXUTILS_LINK $LINUXUTILS_CHECKSUM
+    download_file $REDIS_LINK $REDIS_CHECKSUM
+    download_file $IPFS_LINK $IPFS_CHECKSUM
 
     popd
 }
@@ -209,6 +218,16 @@ extract() {
     if [ ! -d "util-linux-${LINUXUTILS_VERSION}" ]; then
         echo "[+] extracting: util-linux-${LINUXUTILS_VERSION}"
         tar -xf ${DISTFILES}/util-linux-${LINUXUTILS_VERSION}.tar.xz -C .
+    fi
+
+    if [ ! -d "redis-${REDIS_VERSION}" ]; then
+        echo "[+] extracting: redis-${REDIS_VERSION}"
+        tar -xf ${DISTFILES}/redis-${REDIS_VERSION}.tar.gz -C .
+    fi
+
+    if [ ! -d "go-ipfs-${IPFS_VERSION}" ]; then
+        echo "[+] extracting: go-ipfs-${IPFS_VERSION}"
+        tar -xf ${DISTFILES}/go-ipfs_v${IPFS_VERSION}_linux-amd64.tar.gz -C .
     fi
 
     popd
@@ -455,6 +474,54 @@ build_linuxutil() {
     popd
 }
 
+# redis
+prepare_redis() {
+    echo "[+] preparing redis"
+    return
+}
+
+compile_redis() {
+    make ${MAKEOPTS}
+}
+
+install_redis() {
+    cp -a src/redis-server "${ROOTDIR}"/usr/bin/
+}
+
+build_redis() {
+    pushd "${WORKDIR}/redis-${REDIS_VERSION}"
+
+    prepare_redis
+    compile_redis
+    install_redis
+
+    popd
+}
+
+# ipfs
+prepare_ipfs() {
+    echo "[+] preparing ipfs"
+}
+
+compile_ipfs() {
+    return
+}
+
+install_ipfs() {
+    echo "[+] installing ipfs"
+    cp -a ipfs "${ROOTDIR}"/usr/bin/
+}
+
+build_ipfs() {
+    pushd "${WORKDIR}/go-ipfs"
+
+    prepare_ipfs
+    compile_ipfs
+    install_ipfs
+
+    popd
+}
+
 #
 # Dynamic libraries management
 #
@@ -562,6 +629,8 @@ g8os_root() {
     cp -a "${CONFDIR}"/udhcp "${ROOTDIR}"/usr/share/
 }
 
+
+
 main() {
     #
     # Display some informations
@@ -590,6 +659,8 @@ main() {
         build_certs
         build_parted
         build_linuxutil
+        build_redis
+        build_ipfs
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
@@ -601,8 +672,6 @@ main() {
         clean_root
         g8os_root
         build_kernel
-
-
     fi
 }
 
