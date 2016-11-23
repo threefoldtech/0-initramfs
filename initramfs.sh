@@ -516,6 +516,10 @@ clean_root() {
     # copy init
     cp "${CONFDIR}/init" "${ROOTDIR}/init"
     chmod +x "${ROOTDIR}/init"
+
+    # ensure minimal /dev and /mnt
+    mknod -m 622 "${ROOTDIR}"/dev/onsole c 5 1
+    mkdir "${ROOTDIR}"/mnt/root
 }
 
 main() {
