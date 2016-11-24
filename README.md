@@ -4,7 +4,7 @@ This repository contains all needed to build the g8os-kernel and initramfs to st
 # Dependencies
 Under Ubuntu 16.04, you will need this in order to compile everything:
  - `golang` (version 1.7.1)
- - `xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev asciidoc`
+ - `xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev asciidoc git`
 
 This dependencies is of course valid for any other system but adapt it yourself to your case.
 
@@ -25,3 +25,28 @@ Under Gentoo, you probably already have all the dependancies.
  - Compiling the kernel (initramfs is bundled)
 
 
+# How to use it ?
+## Easy way
+Just type: `bash initramfs.sh` and everything should be done in one shot.
+
+## Custom way
+The `initramfs.sh` script accepts multiple options:
+```
+ -d --download    only download and extract archives
+ -b --busybox     only (re)build busybox
+ -t --tools       only (re)build tools (ssl, fuse, ...)
+ -c --cores       only (re)build core0 and coreX
+ -k --kernel      only (re)build kernel (produce final image)
+ -h --help        display this help message
+```
+
+The option `--kernel` is useful if you changes something on the root directory and want to rebuild the kernel (with the initramfs).
+
+If you are modifying the core0/coreX, you can simply use `--cores --kernel` options and the cores will be rebuild and the initramfs rebuild after.
+This will produce easily a new image with last changes.
+
+# I have the kernel, what can I do with it ?
+Just boot it. The kernel image if EFI bootable.
+
+If you have a EFI Shell, just run the kernel like any EFI executable.
+If you don't have the shell or want to boot it automaticaly, put the kernel in `/EFI/BOOT/BOOTX64.EFI` in a FAT partition.
