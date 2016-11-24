@@ -45,6 +45,31 @@ The option `--kernel` is useful if you changes something on the root directory a
 If you are modifying the core0/coreX, you can simply use `--cores --kernel` options and the cores will be rebuild and the initramfs rebuild after.
 This will produce easily a new image with last changes.
 
+## Build using a docker container
+
+From the root of this repository, create a docker container
+```shell
+docker run -v `pwd`:/initramfs --ti ubuntu:16.04 /bin/bash
+```
+
+Then from inside the docker
+```shell
+# install dependencies for building
+apt-get update
+apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev asciidoc git
+
+# install go
+curl https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz > go1.7.3.linux-amd64.tar.gz
+tar -C /usr/local -xzf go1.7.3.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+mkdir /gopath
+export GOPATH=/gopath
+
+# start the build
+bash initramfs.sh
+```
+The result of the build will be located in `staging/vmlinuz.efi`
+
 # I have the kernel, what can I do with it ?
 Just boot it. The kernel image if EFI bootable.
 
