@@ -534,10 +534,10 @@ build_ipfs() {
     popd
 }
 
-# parted
+# btrfs-progs
 prepare_btrfs() {
     echo "[+] configuring btrfs-progs"
-    ./configure --prefix /usr
+    ./configure --prefix /usr --disable-documentation
 }
 
 compile_btrfs() {
