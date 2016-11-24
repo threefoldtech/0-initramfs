@@ -29,6 +29,9 @@ REDIS_CHECKSUM="d3d2b4dd4b2a3e07ee6f63c526b66b08"
 IPFS_VERSION="0.4.4"
 IPFS_CHECKSUM="928a943e2af339b30f93fade59cfe0d4"
 
+BTRFS_VERSION="4.8"
+BTRFS_CHECKSUM="51f907a15c60fd43a7e97a03b24928a1"
+
 
 # You need to use absolutes path
 DISTFILES="${PWD}/archives"
@@ -46,6 +49,7 @@ PARTED_LINK="http://ftp.gnu.org/gnu/parted/parted-${PARTED_VERSION}.tar.xz"
 LINUXUTILS_LINK="https://www.kernel.org/pub/linux/utils/util-linux/v2.29/util-linux-${LINUXUTILS_VERSION}.tar.xz"
 REDIS_LINK="http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz"
 IPFS_LINK="https://dist.ipfs.io/go-ipfs/v0.4.4/go-ipfs_v${IPFS_VERSION}_linux-amd64.tar.gz"
+BTRFS_LINK="https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${BTRFS_VERSION}.tar.xz"
 
 #
 # Flags
@@ -173,6 +177,7 @@ download() {
     download_file $LINUXUTILS_LINK $LINUXUTILS_CHECKSUM
     download_file $REDIS_LINK $REDIS_CHECKSUM
     download_file $IPFS_LINK $IPFS_CHECKSUM
+    download_file $BTRFS_LINK $BTRFS_CHECKSUM
 
     popd
 }
@@ -228,6 +233,11 @@ extract() {
     if [ ! -d "go-ipfs-${IPFS_VERSION}" ]; then
         echo "[+] extracting: go-ipfs-${IPFS_VERSION}"
         tar -xf ${DISTFILES}/go-ipfs_v${IPFS_VERSION}_linux-amd64.tar.gz -C .
+    fi
+
+    if [ ! -d "btrfs-progs-${BTRFS_VERSION}" ]; then
+        echo "[+] extracting: btrfs-progs-${BTRFS_VERSION}"
+        tar -xf ${DISTFILES}/btrfs-progs-v${BTRFS_VERSION}.tar.xz -C .
     fi
 
     popd
@@ -329,6 +339,8 @@ build_certs() {
 prepare_kernel() {
     echo "[+] copying kernel configuration"
     cp "${CONFDIR}/kernel-config" .config
+
+    # FIXME: add patch for secureboot
 }
 
 compile_kernel() {
@@ -522,6 +534,30 @@ build_ipfs() {
     popd
 }
 
+# parted
+prepare_btrfs() {
+    echo "[+] configuring btrfs-progs"
+    ./configure --prefix /usr
+}
+
+compile_btrfs() {
+    make ${MAKEOPTS}
+}
+
+install_btrfs() {
+    make DESTDIR="${ROOTDIR}" install
+}
+
+build_btrfs() {
+    pushd "${WORKDIR}/btrfs-progs-v${BTRFS_VERSION}"
+
+    prepare_btrfs
+    compile_btrfs
+    install_btrfs
+
+    popd
+}
+
 #
 # Dynamic libraries management
 #
@@ -661,6 +697,7 @@ main() {
         build_linuxutil
         build_redis
         build_ipfs
+        build_btrfs
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
