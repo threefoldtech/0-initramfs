@@ -153,6 +153,16 @@ prepare() {
     mkdir -p "${DISTFILES}"
     mkdir -p "${WORKDIR}"
     mkdir -p "${ROOTDIR}"
+
+    mkdir -p "${ROOTDIR}"/usr/lib
+
+    if [ ! -e "${ROOTDIR}"/lib ]; then
+        ln -s usr/lib "${ROOTDIR}"/lib
+    fi
+
+    if [ ! -e "${ROOTDIR}"/lib64 ]; then
+        ln -s usr/lib "${ROOTDIR}"/lib64
+    fi
 }
 
 #
@@ -612,13 +622,13 @@ ensure_libs() {
         for lib in $libs; do
             libname=$(basename $lib)
 
-            # Library found
-            if [ -e lib/$libname ]; then
+            # Library found and not the already installed one
+            if [ -e lib/$libname ] || [ "$lib" == "${PWD}/usr/lib/$libname" ]; then
                 continue
             fi
 
             # Grabbing library from host
-            cp -aL $lib usr/lib/
+            cp -aL $lib lib/
         done
     done
 
