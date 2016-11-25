@@ -137,6 +137,19 @@ prepare() {
         exit 1
     fi
 
+    if [ $UID != 0 ]; then
+        echo "[-]"
+        echo "[-] === WARNING ==="
+        echo "[-] initramfs files need to be chown root"
+        echo "[-] you need to run this script as root if you want"
+        echo "[-] a working root filesystem, you can build it without"
+        echo "[-] root privilege but you will hit trouble when running"
+        echo "[-] the kernel, you have been warned."
+        echo "[-] === WARNING ==="
+        echo "[-]"
+        sleep 1
+    fi
+
     mkdir -p "${DISTFILES}"
     mkdir -p "${WORKDIR}"
     mkdir -p "${ROOTDIR}"
