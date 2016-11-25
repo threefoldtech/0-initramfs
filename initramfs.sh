@@ -688,7 +688,18 @@ g8os_root() {
     cp -a "${CONFDIR}"/udhcp "${ROOTDIR}"/usr/share/
 }
 
+get_size() {
+    du -shc $1 | tail -1 | awk '{ print $1 }'
+}
 
+end_summary() {
+    root_size=$(get_size "${ROOTDIR}")
+    kernel_size=$(get_size "${WORKDIR}"/vmlinuz.efi)
+
+    echo "[+] --- initramfs ready ---"
+    echo "[+] initramfs root size: $root_size"
+    echo "[+] kernel size: $kernel_size"
+}
 
 main() {
     #
@@ -732,6 +743,7 @@ main() {
         clean_root
         g8os_root
         build_kernel
+        end_summary
     fi
 }
 
