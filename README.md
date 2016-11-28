@@ -10,6 +10,10 @@ This dependencies is of course valid for any other system but adapt it yourself 
 
 Under Gentoo, you probably already have all the dependancies.
 
+## Privileges
+You need to have root privilege to be able to execute all the script.
+Some parts need to chown/setuid/chmod files as root.
+
 # What does this script do ?
  - First, downloading and checking checksum of all archives needed
  - Extracting archives
