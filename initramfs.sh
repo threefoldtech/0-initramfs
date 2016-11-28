@@ -71,6 +71,7 @@ done
 . "${INTERNAL}"/cores.sh
 . "${INTERNAL}"/ipfs.sh
 . "${INTERNAL}"/dnsmasq.sh
+. "${INTERNAL}"/nftables.sh
 
 #
 # Utilities
@@ -177,6 +178,7 @@ download_all() {
     download_btrfs
     download_zerotier
     download_dnsmasq
+    download_nftables
 
     popd
 }
@@ -197,6 +199,7 @@ extract_all() {
     extract_btrfs
     extract_zerotier
     extract_dnsmasq
+    extract_nftables
 
     popd
 }
@@ -355,6 +358,7 @@ main() {
         build_btrfs
         build_zerotier
         build_dnsmasq
+        build_nftables
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
