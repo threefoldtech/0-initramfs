@@ -7,7 +7,7 @@ download_btrfs() {
 }
 
 extract_btrfs() {
-    if [ ! -d "btrfs-progs-${BTRFS_VERSION}" ]; then
+    if [ ! -d "btrfs-progs-v${BTRFS_VERSION}" ]; then
         echo "[+] extracting: btrfs-progs-${BTRFS_VERSION}"
         tar -xf ${DISTFILES}/btrfs-progs-v${BTRFS_VERSION}.tar.xz -C .
     fi
