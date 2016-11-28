@@ -1,60 +1,14 @@
 #!/bin/bash
 set -e
 
-KERNEL_VERSION="4.7.2"
-KERNEL_CHECKSUM="ae493473d074185205a54bc8ad49c3b4"
-
-BUSYBOX_VERSION="1.25.1"
-BUSYBOX_CHECKSUM="4f4c5de50b479b11ff636d7d8eb902a2"
-
-FUSE_VERSION="2.9.7"
-FUSE_CHECKSUM="91c97e5ae0a40312115dfecc4887bd9d"
-
-CERTS_VERSION="20161102"
-CERTS_CHECKSUM="5f26fc332ef3c588814c21bf4766ffa1"
-
-PARTED_VERSION="3.2"
-PARTED_CHECKSUM="0247b6a7b314f8edeb618159fa95f9cb"
-
-LINUXUTILS_VERSION="2.29"
-LINUXUTILS_CHECKSUM="07b6845f48a421ad5844aa9d58edb837"
-
-REDIS_VERSION="3.2.5"
-REDIS_CHECKSUM="d3d2b4dd4b2a3e07ee6f63c526b66b08"
-
-ZEROTIER_VERSION="1.1.14"
-ZEROTIER_CHECKSUM="5e381f0864797886b3b3bf20beb49bba"
-
-BTRFS_VERSION="4.8"
-BTRFS_CHECKSUM="51f907a15c60fd43a7e97a03b24928a1"
-
-DNSMASQ_VERSION="2.76"
-DNSMASQ_CHECKSUM="00f5ee66b4e4b7f14538bf62ae3c9461"
-
-# Branch/Tags name
-CORES_VERSION="master"
-IPFS_VERSION="v0.4.4"
-
-
-
 # You need to use absolutes path
 DISTFILES="${PWD}/archives"
 WORKDIR="${PWD}/staging"
 CONFDIR="${PWD}/config"
 ROOTDIR="${PWD}/root"
+INTERNAL="${PWD}/internals/"
 
 MAKEOPTS="-j 4"
-
-KERNEL_LINK="https://www.kernel.org/pub/linux/kernel/v4.x/linux-${KERNEL_VERSION}.tar.xz"
-BUSYBOX_LINK="https://www.busybox.net/downloads/busybox-${BUSYBOX_VERSION}.tar.bz2"
-FUSE_LINK="https://github.com/libfuse/libfuse/archive/fuse-${FUSE_VERSION}.tar.gz"
-CERTS_LINK="http://ftp.fr.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_${CERTS_VERSION}_all.deb"
-PARTED_LINK="http://ftp.gnu.org/gnu/parted/parted-${PARTED_VERSION}.tar.xz"
-LINUXUTILS_LINK="https://www.kernel.org/pub/linux/utils/util-linux/v2.29/util-linux-${LINUXUTILS_VERSION}.tar.xz"
-REDIS_LINK="http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz"
-BTRFS_LINK="https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${BTRFS_VERSION}.tar.xz"
-ZEROTIER_LINK="https://github.com/zerotier/ZeroTierOne/archive/${ZEROTIER_VERSION}.tar.gz"
-DNSMASQ_LINK="http://www.thekelleys.org.uk/dnsmasq/dnsmasq-${DNSMASQ_VERSION}.tar.xz"
 
 #
 # Flags
@@ -101,6 +55,22 @@ while true; do
         * ) break ;;
     esac
 done
+
+#
+# Including sub-system
+#
+. "${INTERNAL}"/linux-kernel.sh
+. "${INTERNAL}"/busybox.sh
+. "${INTERNAL}"/ca-certificates.sh
+. "${INTERNAL}"/libfuse.sh
+. "${INTERNAL}"/parted.sh
+. "${INTERNAL}"/redis.sh
+. "${INTERNAL}"/util-linux.sh
+. "${INTERNAL}"/btrfs-progs.sh
+. "${INTERNAL}"/zerotier.sh
+. "${INTERNAL}"/cores.sh
+. "${INTERNAL}"/ipfs.sh
+. "${INTERNAL}"/dnsmasq.sh
 
 #
 # Utilities
@@ -194,19 +164,19 @@ download_file() {
 # Downloads all the archives, if the archive is already present
 # a retry will be done (if the previous file was not downloaded correctly)
 #
-download() {
+download_all() {
     pushd $DISTFILES
 
-    download_file $KERNEL_LINK $KERNEL_CHECKSUM
-    download_file $BUSYBOX_LINK $BUSYBOX_CHECKSUM
-    download_file $FUSE_LINK $FUSE_CHECKSUM
-    download_file $CERTS_LINK $CERTS_CHECKSUM
-    download_file $PARTED_LINK $PARTED_CHECKSUM
-    download_file $LINUXUTILS_LINK $LINUXUTILS_CHECKSUM
-    download_file $REDIS_LINK $REDIS_CHECKSUM
-    download_file $BTRFS_LINK $BTRFS_CHECKSUM
-    download_file $ZEROTIER_LINK $ZEROTIER_CHECKSUM
-    download_file $DNSMASQ_LINK $DNSMASQ_CHECKSUM
+    download_kernel
+    download_busybox
+    download_fuse
+    download_certs
+    download_parted
+    download_linuxutil
+    download_redis
+    download_btrfs
+    download_zerotier
+    download_dnsmasq
 
     popd
 }
@@ -214,454 +184,23 @@ download() {
 #
 # Extract all archives
 #
-extract() {
+extract_all() {
     pushd "$WORKDIR"
 
-    if [ ! -d "linux-${KERNEL_VERSION}" ]; then
-        echo "[+] extracting: linux-${KERNEL_VERSION}"
-        tar -xf ${DISTFILES}/linux-${KERNEL_VERSION}.tar.xz -C .
-    fi
-
-    if [ ! -d "busybox-${BUSYBOX_VERSION}" ]; then
-        echo "[+] extracting: busybox-${BUSYBOX_VERSION}"
-        tar -xf ${DISTFILES}/busybox-${BUSYBOX_VERSION}.tar.bz2 -C .
-    fi
-
-    if [ ! -d "libfuse-fuse-${FUSE_VERSION}" ]; then
-        echo "[+] extracting: fuse-${FUSE_VERSION}"
-        tar -xf ${DISTFILES}/fuse-${FUSE_VERSION}.tar.gz -C .
-    fi
-
-    if [ ! -d "ca-certificates-${CERTS_VERSION}" ]; then
-        echo "[+] extracting: ca-certificates-${CERTS_VERSION}"
-
-        mkdir -p "ca-certificates-${CERTS_VERSION}/temp"
-        pushd "ca-certificates-${CERTS_VERSION}/temp"
-        ar x ${DISTFILES}/ca-certificates_${CERTS_VERSION}_all.deb
-        tar -xf data.tar.xz -C ..
-        popd
-
-        rm -rf "ca-certificates-${CERTS_VERSION}/temp"
-    fi
-
-    if [ ! -d "parted-${PARTED_VERSION}" ]; then
-        echo "[+] extracting: parted-${PARTED_VERSION}"
-        tar -xf ${DISTFILES}/parted-${PARTED_VERSION}.tar.xz -C .
-    fi
-
-    if [ ! -d "util-linux-${LINUXUTILS_VERSION}" ]; then
-        echo "[+] extracting: util-linux-${LINUXUTILS_VERSION}"
-        tar -xf ${DISTFILES}/util-linux-${LINUXUTILS_VERSION}.tar.xz -C .
-    fi
-
-    if [ ! -d "redis-${REDIS_VERSION}" ]; then
-        echo "[+] extracting: redis-${REDIS_VERSION}"
-        tar -xf ${DISTFILES}/redis-${REDIS_VERSION}.tar.gz -C .
-    fi
-
-    if [ ! -d "btrfs-progs-${BTRFS_VERSION}" ]; then
-        echo "[+] extracting: btrfs-progs-${BTRFS_VERSION}"
-        tar -xf ${DISTFILES}/btrfs-progs-v${BTRFS_VERSION}.tar.xz -C .
-    fi
-
-    if [ ! -d "ZeroTierOne-${ZEROTIER_VERSION}" ]; then
-        echo "[+] extracting: ZeroTierOne-${ZEROTIER_VERSION}"
-        tar -xf ${DISTFILES}/${ZEROTIER_VERSION}.tar.gz -C .
-    fi
-
-    if [ ! -d "dnsmasq-${DNSMASQ_VERSION}" ]; then
-        echo "[+] extracting: dnsmasq-${DNSMASQ_VERSION}"
-        tar -xf ${DISTFILES}/dnsmasq-${DNSMASQ_VERSION}.tar.xz -C .
-    fi
+    extract_kernel
+    extract_busybox
+    extract_fuse
+    extract_certs
+    extract_parted
+    extract_linuxutil
+    extract_redis
+    extract_btrfs
+    extract_zerotier
+    extract_dnsmasq
 
     popd
 }
 
-
-#
-# Builders
-#
-
-# busybox
-prepare_busybox() {
-    echo "[+] copying busybox configuration"
-    cp "${CONFDIR}/busybox-config" .config
-}
-
-compile_busybox() {
-    echo "[+] compiling busybox"
-    make ${MAKEOPTS}
-}
-
-install_busybox() {
-    make install
-    cp -av _install/* "${ROOTDIR}/"
-}
-
-build_busybox() {
-    pushd "$WORKDIR/busybox-${BUSYBOX_VERSION}"
-
-    prepare_busybox
-    compile_busybox
-    install_busybox
-
-    popd
-}
-
-# libfuse
-prepare_fuse() {
-    echo "[+] preparing fuse"
-    ./makeconf.sh
-    ./configure --prefix /usr
-}
-
-compile_fuse() {
-    echo "[+] compiling fuse"
-    make ${MAKEOPTS}
-}
-
-install_fuse() {
-    make DESTDIR="${ROOTDIR}" install
-}
-
-build_fuse() {
-    pushd "${WORKDIR}/libfuse-fuse-${FUSE_VERSION}"
-
-    prepare_fuse
-    compile_fuse
-    install_fuse
-
-    popd
-}
-
-# ca-certificates
-prepare_certs() {
-    echo "[+] preparing ca-certificates"
-
-    cd usr/share/ca-certificates/
-    find * -name '*.crt' | LC_ALL=C sort > ../../../etc/ca-certificates.conf
-    cd ../../../
-
-    if [ ! -f ca-certificates-20150426-root.patch ]; then
-        echo "[+] downloading patch"
-        curl -s https://gist.githubusercontent.com/maxux/a5472530dd88b3480d745388d81e4c7f/raw/373d3b04fb36a28fdf99c6748646335e10317242/ca-certificates-20150426-root.patch > ca-certificates-20150426-root.patch
-        patch -p1 < ca-certificates-20150426-root.patch
-    fi
-}
-
-compile_certs() {
-    echo "[+] building certificate database"
-    sh usr/sbin/update-ca-certificates --root .
-}
-
-install_certs() {
-    cp -av * "${ROOTDIR}"
-    rm -f "${ROOTDIR}"/ca-certificates-20150426-root.patch
-}
-
-build_certs() {
-    pushd "${WORKDIR}/ca-certificates-${CERTS_VERSION}"
-
-    prepare_certs
-    compile_certs
-    install_certs
-
-    popd
-}
-
-# kernel
-prepare_kernel() {
-    echo "[+] copying kernel configuration"
-    cp "${CONFDIR}/kernel-config" .config
-
-    # FIXME: add patch for secureboot
-}
-
-compile_kernel() {
-    echo "[+] compiling the kernel"
-    make ${MAKEOPTS}
-}
-
-install_kernel() {
-    cp arch/x86/boot/bzImage "${WORKDIR}"/vmlinuz.efi
-    echo "[+] kernel installed: ${WORKDIR}/vmlinuz.efi"
-}
-
-build_kernel() {
-    pushd "${WORKDIR}/linux-${KERNEL_VERSION}"
-
-    prepare_kernel
-    compile_kernel
-    install_kernel
-
-    popd
-}
-
-# cores
-prepare_cores() {
-    echo "[+] loading source code: g8os coreX"
-    go get -d -v github.com/g8os/coreX
-
-    echo "[+] loading source code: g8os core0"
-    go get -d -v github.com/g8os/core0
-}
-
-compile_cores() {
-    echo "[+] compiling coreX"
-    pushd coreX
-    go build -ldflags "-s -w"
-    popd
-
-    echo "[+] compiling core0"
-    pushd core0
-    go build -ldflags "-s -w"
-    popd
-}
-
-install_cores() {
-    echo "[+] copying binaries"
-    cp -av coreX/coreX core0/core0 "${ROOTDIR}/sbin/"
-}
-
-build_cores() {
-    # We need to prepare first (download code)
-    prepare_cores
-    pushd $GOPATH/src/github.com/g8os
-
-    compile_cores
-    install_cores
-
-    popd
-}
-
-# parted
-prepare_parted() {
-    echo "[+] configuring parted"
-    ./configure --prefix "${ROOTDIR}"/usr --disable-device-mapper
-
-    if [ ! -f parted-3.2-devmapper.patch ]; then
-        echo "[+] downloading patch"
-        curl -s https://gist.githubusercontent.com/maxux/a5472530dd88b3480d745388d81e4c7f/raw/d5b67d7bd7714178b3ebe35a2836f64ccaa32431/parted-3.2-devmapper.patch > parted-3.2-devmapper.patch
-        patch -p1 < parted-3.2-devmapper.patch
-    fi
-}
-
-compile_parted() {
-    make ${MAKEOPTS}
-}
-
-install_parted() {
-    make install
-}
-
-build_parted() {
-    pushd "${WORKDIR}/parted-${PARTED_VERSION}"
-
-    prepare_parted
-    compile_parted
-    install_parted
-
-    popd
-}
-
-# util-linux
-prepare_linuxutil() {
-    echo "[+] configuring util-linux"
-    ./configure --prefix "${ROOTDIR}"/usr \
-        --disable-libfdisk \
-        --disable-mount \
-        --disable-zramctl \
-        --disable-mountpoint \
-        --disable-eject \
-        --disable-lslogins \
-        --disable-setpriv \
-        --disable-agetty \
-        --disable-cramfs \
-        --disable-bfs \
-        --disable-minix \
-        --disable-fdformat \
-        --disable-wdctl \
-        --disable-cal \
-        --disable-logger \
-        --disable-switch_root \
-        --disable-pivot_root \
-        --disable-ipcrm \
-        --disable-ipcs \
-        --disable-kill \
-        --disable-last \
-        --disable-utmpdump \
-        --disable-mesg \
-        --disable-raw \
-        --disable-rename \
-        --disable-login \
-        --disable-nologin \
-        --disable-sulogin \
-        --disable-su \
-        --disable-runuser \
-        --disable-ul \
-        --disable-more \
-        --disable-wall \
-        --disable-pylibmount \
-        --disable-bash-completion \
-        --without-python
-}
-
-compile_linuxutil() {
-    make ${MAKEOPTS}
-}
-
-install_linuxutil() {
-    make install
-}
-
-build_linuxutil() {
-    pushd "${WORKDIR}/util-linux-${LINUXUTILS_VERSION}"
-
-    prepare_linuxutil
-    compile_linuxutil
-    install_linuxutil
-
-    popd
-}
-
-# redis
-prepare_redis() {
-    echo "[+] preparing redis"
-    return
-}
-
-compile_redis() {
-    make ${MAKEOPTS}
-}
-
-install_redis() {
-    cp -a src/redis-server "${ROOTDIR}"/usr/bin/
-}
-
-build_redis() {
-    pushd "${WORKDIR}/redis-${REDIS_VERSION}"
-
-    prepare_redis
-    compile_redis
-    install_redis
-
-    popd
-}
-
-# ipfs
-prepare_ipfs() {
-    echo "[+] loading source code: ipfs"
-    go get -d -v github.com/ipfs/go-ipfs
-
-    pushd "$GOPATH/src/github.com/ipfs/go-ipfs"
-
-    if [ "$(git describe)" != "${IPFS_VERSION}" ]; then
-        git checkout ${IPFS_VERSION}
-    fi
-
-    if [ ! -f ipfs-dist_get.patch ]; then
-        echo "[+] downloading patch"
-        curl -s https://gist.githubusercontent.com/maxux/a5472530dd88b3480d745388d81e4c7f/raw/040c8c17be8e71035b8484866c3ef69555e1a61d/ipfs-dist_get.patch > ipfs-dist_get.patch
-        patch -p0 < ipfs-dist_get.patch
-    fi
-
-    popd
-}
-
-compile_ipfs() {
-    echo "[+] compiling dependancies"
-    make deps
-
-    echo "[+] compiling ipfs"
-    pushd cmd/ipfs
-    go build -i -ldflags="-X "github.com/ipfs/go-ipfs/repo/config".CurrentCommit=d905d48 -w -s"
-    popd
-}
-
-install_ipfs() {
-    echo "[+] installing ipfs"
-    cp -a cmd/ipfs/ipfs "${ROOTDIR}"/usr/bin/
-}
-
-build_ipfs() {
-    prepare_ipfs
-    pushd "$GOPATH/src/github.com/ipfs/go-ipfs"
-
-    compile_ipfs
-    install_ipfs
-
-    popd
-}
-
-# btrfs-progs
-prepare_btrfs() {
-    echo "[+] configuring btrfs-progs"
-    ./configure --prefix /usr --disable-documentation
-}
-
-compile_btrfs() {
-    make ${MAKEOPTS}
-}
-
-install_btrfs() {
-    make DESTDIR="${ROOTDIR}" install
-}
-
-build_btrfs() {
-    pushd "${WORKDIR}/btrfs-progs-v${BTRFS_VERSION}"
-
-    prepare_btrfs
-    compile_btrfs
-    install_btrfs
-
-    popd
-}
-
-# zerotier
-prepare_zerotier() {
-    echo "[+] configuring zerotier"
-}
-
-compile_zerotier() {
-    make one ${MAKEOPTS}
-}
-
-install_zerotier() {
-    cp -av zerotier-cli zerotier-idtool zerotier-one "${ROOTDIR}/usr/bin/"
-}
-
-build_zerotier() {
-    pushd "${WORKDIR}/ZeroTierOne-${ZEROTIER_VERSION}"
-
-    prepare_zerotier
-    compile_zerotier
-    install_zerotier
-
-    popd
-}
-
-# dnsmasq
-prepare_dnsmasq() {
-    echo "[+] configuring dnsmasq"
-}
-
-compile_dnsmasq() {
-    make ${MAKEOPTS}
-}
-
-install_dnsmasq() {
-    cp -avL src/dnsmasq "${ROOTDIR}/usr/bin/"
-}
-
-build_dnsmasq() {
-    pushd "${WORKDIR}/dnsmasq-${DNSMASQ_VERSION}"
-
-    prepare_dnsmasq
-    compile_dnsmasq
-    install_dnsmasq
-
-    popd
-}
 
 #
 # Dynamic libraries management
@@ -798,8 +337,8 @@ main() {
     prepare
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_DOWNLOAD == 1 ]]; then
-        download
-        extract
+        download_all
+        extract_all
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_BUSYBOX == 1 ]]; then
