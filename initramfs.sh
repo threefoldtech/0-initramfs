@@ -310,6 +310,7 @@ g8os_root() {
     cp -a "${CONFDIR}"/g8os "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/root "${ROOTDIR}"/root/conf
     cp -a "${CONFDIR}"/udhcp "${ROOTDIR}"/usr/share/
+    cp -a "${CONFDIR}"/nftables.conf "${ROOTDIR}"/etc/
 }
 
 get_size() {
