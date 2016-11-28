@@ -22,9 +22,6 @@ LINUXUTILS_CHECKSUM="07b6845f48a421ad5844aa9d58edb837"
 REDIS_VERSION="3.2.5"
 REDIS_CHECKSUM="d3d2b4dd4b2a3e07ee6f63c526b66b08"
 
-# IPFS_VERSION="0.4.4"
-# IPFS_CHECKSUM="928a943e2af339b30f93fade59cfe0d4"
-
 ZEROTIER_VERSION="1.1.14"
 ZEROTIER_CHECKSUM="5e381f0864797886b3b3bf20beb49bba"
 
@@ -55,7 +52,6 @@ CERTS_LINK="http://ftp.fr.debian.org/debian/pool/main/c/ca-certificates/ca-certi
 PARTED_LINK="http://ftp.gnu.org/gnu/parted/parted-${PARTED_VERSION}.tar.xz"
 LINUXUTILS_LINK="https://www.kernel.org/pub/linux/utils/util-linux/v2.29/util-linux-${LINUXUTILS_VERSION}.tar.xz"
 REDIS_LINK="http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz"
-# IPFS_LINK="https://dist.ipfs.io/go-ipfs/v0.4.4/go-ipfs_v${IPFS_VERSION}_linux-amd64.tar.gz"
 BTRFS_LINK="https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${BTRFS_VERSION}.tar.xz"
 ZEROTIER_LINK="https://github.com/zerotier/ZeroTierOne/archive/${ZEROTIER_VERSION}.tar.gz"
 DNSMASQ_LINK="http://www.thekelleys.org.uk/dnsmasq/dnsmasq-${DNSMASQ_VERSION}.tar.xz"
@@ -208,7 +204,6 @@ download() {
     download_file $PARTED_LINK $PARTED_CHECKSUM
     download_file $LINUXUTILS_LINK $LINUXUTILS_CHECKSUM
     download_file $REDIS_LINK $REDIS_CHECKSUM
-    # download_file $IPFS_LINK $IPFS_CHECKSUM
     download_file $BTRFS_LINK $BTRFS_CHECKSUM
     download_file $ZEROTIER_LINK $ZEROTIER_CHECKSUM
     download_file $DNSMASQ_LINK $DNSMASQ_CHECKSUM
@@ -263,11 +258,6 @@ extract() {
         echo "[+] extracting: redis-${REDIS_VERSION}"
         tar -xf ${DISTFILES}/redis-${REDIS_VERSION}.tar.gz -C .
     fi
-
-    # if [ ! -d "go-ipfs-${IPFS_VERSION}" ]; then
-    #    echo "[+] extracting: go-ipfs-${IPFS_VERSION}"
-    #    tar -xf ${DISTFILES}/go-ipfs_v${IPFS_VERSION}_linux-amd64.tar.gz -C .
-    # fi
 
     if [ ! -d "btrfs-progs-${BTRFS_VERSION}" ]; then
         echo "[+] extracting: btrfs-progs-${BTRFS_VERSION}"
@@ -434,7 +424,7 @@ install_cores() {
 }
 
 build_cores() {
-    # We need to prepare first to download code
+    # We need to prepare first (download code)
     prepare_cores
     pushd $GOPATH/src/github.com/g8os
 
