@@ -22,11 +22,22 @@ LINUXUTILS_CHECKSUM="07b6845f48a421ad5844aa9d58edb837"
 REDIS_VERSION="3.2.5"
 REDIS_CHECKSUM="d3d2b4dd4b2a3e07ee6f63c526b66b08"
 
-IPFS_VERSION="0.4.4"
-IPFS_CHECKSUM="928a943e2af339b30f93fade59cfe0d4"
+# IPFS_VERSION="0.4.4"
+# IPFS_CHECKSUM="928a943e2af339b30f93fade59cfe0d4"
+
+ZEROTIER_VERSION="1.1.14"
+ZEROTIER_CHECKSUM="5e381f0864797886b3b3bf20beb49bba"
 
 BTRFS_VERSION="4.8"
 BTRFS_CHECKSUM="51f907a15c60fd43a7e97a03b24928a1"
+
+DNSMASQ_VERSION="2.76"
+DNSMASQ_CHECKSUM="00f5ee66b4e4b7f14538bf62ae3c9461"
+
+# Branch/Tags name
+CORES_VERSION="master"
+IPFS_VERSION="v0.4.4"
+
 
 
 # You need to use absolutes path
@@ -44,8 +55,10 @@ CERTS_LINK="http://ftp.fr.debian.org/debian/pool/main/c/ca-certificates/ca-certi
 PARTED_LINK="http://ftp.gnu.org/gnu/parted/parted-${PARTED_VERSION}.tar.xz"
 LINUXUTILS_LINK="https://www.kernel.org/pub/linux/utils/util-linux/v2.29/util-linux-${LINUXUTILS_VERSION}.tar.xz"
 REDIS_LINK="http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz"
-IPFS_LINK="https://dist.ipfs.io/go-ipfs/v0.4.4/go-ipfs_v${IPFS_VERSION}_linux-amd64.tar.gz"
+# IPFS_LINK="https://dist.ipfs.io/go-ipfs/v0.4.4/go-ipfs_v${IPFS_VERSION}_linux-amd64.tar.gz"
 BTRFS_LINK="https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${BTRFS_VERSION}.tar.xz"
+ZEROTIER_LINK="https://github.com/zerotier/ZeroTierOne/archive/${ZEROTIER_VERSION}.tar.gz"
+DNSMASQ_LINK="http://www.thekelleys.org.uk/dnsmasq/dnsmasq-${DNSMASQ_VERSION}.tar.xz"
 
 #
 # Flags
@@ -195,8 +208,10 @@ download() {
     download_file $PARTED_LINK $PARTED_CHECKSUM
     download_file $LINUXUTILS_LINK $LINUXUTILS_CHECKSUM
     download_file $REDIS_LINK $REDIS_CHECKSUM
-    download_file $IPFS_LINK $IPFS_CHECKSUM
+    # download_file $IPFS_LINK $IPFS_CHECKSUM
     download_file $BTRFS_LINK $BTRFS_CHECKSUM
+    download_file $ZEROTIER_LINK $ZEROTIER_CHECKSUM
+    download_file $DNSMASQ_LINK $DNSMASQ_CHECKSUM
 
     popd
 }
@@ -249,14 +264,24 @@ extract() {
         tar -xf ${DISTFILES}/redis-${REDIS_VERSION}.tar.gz -C .
     fi
 
-    if [ ! -d "go-ipfs-${IPFS_VERSION}" ]; then
-        echo "[+] extracting: go-ipfs-${IPFS_VERSION}"
-        tar -xf ${DISTFILES}/go-ipfs_v${IPFS_VERSION}_linux-amd64.tar.gz -C .
-    fi
+    # if [ ! -d "go-ipfs-${IPFS_VERSION}" ]; then
+    #    echo "[+] extracting: go-ipfs-${IPFS_VERSION}"
+    #    tar -xf ${DISTFILES}/go-ipfs_v${IPFS_VERSION}_linux-amd64.tar.gz -C .
+    # fi
 
     if [ ! -d "btrfs-progs-${BTRFS_VERSION}" ]; then
         echo "[+] extracting: btrfs-progs-${BTRFS_VERSION}"
         tar -xf ${DISTFILES}/btrfs-progs-v${BTRFS_VERSION}.tar.xz -C .
+    fi
+
+    if [ ! -d "ZeroTierOne-${ZEROTIER_VERSION}" ]; then
+        echo "[+] extracting: ZeroTierOne-${ZEROTIER_VERSION}"
+        tar -xf ${DISTFILES}/${ZEROTIER_VERSION}.tar.gz -C .
+    fi
+
+    if [ ! -d "dnsmasq-${DNSMASQ_VERSION}" ]; then
+        echo "[+] extracting: dnsmasq-${DNSMASQ_VERSION}"
+        tar -xf ${DISTFILES}/dnsmasq-${DNSMASQ_VERSION}.tar.xz -C .
     fi
 
     popd
@@ -393,10 +418,14 @@ prepare_cores() {
 
 compile_cores() {
     echo "[+] compiling coreX"
-    pushd coreX && go build && popd
+    pushd coreX
+    go build -ldflags "-s -w"
+    popd
 
     echo "[+] compiling core0"
-    pushd core0 && go build && popd
+    pushd core0
+    go build -ldflags "-s -w"
+    popd
 }
 
 install_cores() {
@@ -531,22 +560,43 @@ build_redis() {
 
 # ipfs
 prepare_ipfs() {
-    echo "[+] preparing ipfs"
+    echo "[+] loading source code: ipfs"
+    go get -d -v github.com/ipfs/go-ipfs
+
+    pushd "$GOPATH/src/github.com/ipfs/go-ipfs"
+
+    if [ "$(git describe)" != "${IPFS_VERSION}" ]; then
+        git checkout ${IPFS_VERSION}
+    fi
+
+    if [ ! -f ipfs-dist_get.patch ]; then
+        echo "[+] downloading patch"
+        curl -s https://gist.githubusercontent.com/maxux/a5472530dd88b3480d745388d81e4c7f/raw/040c8c17be8e71035b8484866c3ef69555e1a61d/ipfs-dist_get.patch > ipfs-dist_get.patch
+        patch -p0 < ipfs-dist_get.patch
+    fi
+
+    popd
 }
 
 compile_ipfs() {
-    return
+    echo "[+] compiling dependancies"
+    make deps
+
+    echo "[+] compiling ipfs"
+    pushd cmd/ipfs
+    go build -i -ldflags="-X "github.com/ipfs/go-ipfs/repo/config".CurrentCommit=d905d48 -w -s"
+    popd
 }
 
 install_ipfs() {
     echo "[+] installing ipfs"
-    cp -a ipfs "${ROOTDIR}"/usr/bin/
+    cp -a cmd/ipfs/ipfs "${ROOTDIR}"/usr/bin/
 }
 
 build_ipfs() {
-    pushd "${WORKDIR}/go-ipfs"
-
     prepare_ipfs
+    pushd "$GOPATH/src/github.com/ipfs/go-ipfs"
+
     compile_ipfs
     install_ipfs
 
@@ -573,6 +623,52 @@ build_btrfs() {
     prepare_btrfs
     compile_btrfs
     install_btrfs
+
+    popd
+}
+
+# zerotier
+prepare_zerotier() {
+    echo "[+] configuring zerotier"
+}
+
+compile_zerotier() {
+    make one ${MAKEOPTS}
+}
+
+install_zerotier() {
+    cp -av zerotier-cli zerotier-idtool zerotier-one "${ROOTDIR}/usr/bin/"
+}
+
+build_zerotier() {
+    pushd "${WORKDIR}/ZeroTierOne-${ZEROTIER_VERSION}"
+
+    prepare_zerotier
+    compile_zerotier
+    install_zerotier
+
+    popd
+}
+
+# dnsmasq
+prepare_dnsmasq() {
+    echo "[+] configuring dnsmasq"
+}
+
+compile_dnsmasq() {
+    make ${MAKEOPTS}
+}
+
+install_dnsmasq() {
+    cp -avL src/dnsmasq "${ROOTDIR}/usr/bin/"
+}
+
+build_dnsmasq() {
+    pushd "${WORKDIR}/dnsmasq-${DNSMASQ_VERSION}"
+
+    prepare_dnsmasq
+    compile_dnsmasq
+    install_dnsmasq
 
     popd
 }
@@ -728,6 +824,8 @@ main() {
         build_redis
         build_ipfs
         build_btrfs
+        build_zerotier
+        build_dnsmasq
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
