@@ -240,7 +240,8 @@ ensure_libs() {
 
     for file in $(find -type f -executable); do
         # Looking for dynamic libraries shared
-        libs=$(ldd $file 2>&1 | grep '=>' | grep -v '=>  (' | awk '{ print $3 }' || true)
+        LDD="LD_LIBRARY_PATH=${ROOTDIR}/lib:${ROOTDIR}/usr/lib ldd"
+        libs=$($LDD $file 2>&1 | grep '=>' | grep -v '=>  (' | awk '{ print $3 }' || true)
 
         # Checking each libraries
         for lib in $libs; do
