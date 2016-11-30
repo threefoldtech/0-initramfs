@@ -37,6 +37,7 @@ prepare_nftables() {
     export LIBNFTNL_LIBS="-L${ROOTDIR}/usr/lib -lnftnl"
 
     ./configure --prefix "${ROOTDIR}"/usr --disable-debug --without-cli --with-mini-gmp
+    echo "all:" > doc/Makefile
 }
 
 compile_nftables() {
