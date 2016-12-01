@@ -311,8 +311,11 @@ g8os_root() {
     fi
 
     echo "[+] installing g8os configuration"
-    cp -a "${CONFDIR}"/g8os "${ROOTDIR}"/etc/
+    rm -rf "${ROOTDIR}"/root/conf
     cp -a "${CONFDIR}"/root "${ROOTDIR}"/root/conf
+    cp -a "${CONFDIR}"/g8os "${ROOTDIR}"/etc/
+
+    # System configuration
     cp -a "${CONFDIR}"/udhcp "${ROOTDIR}"/usr/share/
     cp -a "${CONFDIR}"/nftables.conf "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/nsswitch.conf "${ROOTDIR}"/etc/
