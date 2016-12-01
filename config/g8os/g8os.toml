@@ -14,7 +14,7 @@ cmds = [] # empty for long polling from all defined controllers, or specif contr
 
 [extension.bash]
 binary = "/bin/ash"
-args = ['-c', 'T=`mktemp` && cat > $T && bash $T; EXIT=$?; rm -rf $T; exit $EXIT']
+args = ['-c', 'T=`mktemp` && cat > $T && ash $T; EXIT=$?; rm -rf $T; exit $EXIT']
 
 [logging]
     [logging.db]
