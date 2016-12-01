@@ -1,11 +1,9 @@
 CORES_VERSION="master"
 
 prepare_cores() {
-    echo "[+] loading source code: g8os coreX"
-    go get -d -v github.com/g8os/coreX
-
-    echo "[+] loading source code: g8os core0"
-    go get -d -v github.com/g8os/core0
+    echo "[+] loading source code: g8os cores"
+    go get -d -v github.com/g8os/core0/core0
+    go get -d -v github.com/g8os/core0/coreX
 }
 
 compile_cores() {
@@ -28,7 +26,7 @@ install_cores() {
 build_cores() {
     # We need to prepare first (download code)
     prepare_cores
-    pushd $GOPATH/src/github.com/g8os
+    pushd $GOPATH/src/github.com/g8os/core0
 
     compile_cores
     install_cores
