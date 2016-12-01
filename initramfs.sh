@@ -315,6 +315,7 @@ g8os_root() {
     cp -a "${CONFDIR}"/nftables.conf "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/nsswitch.conf "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/hosts "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/passwd "${ROOTDIR}"/etc/
 }
 
 get_size() {
