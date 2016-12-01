@@ -18,13 +18,12 @@ cp -ar /root $target
 cp -ar /bin $target
 cp -ar /tmp $target
 cp -ar /sbin $target
+cp -ar /var $target
 
 mkdir -p $target/dev
 mkdir -p $target/sys
 mkdir -p $target/proc
 mkdir -p $target/mnt
-mkdir -p $target/var/run
-mkdir -p $target/var/log
 
 mount -t proc proc $target/proc
 mount -t sysfs sysfs $target/sys

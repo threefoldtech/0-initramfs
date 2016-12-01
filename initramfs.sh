@@ -302,6 +302,8 @@ g8os_root() {
     # ensure minimal /dev and /mnt
     echo "[+] creating default directories and files"
     mkdir -p "${ROOTDIR}"/mnt/root
+    mkdir -p "${ROOTDIR}"/var/run
+    mkdir -p "${ROOTDIR}"/var/log
 
     if [ ! -e "${ROOTDIR}"/dev/console ]; then
         # mknod need to be run as root
