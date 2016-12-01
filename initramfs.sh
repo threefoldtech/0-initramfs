@@ -72,6 +72,7 @@ done
 . "${INTERNAL}"/ipfs.sh
 . "${INTERNAL}"/dnsmasq.sh
 . "${INTERNAL}"/nftables.sh
+. "${INTERNAL}"/iproute2.sh
 
 #
 # Utilities
@@ -179,6 +180,7 @@ download_all() {
     download_zerotier
     download_dnsmasq
     download_nftables
+    download_iproute2
 
     popd
 }
@@ -200,6 +202,7 @@ extract_all() {
     extract_zerotier
     extract_dnsmasq
     extract_nftables
+    extract_iproute2
 
     popd
 }
@@ -370,6 +373,7 @@ main() {
         build_zerotier
         build_dnsmasq
         build_nftables
+        build_iproute2
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
