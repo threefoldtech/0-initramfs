@@ -231,6 +231,8 @@ ensure_libs() {
     if [ ! -e lib64 ]; then ln -s usr/lib lib64; fi
     if [ ! -e lib ]; then ln -s lib64 lib; fi
 
+    export LD_LIBRARY_PATH=${ROOTDIR}/lib:${ROOTDIR}/usr/lib
+
     # Copiyng ld-dependancy
     ld=$(ldd /bin/bash | grep ld-linux | awk '{ print $1 }')
     cp -aL $ld lib/
@@ -240,8 +242,7 @@ ensure_libs() {
 
     for file in $(find -type f -executable); do
         # Looking for dynamic libraries shared
-        LDD="LD_LIBRARY_PATH=${ROOTDIR}/lib:${ROOTDIR}/usr/lib ldd"
-        libs=$($LDD $file 2>&1 | grep '=>' | grep -v '=>  (' | awk '{ print $3 }' || true)
+        libs=$(ldd $file 2>&1 | grep '=>' | grep -v '=>  (' | awk '{ print $3 }' || true)
 
         # Checking each libraries
         for lib in $libs; do
