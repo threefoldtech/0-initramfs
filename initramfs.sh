@@ -313,6 +313,8 @@ g8os_root() {
     cp -a "${CONFDIR}"/root "${ROOTDIR}"/root/conf
     cp -a "${CONFDIR}"/udhcp "${ROOTDIR}"/usr/share/
     cp -a "${CONFDIR}"/nftables.conf "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/nsswitch.conf "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/hosts "${ROOTDIR}"/etc/
 }
 
 get_size() {

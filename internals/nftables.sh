@@ -37,6 +37,8 @@ prepare_nftables() {
     export LIBNFTNL_LIBS="-L${ROOTDIR}/usr/lib -lnftnl"
 
     ./configure --prefix "${ROOTDIR}"/usr --disable-debug --without-cli --with-mini-gmp
+
+    # Force to skip documentation compilation
     echo "all:" > doc/Makefile
 }
 
