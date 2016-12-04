@@ -61,7 +61,7 @@ Then from inside the docker
 # install dependencies for building
 apt-get update
 apt-get install -y asciidoc xmlto --no-install-recommends
-apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev
+apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source
 
 # install go
 curl https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz > go1.7.3.linux-amd64.tar.gz
@@ -71,6 +71,7 @@ mkdir /gopath
 export GOPATH=/gopath
 
 # start the build
+cd /initramfs
 bash initramfs.sh
 ```
 The result of the build will be located in `staging/vmlinuz.efi`
@@ -80,3 +81,14 @@ Just boot it. The kernel image if EFI bootable.
 
 If you have a EFI Shell, just run the kernel like any EFI executable.
 If you don't have the shell or want to boot it automaticaly, put the kernel in `/EFI/BOOT/BOOTX64.EFI` in a FAT partition.
+
+example how to create a boot disk
+```shell
+dd if=/dev/zero of=g8os.img bs=1M count=64
+mkfs.vfat g8os.iso
+mount g8os.iso /mnt
+mkdir -p /mnt/EFI/BOOT
+cp staging/vmlinuz.efi /mnt/EFI/BOOT/BOOTX64.EFI
+umount /mnt
+```
+
