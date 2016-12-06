@@ -3,4 +3,4 @@ name = "core.system"
 
 [startup.telnetd.args]
 name = "telnetd"
-args = ["-l", "/bin/ash"]
+args = ["-l", "/bin/ash", "-F"]
