@@ -1,0 +1,24 @@
+[extension."disk.list"]
+binary = "sh"
+args = ["-c", "echo 20::: && lsblk -J -b && echo :::"]
+
+[extension."disk.mktable"]
+binary = "parted"
+args = ["{disk}", "mktable", "{table_type}"]
+
+[extension."disk.mkpart"]
+binary = "parted"
+args = ["{disk}", "mkpart", "{part_type}", "{start}", "{end}"]
+
+[extension."disk.rmpart"]
+binary = "parted"
+args = ["{disk}", "rm", "{number}"]
+
+[extension."disk.mount"]
+binary = "mount"
+args = ["-o", "{options}", "{source}", "{target}"]
+
+[extension."disk.umount"]
+binary = "umount"
+args = ["{source}"]
+
