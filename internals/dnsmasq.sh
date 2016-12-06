@@ -24,6 +24,7 @@ compile_dnsmasq() {
 install_dnsmasq() {
     cp -avL src/dnsmasq "${ROOTDIR}/usr/bin/"
     mkdir -p "${ROOTDIR}"/var/run/dnsmasq
+    mkdir -p "${ROOTDIR}"/var/lib/misc
 }
 
 build_dnsmasq() {
