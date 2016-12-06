@@ -9,21 +9,21 @@ name = "ipfs"
 args = ["daemon", "--init"]
 
 # make sure /ipfs and /ipns are in place so we start the mount
-[startup.ipfs-mount-init]
-name = "bash"
-running_delay = -1
-
-[startup.ipfs-mount-init.args]
-stdin = """
-mkdir -p /ipfs
-mkdir -p /ipns
-"""
-
-[startup.ipfs-mount]
-name = "core.system"
-after = ["ipfs-daemon", "ipfs-mount-init"]
-
-[startup.ipfs-mount.args]
-name = "ipfs"
-args = ["mount"]
-
+# [startup.ipfs-mount-init]
+# name = "bash"
+# running_delay = -1
+# 
+# [startup.ipfs-mount-init.args]
+# stdin = """
+# mkdir -p /ipfs
+# mkdir -p /ipns
+# """
+# 
+# [startup.ipfs-mount]
+# name = "core.system"
+# after = ["ipfs-daemon", "ipfs-mount-init"]
+# 
+# [startup.ipfs-mount.args]
+# name = "ipfs"
+# args = ["mount"]
+# 
