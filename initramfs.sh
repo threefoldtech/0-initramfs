@@ -311,6 +311,11 @@ g8os_root() {
     mkdir -p "${ROOTDIR}"/var/run
     mkdir -p "${ROOTDIR}"/var/log
 
+    # Ensure /run -> /var/run
+    pushd "${ROOTDIR}"
+    ln -s var/run run
+    popd
+
     if [ ! -e "${ROOTDIR}"/dev/console ]; then
         # mknod need to be run as root
         mknod -m 622 "${ROOTDIR}"/dev/console c 5 1 || mknod_die
