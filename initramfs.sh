@@ -73,6 +73,7 @@ done
 . "${INTERNAL}"/dnsmasq.sh
 . "${INTERNAL}"/nftables.sh
 . "${INTERNAL}"/iproute2.sh
+. "${INTERNAL}"/socat.sh
 
 #
 # Utilities
@@ -181,6 +182,7 @@ download_all() {
     download_dnsmasq
     download_nftables
     download_iproute2
+    download_socat
 
     popd
 }
@@ -203,6 +205,7 @@ extract_all() {
     extract_dnsmasq
     extract_nftables
     extract_iproute2
+    extract_socat
 
     popd
 }
@@ -374,6 +377,7 @@ main() {
         build_dnsmasq
         build_nftables
         build_iproute2
+        build_socat
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
