@@ -313,7 +313,7 @@ g8os_root() {
 
     # Ensure /run -> /var/run
     pushd "${ROOTDIR}"
-    ln -s var/run run
+    ln -sf var/run run
     popd
 
     if [ ! -e "${ROOTDIR}"/dev/console ]; then
