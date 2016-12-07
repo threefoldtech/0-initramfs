@@ -1,6 +1,9 @@
 # G8OS Initramfs Builder
 This repository contains all needed to build the g8os-kernel and initramfs to start our root filesystem.
 
+## Releases:
+- [0.9.0](https://github.com/g8os/initramfs/tree/0.9.0) : used to build the [v0.9.0](https://github.com/g8os/core0/releases/tag/v0.9.0) of core0
+
 # Dependencies
 Under Ubuntu 16.04, you will need this in order to compile everything:
  - `golang` (version 1.7)
@@ -91,4 +94,3 @@ mkdir -p /mnt/EFI/BOOT
 cp staging/vmlinuz.efi /mnt/EFI/BOOT/BOOTX64.EFI
 umount /mnt
 ```
-
