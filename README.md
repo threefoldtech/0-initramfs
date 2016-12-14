@@ -49,6 +49,11 @@ The option `--kernel` is useful if you changes something on the root directory a
 If you are modifying the core0/coreX, you can simply use `--cores --kernel` options and the cores will be rebuild and the initramfs rebuild after.
 This will produce easily a new image with last changes.
 
+### Customize build
+You can customise your build for some service, for exemple, you can configure a private ZeroTier Network to join during boot.
+You need to add your own services to `conf/root/` directory. By default you will join ZeroTier Earth network.
+You can disable this and join another network by editing/moving/copying `conf/root/zerotier-public.toml` file.
+
 ## Build using a docker container
 
 From the root of this repository, create a docker container
