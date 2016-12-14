@@ -313,6 +313,7 @@ g8os_root() {
 
     # Ensure /run -> /var/run
     pushd "${ROOTDIR}"
+    rm -f run
     ln -sf var/run run
     popd
 
