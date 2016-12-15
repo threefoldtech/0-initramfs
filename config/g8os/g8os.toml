@@ -3,14 +3,13 @@
 [main]
 max_jobs = 200
 include = "/root/conf"
+log_level = "info"
 network = "/etc/g8os/network.toml"
 
 [sink.main]
 url = "redis://127.0.0.1:6379"
 password = ""
 
-[channel]
-cmds = [] # empty for long polling from all defined controllers, or specif controllers keys
 
 [extension.bash]
 binary = "/bin/ash"
@@ -26,6 +25,12 @@ args = ['-c', 'T=`mktemp` && cat > $T && ash $T; EXIT=$?; rm -rf $T; exit $EXIT'
     type = "console"
     levels = [1, 2, 4, 7, 8, 9]
 
+    [logging.redis]
+    type = "redis"
+    levels = [1, 2, 4, 7, 8, 9]
+    address = "127.0.0.1:6379"
+    batch_size = 1000
+
 [stats]
 interval = 60000 # milliseconds (1 min)
 
@@ -33,3 +38,6 @@ interval = 60000 # milliseconds (1 min)
 enabled = false
 flush_interval = 100 # millisecond
 address = "127.0.0.1:6379"
+
+[globals]
+fuse_storage = "https://stor.jumpscale.org/stor2/store/ubuntu-g8os-flist/"
