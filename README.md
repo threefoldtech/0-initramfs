@@ -1,5 +1,5 @@
 # G8OS Initramfs Builder
-This repository contains all needed to build the g8os-kernel and initramfs to start our root filesystem.
+This repository contains all that is needed to build the g8os-kernel and initramfs to start our root filesystem.
 
 ## Releases:
 - [0.9.0](https://github.com/g8os/initramfs/tree/0.9.0) : used to build the [v0.9.0](https://github.com/g8os/core0/releases/tag/v0.9.0) of core0
@@ -9,18 +9,18 @@ Under Ubuntu 16.04, you will need this in order to compile everything:
  - `golang` (version 1.7)
  - `xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git asciidoc xmlto libbison-dev flex libmnl-dev`
 
-This dependencies is of course valid for any other system but adapt it yourself to your case.
+These dependencies are of course valid for any other system but adapt you'll have to adapt it to suit yours.
 
-Under Gentoo, you probably already have all the dependancies.
+On Gentoo, you probably already have all the dependancies.
 
 ## Privileges
-You need to have root privilege to be able to execute all the script.
+You need to have root privilege to be able to execute all the scripts.
 Some parts need to chown/setuid/chmod files as root.
 
 # What does this script do ?
- - First, downloading and checking checksum of all archives needed
- - Extracting archives
- - Compiling:
+ - First, download and check checksum of all archives needed
+ - Extract the archives
+ - Compiles:
     - Busybox
     - Fuse (library and userland tools)
     - SSL Certificates (ca-certificates)
@@ -28,12 +28,12 @@ Some parts need to chown/setuid/chmod files as root.
     - Redis (only the server is used)
     - IPFS
     - BTRFS (btrfs-progs)
- - Cleaning and removing useless files
- - Compiling the kernel (initramfs is bundled)
+ - Clean and remove useless files
+ - Compile the kernel (and bundles initramfs in the kernel)
 
 
 # How to use it ?
-## Easy way
+## Easy
 Just type: `bash initramfs.sh` and everything should be done in one shot.
 
 ## Custom way
@@ -49,8 +49,8 @@ The `initramfs.sh` script accepts multiple options:
 
 The option `--kernel` is useful if you changes something on the root directory and want to rebuild the kernel (with the initramfs).
 
-If you are modifying the core0/coreX, you can simply use `--cores --kernel` options and the cores will be rebuild and the initramfs rebuild after.
-This will produce easily a new image with last changes.
+If you are modifying core0/coreX, you can simply use `--cores --kernel` options and the cores will be rebuilt and the initramfs rebuilt after.
+This will produce a new image with the latest changes.
 
 ### Customize build
 You can customise your build for some service, for exemple, you can configure a private ZeroTier Network to join during boot.
@@ -85,9 +85,9 @@ bash initramfs.sh
 The result of the build will be located in `staging/vmlinuz.efi`
 
 # I have the kernel, what can I do with it ?
-Just boot it. The kernel image if EFI bootable.
+Just boot it. The kernel image is EFI bootable.
 
-If you have a EFI Shell, just run the kernel like any EFI executable.
+If you have an EFI Shell, just run the kernel like any EFI executable.
 If you don't have the shell or want to boot it automaticaly, put the kernel in `/EFI/BOOT/BOOTX64.EFI` in a FAT partition.
 
 example how to create a boot disk
