@@ -69,7 +69,6 @@ done
 . "${INTERNAL}"/btrfs-progs.sh
 . "${INTERNAL}"/zerotier.sh
 . "${INTERNAL}"/cores.sh
-. "${INTERNAL}"/ipfs.sh
 . "${INTERNAL}"/dnsmasq.sh
 . "${INTERNAL}"/nftables.sh
 . "${INTERNAL}"/iproute2.sh
@@ -313,6 +312,7 @@ g8os_root() {
 
     # Ensure /run -> /var/run
     pushd "${ROOTDIR}"
+    rm -f run
     ln -sf var/run run
     popd
 
@@ -376,7 +376,6 @@ main() {
         build_parted
         build_linuxutil
         build_redis
-        build_ipfs
         build_btrfs
         build_zerotier
         build_dnsmasq

@@ -1,0 +1,20 @@
+# Start the ipfs daemon, after the networkin is already configured
+[startup.zerotier]
+name = "core.system"
+after = ["net"]
+
+[startup.zerotier.args]
+name = "zerotier-one"
+args = ["/tmp/core-0-zt"]
+
+[extension."zerotier.join"]
+binary = "zerotier-cli"
+args = ["-D/tmp/core-0-zt", "join", "{network}"]
+
+[extension."zerotier.leave"]
+binary = "zerotier-cli"
+args = ["-D/tmp/core-0-zt", "leave", "{network}"]
+
+[extension."zerotier.list"]
+binary = "sh"
+args = ["-c", "echo 20::: && zerotier-cli -D/tmp/core-0-zt listnetworks -j && echo :::"]
