@@ -73,6 +73,8 @@ done
 . "${INTERNAL}"/nftables.sh
 . "${INTERNAL}"/iproute2.sh
 . "${INTERNAL}"/socat.sh
+. "${INTERNAL}"/qemu.sh
+. "${INTERNAL}"/libvirt.sh
 
 #
 # Utilities
@@ -182,6 +184,8 @@ download_all() {
     download_nftables
     download_iproute2
     download_socat
+    download_qemu
+    download_libvirt
 
     popd
 }
@@ -205,6 +209,8 @@ extract_all() {
     extract_nftables
     extract_iproute2
     extract_socat
+    extract_qemu
+    extract_libvirt
 
     popd
 }
@@ -289,6 +295,7 @@ clean_root() {
     rm -rf usr/lib/*.a
     rm -rf usr/lib/*.la
     rm -rf usr/share/doc
+    rm -rf usr/share/gtk-doc
     rm -rf usr/share/man
     rm -rf usr/share/locale
     rm -rf usr/share/info
@@ -332,6 +339,7 @@ g8os_root() {
     cp -a "${CONFDIR}"/nsswitch.conf "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/hosts "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/passwd "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/group "${ROOTDIR}"/etc/
 }
 
 get_size() {
