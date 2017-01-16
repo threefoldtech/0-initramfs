@@ -15,7 +15,7 @@ extract_socat() {
 
 prepare_socat() {
     echo "[+] configuring socat"
-    ./configure
+    ./configure --disable-openssl
 
     if [ ! -f socat-1.7.3.1-ubuntu.patch ]; then
         echo "[+] downloading patch"
