@@ -425,6 +425,8 @@ main() {
         build_nftables
         build_iproute2
         build_socat
+        build_qemu
+        build_libvirt
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
