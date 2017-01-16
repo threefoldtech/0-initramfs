@@ -81,6 +81,7 @@ done
 . "${INTERNAL}"/socat.sh
 . "${INTERNAL}"/qemu.sh
 . "${INTERNAL}"/libvirt.sh
+. "${INTERNAL}"/openssl.sh
 
 #
 # Utilities
@@ -192,6 +193,7 @@ download_all() {
     download_socat
     download_qemu
     download_libvirt
+    download_openssl
 
     popd
 }
@@ -217,6 +219,7 @@ extract_all() {
     extract_socat
     extract_qemu
     extract_libvirt
+    extract_openssl
 
     popd
 }
@@ -411,6 +414,7 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
         build_fuse
+        build_openssl
         build_certs
         build_parted
         build_linuxutil
