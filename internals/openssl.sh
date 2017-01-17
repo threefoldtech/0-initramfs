@@ -15,7 +15,10 @@ extract_openssl() {
 
 prepare_openssl() {
     echo "[+] preparing openssl"
-    ./config --prefix=/usr
+
+    # Setting custom CFLAGS, ensure shared library compiles
+    export CFLAGS="-fPIC"
+    ./config --prefix=/usr shared
 }
 
 compile_openssl() {
@@ -24,7 +27,13 @@ compile_openssl() {
 }
 
 install_openssl() {
-    make INSTALL_PREFIX="${ROOTDIR}"/usr install
+    make INSTALL_PREFIX="${ROOTDIR}" install
+
+    # Removing useless ssl extra files
+    rm -rf "${ROOTDIR}"/usr/ssl
+
+    # Cleaning CFLAGS
+    unset CFLAGS
 }
 
 build_openssl() {
