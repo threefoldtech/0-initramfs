@@ -25,11 +25,17 @@ Some parts need to chown/setuid/chmod files as root.
  - Compiles:
     - Busybox
     - Fuse (library and userland tools)
-    - SSL Certificates (ca-certificates)
+    - OpenSSL and SSL Certificates (ca-certificates)
     - util-linux (for `lsblk`, ...)
     - Redis (only the server is used)
-    - IPFS
     - BTRFS (btrfs-progs)
+    - libvirt and QEMU
+    - ZeroTier One
+    - parted (partition management)
+    - dnsmasq (used for dhcp on containers)
+    - nftables (used for firewalling and routing)
+    - iproute2 (used for network namespace support)
+    - socat (used for some tcp/port forwarding)
  - Clean and remove useless files
  - Compile the kernel (and bundles initramfs in the kernel)
 
