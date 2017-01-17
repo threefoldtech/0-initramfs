@@ -237,6 +237,7 @@ resolv_libs() {
 
         cp -aL $path/libresolv* "${ROOTDIR}/usr/lib/"
         cp -a $path/libnss_{compat,dns,files}* "${ROOTDIR}/usr/lib/"
+        cp -a $path/libnsl* "${ROOTDIR}/usr/lib/"
         return
     done
 
