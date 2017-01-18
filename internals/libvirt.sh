@@ -20,6 +20,7 @@ prepare_libvirt() {
     ./configure --prefix=/ \
         --with-qemu \
         --with-fuse \
+        --with-yajl \
         --with-init-script=none \
         --with-sysctl=no \
         --without-apparmor \
@@ -53,7 +54,9 @@ prepare_libvirt() {
         --without-storage-sheepdog \
         --without-storage-gluster \
         --without-storage-zfs \
-        --without-wireshark-dissector
+        --without-wireshark-dissector \
+        --without-pm-utils \
+        --without-firewalld
 }
 
 compile_libvirt() {
