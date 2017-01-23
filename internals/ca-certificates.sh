@@ -1,5 +1,5 @@
-CERTS_VERSION="20161102"
-CERTS_CHECKSUM="165cba65008ea1282cf696ef7773de16"
+CERTS_VERSION="20161130"
+CERTS_CHECKSUM="903fd61bf44370efe92f463783e59a9a"
 CERTS_LINK="http://ftp.fr.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_${CERTS_VERSION}_all.deb"
 
 download_certs() {
