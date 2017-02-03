@@ -3,11 +3,13 @@ This repository contains all that is needed to build the g8os-kernel and initram
 
 ## Releases:
 - [0.9.0](https://github.com/g8os/initramfs/tree/0.9.0) : used to build the [v0.9.0](https://github.com/g8os/core0/releases/tag/v0.9.0) of core0
+- [0.10.0](https://github.com/g8os/initramfs/tree/0.10.0) : used to build the [v0.10.0](https://github.com/g8os/core0/releases/tag/v0.10.0) of core0
+- [0.11.0](https://github.com/g8os/initramfs/tree/0.11.0) : used to build the [v0.11.0](https://github.com/g8os/core0/releases/tag/v0.11.0) of core0
 
 # Dependencies
 Under Ubuntu 16.04, you will need this in order to compile everything:
  - `golang` (version 1.7)
- - `xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git asciidoc xmlto libbison-dev flex libmnl-dev`
+ - `xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git asciidoc xmlto libbison-dev flex libmnl-dev libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq`
 
 These dependencies are of course valid for any other system but adapt you'll have to adapt it to suit yours.
 
@@ -23,11 +25,17 @@ Some parts need to chown/setuid/chmod files as root.
  - Compiles:
     - Busybox
     - Fuse (library and userland tools)
-    - SSL Certificates (ca-certificates)
+    - OpenSSL and SSL Certificates (ca-certificates)
     - util-linux (for `lsblk`, ...)
     - Redis (only the server is used)
-    - IPFS
     - BTRFS (btrfs-progs)
+    - libvirt and QEMU
+    - ZeroTier One
+    - parted (partition management)
+    - dnsmasq (used for dhcp on containers)
+    - nftables (used for firewalling and routing)
+    - iproute2 (used for network namespace support)
+    - socat (used for some tcp/port forwarding)
  - Clean and remove useless files
  - Compile the kernel (and bundles initramfs in the kernel)
 
@@ -69,7 +77,7 @@ Then from inside the docker
 # install dependencies for building
 apt-get update
 apt-get install -y asciidoc xmlto --no-install-recommends
-apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source
+apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq
 
 # install go
 curl https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz > go1.7.3.linux-amd64.tar.gz

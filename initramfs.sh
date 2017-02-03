@@ -13,7 +13,7 @@ MAKEOPTS="-j 4"
 #
 # Flags
 #
-OPTS=$(getopt -o dbtckh --long download,busybox,tools,cores,kernel,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o dbtcklmh --long download,busybox,tools,cores,kernel,clean,mrproper,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
@@ -29,6 +29,8 @@ if [ "$OPTS" != " --" ]; then
     DO_TOOLS=0
     DO_CORES=0
     DO_KERNEL=0
+    DO_CLEAN=0
+    DO_MRPROPER=0
 
     eval set -- "$OPTS"
 fi
@@ -40,6 +42,8 @@ while true; do
         -t | --tools)    DO_TOOLS=1;    shift ;;
         -c | --cores)    DO_CORES=1;    shift ;;
         -k | --kernel)   DO_KERNEL=1;   shift ;;
+        -l | --clean)    DO_CLEAN=1;    shift ;;
+        -m | --mrproper) DO_MRPROPER=1; shift ;;
         -h | --help)
             echo "Usage:"
             echo " -d --download    only download and extract archives"
@@ -47,6 +51,8 @@ while true; do
             echo " -t --tools       only (re)build tools (ssl, fuse, ...)"
             echo " -c --cores       only (re)build core0 and coreX"
             echo " -k --kernel      only (re)build kernel (produce final image)"
+            echo " -l --clean       only clean staging files (extracted sources)"
+            echo " -m --mrproper    only remove staging files and clean the root"
             echo " -h --help        display this help message"
             exit 1
         shift ;;
@@ -73,6 +79,10 @@ done
 . "${INTERNAL}"/nftables.sh
 . "${INTERNAL}"/iproute2.sh
 . "${INTERNAL}"/socat.sh
+. "${INTERNAL}"/qemu.sh
+. "${INTERNAL}"/libvirt.sh
+. "${INTERNAL}"/openssl.sh
+. "${INTERNAL}"/dmidecode.sh
 
 #
 # Utilities
@@ -182,6 +192,10 @@ download_all() {
     download_nftables
     download_iproute2
     download_socat
+    download_qemu
+    download_libvirt
+    download_openssl
+    download_dmidecode
 
     popd
 }
@@ -205,6 +219,10 @@ extract_all() {
     extract_nftables
     extract_iproute2
     extract_socat
+    extract_qemu
+    extract_libvirt
+    extract_openssl
+    extract_dmidecode
 
     popd
 }
@@ -222,6 +240,7 @@ resolv_libs() {
 
         cp -aL $path/libresolv* "${ROOTDIR}/usr/lib/"
         cp -a $path/libnss_{compat,dns,files}* "${ROOTDIR}/usr/lib/"
+        cp -a $path/libnsl* "${ROOTDIR}/usr/lib/"
         return
     done
 
@@ -289,6 +308,7 @@ clean_root() {
     rm -rf usr/lib/*.a
     rm -rf usr/lib/*.la
     rm -rf usr/share/doc
+    rm -rf usr/share/gtk-doc
     rm -rf usr/share/man
     rm -rf usr/share/locale
     rm -rf usr/share/info
@@ -332,6 +352,7 @@ g8os_root() {
     cp -a "${CONFDIR}"/nsswitch.conf "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/hosts "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/passwd "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/group "${ROOTDIR}"/etc/
 }
 
 get_size() {
@@ -345,6 +366,20 @@ end_summary() {
     echo "[+] --- initramfs ready ---"
     echo "[+] initramfs root size: $root_size"
     echo "[+] kernel size: $kernel_size"
+}
+
+remove_staging() {
+    echo "[+] cleaning ${WORKDIR}"
+    rm -rf "${WORKDIR}"/*
+
+    echo "[+] source cleared"
+}
+
+remove_root() {
+    echo "[+] cleaning ${ROOTDIR}"
+    rm -rf "${ROOTDIR}"/*
+
+    echo "[+] root cleared"
 }
 
 main() {
@@ -361,6 +396,17 @@ main() {
     #
     prepare
 
+    if [[ $DO_CLEAN == 1 ]]; then
+        remove_staging
+        exit 0
+    fi
+
+    if [[ $DO_MRPROPER == 1 ]]; then
+        remove_staging
+        remove_root
+        exit 0
+    fi
+
     if [[ $DO_ALL == 1 ]] || [[ $DO_DOWNLOAD == 1 ]]; then
         download_all
         extract_all
@@ -372,6 +418,7 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
         build_fuse
+        build_openssl
         build_certs
         build_parted
         build_linuxutil
@@ -382,6 +429,9 @@ main() {
         build_nftables
         build_iproute2
         build_socat
+        build_qemu
+        build_libvirt
+        build_dmidecode
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then

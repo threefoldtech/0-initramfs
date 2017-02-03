@@ -25,6 +25,11 @@ install_dnsmasq() {
     cp -avL src/dnsmasq "${ROOTDIR}/usr/bin/"
     mkdir -p "${ROOTDIR}"/var/run/dnsmasq
     mkdir -p "${ROOTDIR}"/var/lib/misc
+
+    # symlink dnsmasq to sbin to ensure hardcoded location
+    pushd "${ROOTDIR}/usr/sbin/"
+    ln -fs ../bin/dnsmasq dnsmasq
+    popd
 }
 
 build_dnsmasq() {
