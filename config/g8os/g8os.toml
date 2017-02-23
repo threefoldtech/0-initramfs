@@ -40,4 +40,4 @@ flush_interval = 100 # millisecond
 address = "127.0.0.1:6379"
 
 [globals]
-fuse_storage = "https://stor.jumpscale.org/stor2/store/ubuntu-g8os-flist/"
+fuse_storage = "ardb://remote-host:26379"
