@@ -159,7 +159,12 @@ prepare() {
 # First argument need to be the url, second is the md5 hash
 #
 download_file() {
-    output=$(basename "$1")
+    if [ "$3" != "" ]; then
+        output=$3
+    else
+        output=$(basename "$1")
+    fi
+
     echo "[+] downloading: ${output}"
 
     if [ -f "${output}" ]; then
