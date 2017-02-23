@@ -329,6 +329,23 @@ clean_root() {
     popd
 }
 
+optimize_size() {
+    echo "[+] optimizing binaries size"
+    pushd "${ROOTDIR}"
+
+    for file in $(find ./bin ./sbin ./libexec ./usr/bin ./usr/sbin ./usr/libexec ./usr/lib -type f); do
+        # dumping 4 first bytes
+        header=$(dd if=$file bs=1 count=4 2> /dev/null | hexdump -e '/1 "%02X"')
+
+        # checking if it's a ELF file
+        if [ "$header" == "7F454C46" ]; then
+            strip --strip-debug $file || true
+        fi
+    done
+
+    popd
+}
+
 g8os_root() {
     # copy init
     echo "[+] installing init script"
@@ -454,6 +471,7 @@ main() {
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]]; then
         ensure_libs
         clean_root
+        optimize_size
         g8os_root
         build_kernel
         end_summary
