@@ -24,7 +24,7 @@ compile_rocksdb() {
 
 install_rocksdb() {
     echo "[+] installing rocksdb"
-    cp -av librocksdb.so* "${ROOTDIR}"/usr/lib/
+    cp -a librocksdb.so* "${ROOTDIR}"/usr/lib/
 }
 
 prepare_gorocksdb() {

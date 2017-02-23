@@ -24,9 +24,9 @@ compile_unionfs() {
 
 install_unionfs() {
     echo "[+] installing unionfs-fuse"
-    cp -av mount.unionfs "${ROOTDIR}"/usr/bin/
-    cp -av src/unionfs "${ROOTDIR}"/usr/bin/
-    cp -av src/unionfsctl "${ROOTDIR}"/usr/bin/
+    cp -a mount.unionfs "${ROOTDIR}"/usr/bin/
+    cp -a src/unionfs "${ROOTDIR}"/usr/bin/
+    cp -a src/unionfsctl "${ROOTDIR}"/usr/bin/
 }
 
 build_unionfs() {
