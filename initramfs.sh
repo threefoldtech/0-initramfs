@@ -83,6 +83,8 @@ done
 . "${INTERNAL}"/libvirt.sh
 . "${INTERNAL}"/openssl.sh
 . "${INTERNAL}"/dmidecode.sh
+. "${INTERNAL}"/unionfs-fuse.sh
+. "${INTERNAL}"/gorocksdb.sh
 
 #
 # Utilities
@@ -196,6 +198,8 @@ download_all() {
     download_libvirt
     download_openssl
     download_dmidecode
+    download_unionfs
+    download_gorocksdb
 
     popd
 }
@@ -223,6 +227,8 @@ extract_all() {
     extract_libvirt
     extract_openssl
     extract_dmidecode
+    extract_unionfs
+    extract_gorocksdb
 
     popd
 }
@@ -432,6 +438,8 @@ main() {
         build_qemu
         build_libvirt
         build_dmidecode
+        build_unionfs
+        build_gorocksdb
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
