@@ -2,7 +2,7 @@
 
 [main]
 max_jobs = 200
-include = "/root/conf"
+include = "/etc/g8os/conf"
 log_level = "info"
 network = "/etc/g8os/network.toml"
 
@@ -40,4 +40,4 @@ flush_interval = 100 # millisecond
 address = "127.0.0.1:6379"
 
 [globals]
-fuse_storage = "ardb://remote-host:26379"
+fuse_storage = "ardb://10.241.0.232:16379"

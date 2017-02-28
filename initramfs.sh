@@ -370,9 +370,10 @@ g8os_root() {
     fi
 
     echo "[+] installing g8os configuration"
-    rm -rf "${ROOTDIR}"/root/conf
-    cp -a "${CONFDIR}"/root "${ROOTDIR}"/root/conf
+    rm -rf "${ROOTDIR}"/etc/g8os/conf
     cp -a "${CONFDIR}"/g8os "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/g8os-conf "${ROOTDIR}"/etc/g8os/conf
+
 
     # System configuration
     cp -a "${CONFDIR}"/udhcp "${ROOTDIR}"/usr/share/
