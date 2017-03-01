@@ -28,6 +28,11 @@ install_cores() {
     echo "[+] copying binaries"
     cp -a coreX/coreX core0/core0 "${ROOTDIR}/sbin/"
     cp -a ../g8ufs/cmd/cmd "${ROOTDIR}/sbin/g8ufs"
+
+    echo "[+] installing configuration"
+    mkdir -p "${ROOTDIR}/etc/g8os/conf"
+    cp -a core0/conf/* "${ROOTDIR}"/etc/g8os/conf/
+    rm -f "${ROOTDIR}"/etc/g8os/conf/README.md
 }
 
 build_cores() {

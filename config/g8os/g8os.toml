@@ -2,7 +2,7 @@
 
 [main]
 max_jobs = 200
-include = "/etc/g8os/conf"
+include = ["/etc/g8os/conf"]
 log_level = "info"
 network = "/etc/g8os/network.toml"
 
