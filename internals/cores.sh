@@ -8,15 +8,8 @@ prepare_cores() {
 }
 
 compile_cores() {
-    echo "[+] compiling coreX"
-    pushd coreX
-    go build -ldflags "-s -w"
-    popd
-
-    echo "[+] compiling core0"
-    pushd core0
-    go build -ldflags "-s -w"
-    popd
+    echo "[+] compiling coreX and core0"
+    make
 
     echo "[+] compiling g8ufs"
     pushd ../g8ufs/cmd
@@ -26,7 +19,7 @@ compile_cores() {
 
 install_cores() {
     echo "[+] copying binaries"
-    cp -a coreX/coreX core0/core0 "${ROOTDIR}/sbin/"
+    cp -a bin/coreX bin/core0 "${ROOTDIR}/sbin/"
     cp -a ../g8ufs/cmd/cmd "${ROOTDIR}/sbin/g8ufs"
 
     echo "[+] installing configuration"
