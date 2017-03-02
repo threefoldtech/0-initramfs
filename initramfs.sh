@@ -85,6 +85,7 @@ done
 . "${INTERNAL}"/dmidecode.sh
 . "${INTERNAL}"/unionfs-fuse.sh
 . "${INTERNAL}"/gorocksdb.sh
+. "${INTERNAL}"/eudev.sh
 
 #
 # Utilities
@@ -205,6 +206,7 @@ download_all() {
     download_dmidecode
     download_unionfs
     download_gorocksdb
+    download_eudev
 
     popd
 }
@@ -234,6 +236,7 @@ extract_all() {
     extract_dmidecode
     extract_unionfs
     extract_gorocksdb
+    extract_eudev
 
     popd
 }
@@ -463,6 +466,7 @@ main() {
         build_dmidecode
         build_unionfs
         build_gorocksdb
+        build_eudev
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
