@@ -1,10 +1,27 @@
-CORES_VERSION="master"
+CORES_VERSION="0.12.0"
+G8UFS_VERSION="master"
 
 prepare_cores() {
     echo "[+] loading source code: g8os cores"
     go get -d -v github.com/g8os/core0/core0
     go get -d -v github.com/g8os/core0/coreX
     go get -d -v github.com/g8os/g8ufs
+
+    pushd $GOPATH/src/github.com/g8os/core0
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$branch" != $CORES_VERSION ]; then
+        git fetch origin ${CORES_VERSION}:${CORES_VERSION}
+        git checkout ${CORES_VERSION}
+    fi
+    popd
+
+    pushd $GOPATH/src/github.com/g8os/g8ufs
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$branch" != $G8UFS_VERSION ]; then
+        git fetch origin ${G8UFS_VERSION}:${G8UFS_VERSION}
+        git checkout ${G8UFS_VERSION}
+    fi
+    popd
 }
 
 compile_cores() {
