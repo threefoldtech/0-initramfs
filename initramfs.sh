@@ -318,7 +318,6 @@ clean_root() {
     rm -rf lib/*.a
     rm -rf lib/*.la
     rm -rf etc/init.d
-    rm -rf etc/udev
     rm -rf usr/lib/*.a
     rm -rf usr/lib/*.la
     rm -rf usr/share/doc
