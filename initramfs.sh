@@ -29,6 +29,7 @@ if [ "$OPTS" != " --" ]; then
     DO_TOOLS=0
     DO_CORES=0
     DO_KERNEL=0
+    DO_KMODULES=0
     DO_CLEAN=0
     DO_MRPROPER=0
 
@@ -42,6 +43,7 @@ while true; do
         -t | --tools)    DO_TOOLS=1;    shift ;;
         -c | --cores)    DO_CORES=1;    shift ;;
         -k | --kernel)   DO_KERNEL=1;   shift ;;
+        -M | --modules)  DO_KMODULES=1; shift ;;
         -l | --clean)    DO_CLEAN=1;    shift ;;
         -m | --mrproper) DO_MRPROPER=1; shift ;;
         -h | --help)
@@ -50,7 +52,8 @@ while true; do
             echo " -b --busybox     only (re)build busybox"
             echo " -t --tools       only (re)build tools (ssl, fuse, ...)"
             echo " -c --cores       only (re)build core0 and coreX"
-            echo " -k --kernel      only (re)build kernel (produce final image)"
+            echo " -k --kernel      only (re)build kernel (vmlinuz, produce final image)"
+            echo " -M --modules     only (re)build kernel modules"
             echo " -l --clean       only clean staging files (extracted sources)"
             echo " -m --mrproper    only remove staging files and clean the root"
             echo " -h --help        display this help message"

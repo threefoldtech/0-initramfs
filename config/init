@@ -36,5 +36,19 @@ mount -t devpts devpts $target/dev/pts
 echo "[+] setting environment"
 export PATH
 
+echo "[+] loading drivers"
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+
+udevd --daemon
+sleep 0.2
+
+udevadm trigger --action=add
+udevadm settle
+kill $(pidof udevd)
+
+umount /proc
+umount /sys
+
 echo "[+] switching root"
 exec switch_root /mnt/root /sbin/core0

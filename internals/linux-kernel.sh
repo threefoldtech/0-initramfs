@@ -21,9 +21,11 @@ prepare_kernel() {
 }
 
 compile_kernel() {
-    echo "[+] compiling the kernel (modules)"
-    make ${MAKEOPTS} modules
-    make INSTALL_MOD_PATH="${ROOTDIR}" modules_install
+    if [[ $DO_ALL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
+        echo "[+] compiling the kernel (modules)"
+        make ${MAKEOPTS} modules
+        make INSTALL_MOD_PATH="${ROOTDIR}" modules_install
+    fi
 
     echo "[+] compiling the kernel (vmlinuz)"
     make ${MAKEOPTS}
