@@ -73,15 +73,17 @@ You can disable this and join another network by editing/moving/copying `conf/ro
 
 From the root of this repository, create a docker container
 ```shell
-docker run -v $(pwd):/initramfs -ti ubuntu:16.04 /bin/bash
+docker run -ti --name g8osbuilder ubuntu:16.04 /bin/bash
 ```
+
+Don't try to mount the initramfs repo, the build will fail.
 
 Then from inside the docker
 ```shell
 # install dependencies for building
 apt-get update
 apt-get install -y asciidoc xmlto --no-install-recommends
-apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq liblz4-dev libsnappy-dev libbz2-dev libssl-dev gperf libelf-dev
+apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq liblz4-dev libsnappy-dev libbz2-dev libssl-dev gperf libelf-dev git
 
 # install go
 curl https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz > go1.7.3.linux-amd64.tar.gz
@@ -90,11 +92,14 @@ export PATH=$PATH:/usr/local/go/bin
 mkdir /gopath
 export GOPATH=/gopath
 
+#clone the repo
+git clone https://github.com/g8os/initramfs.git
+
 # start the build
 cd /initramfs
 bash initramfs.sh
 ```
-The result of the build will be located in `staging/vmlinuz.efi`
+The result of the build will be located in `staging/vmlinuz.efi` so copy it out of the docker by executing `docker cp g8osbuilder:/initramfs/staging/vmlinuz.efi .`
 
 # I have the kernel, what can I do with it ?
 Just boot it. The kernel image is EFI bootable.
