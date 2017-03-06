@@ -27,8 +27,10 @@ compile_kernel() {
         make INSTALL_MOD_PATH="${ROOTDIR}" modules_install
     fi
 
-    echo "[+] compiling the kernel (vmlinuz)"
-    make ${MAKEOPTS}
+    if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]]; then
+        echo "[+] compiling the kernel (vmlinuz)"
+        make ${MAKEOPTS}
+    fi
 }
 
 install_kernel() {
