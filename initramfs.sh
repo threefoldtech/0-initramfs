@@ -475,6 +475,10 @@ main() {
         build_cores
     fi
 
+    if [[ $DO_KMODULES == 1 ]]; then
+        build_kernel
+    fi
+
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]]; then
         ensure_libs
         clean_root
