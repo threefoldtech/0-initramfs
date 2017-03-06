@@ -13,7 +13,7 @@ MAKEOPTS="-j 4"
 #
 # Flags
 #
-OPTS=$(getopt -o dbtcklmh --long download,busybox,tools,cores,kernel,clean,mrproper,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o dbtcklmMh --long download,busybox,tools,cores,kernel,modules,clean,mrproper,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
