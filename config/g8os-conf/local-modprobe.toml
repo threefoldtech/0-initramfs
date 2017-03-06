@@ -1,0 +1,10 @@
+[startup.modprobecustom]
+name = "bash"
+after = ["init"]
+running_delay = -1
+
+[startup.modprobecustom.args]
+stdin = """
+modprobe fuse
+modprobe btrfs
+"""
