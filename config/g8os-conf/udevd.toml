@@ -1,5 +1,6 @@
 [startup.udevd]
 name = "core.system"
+after = ["init"]
 
 [startup.udevd.args]
 name = "udevd"
@@ -7,10 +8,10 @@ args = ["--daemon"]
 
 [startup.udevtrigger]
 name = "bash"
-after = ["udevd"]
+after = ["init"]
 running_delay = -1
 
 [startup.udevtrigger.args]
 stdin = """
-udevadm trigger --action=add; udevadm settle
+sleep 2; udevadm trigger --action=add; udevadm settle
 """

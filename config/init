@@ -44,7 +44,9 @@ udevd --daemon
 sleep 0.2
 
 udevadm trigger --action=add
+udevadm trigger
 udevadm settle
+
 kill $(pidof udevd)
 
 umount /proc
