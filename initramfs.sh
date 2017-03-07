@@ -89,6 +89,7 @@ done
 . "${INTERNAL}"/unionfs-fuse.sh
 . "${INTERNAL}"/gorocksdb.sh
 . "${INTERNAL}"/eudev.sh
+. "${INTERNAL}"/kmod.sh
 
 #
 # Utilities
@@ -210,6 +211,7 @@ download_all() {
     download_unionfs
     download_gorocksdb
     download_eudev
+    download_kmod
 
     popd
 }
@@ -240,6 +242,7 @@ extract_all() {
     extract_unionfs
     extract_gorocksdb
     extract_eudev
+    extract_kmod
 
     popd
 }
@@ -469,17 +472,14 @@ main() {
         build_unionfs
         build_gorocksdb
         build_eudev
+        build_kmod
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
         build_cores
     fi
 
-    if [[ $DO_KMODULES == 1 ]]; then
-        build_kernel
-    fi
-
-    if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]]; then
+    if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
         ensure_libs
         clean_root
         optimize_size
