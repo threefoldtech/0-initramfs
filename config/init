@@ -5,6 +5,8 @@ echo "==             G8OS INITRAMFS             =="
 echo "============================================"
 
 echo "[+] creating ram filesystem"
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
 mount -t tmpfs tmpfs /mnt/root -o size=256M
 mount -t devtmpfs devtmpfs /dev
 
@@ -37,14 +39,11 @@ echo "[+] setting environment"
 export PATH
 
 echo "[+] loading drivers"
-mount -t proc proc /proc
-mount -t sysfs sysfs /sys
+udevadm hwdb --update
 
 udevd --daemon
-sleep 0.2
-
-udevadm trigger --action=add
-udevadm trigger
+udevadm trigger --action=add --type=subsystems
+udevadm trigger --action=add --type=devices
 udevadm settle
 
 kill $(pidof udevd)
