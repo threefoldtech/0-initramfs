@@ -382,7 +382,6 @@ g8os_root() {
     cp -a "${CONFDIR}"/g8os/* "${ROOTDIR}"/etc/g8os/
     cp -a "${CONFDIR}"/g8os-conf/* "${ROOTDIR}"/etc/g8os/conf/
 
-
     # System configuration
     cp -a "${CONFDIR}"/udhcp "${ROOTDIR}"/usr/share/
     cp -a "${CONFDIR}"/nftables.conf "${ROOTDIR}"/etc/
