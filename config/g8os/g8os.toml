@@ -40,4 +40,4 @@ flush_interval = 100 # millisecond
 address = "127.0.0.1:6379"
 
 [globals]
-fuse_storage = "ardb://10.241.0.232:16379"
+fuse_storage = "ardb://home.maxux.net:26379"
