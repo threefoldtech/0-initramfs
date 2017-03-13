@@ -41,7 +41,7 @@ Some parts need to chown/setuid/chmod files as root.
     - RocksDB (shared library)
     - GoRocksDB
     - eudev and kmod (used for hardware and modules management)
- - Clean and remove useless files
+ - Clean, remove useless files, optimize (strip) files and copy system's config
  - Compile the kernel (and bundles initramfs in the kernel)
 
 
