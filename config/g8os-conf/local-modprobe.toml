@@ -4,7 +4,7 @@ after = ["init"]
 running_delay = -1
 
 [startup.modprobecustom.args]
-stdin = """
+script = """
 modprobe fuse
 modprobe btrfs
 modprobe tun
