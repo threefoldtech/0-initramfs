@@ -365,6 +365,7 @@ g8os_root() {
     mkdir -p "${ROOTDIR}"/mnt/root
     mkdir -p "${ROOTDIR}"/var/run
     mkdir -p "${ROOTDIR}"/var/log
+    mkdir -p "${ROOTDIR}"/var/lock
 
     # Ensure /run -> /var/run
     pushd "${ROOTDIR}"
