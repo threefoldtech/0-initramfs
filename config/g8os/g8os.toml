@@ -10,11 +10,6 @@ network = "/etc/g8os/network.toml"
 url = "redis://127.0.0.1:6379"
 password = ""
 
-
-[extension.bash]
-binary = "/bin/ash"
-args = ['-c', 'T=`mktemp` && cat > $T && ash $T; EXIT=$?; rm -rf $T; exit $EXIT']
-
 [logging]
     [logging.db]
     type = "DB"
