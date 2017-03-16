@@ -355,17 +355,22 @@ optimize_size() {
 }
 
 g8os_root() {
-    # copy init
+    # Copy init
     echo "[+] installing init script"
     cp "${CONFDIR}/init" "${ROOTDIR}/init"
     chmod +x "${ROOTDIR}/init"
 
-    # ensure minimal /dev and /mnt
+    # Ensure minimal system directories and symlinks
     echo "[+] creating default directories and files"
     mkdir -p "${ROOTDIR}"/mnt/root
     mkdir -p "${ROOTDIR}"/var/run
     mkdir -p "${ROOTDIR}"/var/log
     mkdir -p "${ROOTDIR}"/var/lock
+
+    # Legacy mtab symlink
+    pushd "${ROOTDIR}/etc"
+    ln -sf /proc/mounts mtab
+    popd
 
     # Ensure /run -> /var/run
     pushd "${ROOTDIR}"
