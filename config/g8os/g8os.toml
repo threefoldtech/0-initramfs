@@ -1,7 +1,7 @@
 #leave /tmp and /opt/jumpscale8 in this file, gets replaced during installation
 
 [main]
-max_jobs = 200
+max_jobs = 524288
 include = ["/etc/g8os/conf"]
 log_level = "info"
 network = "/etc/g8os/network.toml"
