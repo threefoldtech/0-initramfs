@@ -109,12 +109,13 @@ Just boot it. The kernel image is EFI bootable.
 If you have an EFI Shell, just run the kernel like any EFI executable.
 If you don't have the shell or want to boot it automaticaly, put the kernel in `/EFI/BOOT/BOOTX64.EFI` in a FAT partition.
 
-example how to create a boot disk
+## How to create a 'bootable' (EFI) image
 ```shell
-dd if=/dev/zero of=g8os.img bs=1M count=64
-mkfs.vfat g8os.iso
-mount g8os.iso /mnt
-mkdir -p /mnt/EFI/BOOT
+dd if=/dev/zero of=/tmp/g8os.img bs=1M count=256
+mkfs.vfat /tmp/g8os.iso
+mkdir -p /mnt/g8os-iso
+mount g8os.iso /mnt/g8os-iso
+mkdir -p /mnt/g8os-iso/EFI/BOOT
 cp staging/vmlinuz.efi /mnt/EFI/BOOT/BOOTX64.EFI
-umount /mnt
+umount /mnt/g8os-iso
 ```
