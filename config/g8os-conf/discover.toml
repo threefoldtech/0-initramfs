@@ -1,0 +1,19 @@
+[startup."ays.register"]
+name = "bash"
+after = ["net"]
+max_restart = 10000 # it automatically sleeps 1 sec between each trial
+ 
+[startup."ays.register".args]
+script = """
+#!/bin/ash
+echo -en \"POST /webhooks/events HTTP/1.1\r\n\" > /tmp/discover
+echo -en \"Host: {ays_ip}\r\n\" >> /tmp/discover
+echo -en \"Content-Type: application/json\r\n\" >> /tmp/discover
+echo -en \"Connection: close\r\n\" >> /tmp/discover
+echo -en \"Content-Length: 24\r\n\r\n\" >> /tmp/discover
+echo -en '{\"command\": \"discover\"}' \"\r\n\" >> /tmp/discover
+ 
+nc {ays_ip} {ays_port} < /tmp/discover
+"""
+ 
+
