@@ -90,6 +90,7 @@ done
 . "${INTERNAL}"/gorocksdb.sh
 . "${INTERNAL}"/eudev.sh
 . "${INTERNAL}"/kmod.sh
+. "${INTERNAL}"/dropbear.sh
 
 #
 # Utilities
@@ -212,6 +213,7 @@ download_all() {
     download_gorocksdb
     download_eudev
     download_kmod
+    download_dropbear
 
     popd
 }
@@ -243,6 +245,7 @@ extract_all() {
     extract_gorocksdb
     extract_eudev
     extract_kmod
+    extract_dropbear
 
     popd
 }
@@ -478,6 +481,7 @@ main() {
         build_gorocksdb
         build_eudev
         build_kmod
+        build_dropbear
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
