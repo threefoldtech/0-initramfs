@@ -370,6 +370,10 @@ g8os_root() {
     mkdir -p "${ROOTDIR}"/var/log
     mkdir -p "${ROOTDIR}"/var/lock
 
+    # Ensure minimal login logs
+    touch "${ROOTDIR}"/var/log/lastlog
+    touch "${ROOTDIR}"/var/log/wtmp
+
     # Legacy mtab symlink
     pushd "${ROOTDIR}/etc"
     ln -sf /proc/mounts mtab
@@ -398,6 +402,7 @@ g8os_root() {
     cp -a "${CONFDIR}"/hosts "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/passwd "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/group "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/shells "${ROOTDIR}"/etc/
 }
 
 get_size() {

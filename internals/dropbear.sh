@@ -26,11 +26,16 @@ prepare_dropbear() {
 compile_dropbear() {
     echo "[+] compiling dropbear"
     make ${MAKEOPTS}
+    make scp
 }
 
 install_dropbear() {
     echo "[+] installing dropbear"
     make DESTDIR="${ROOTDIR}" install
+    cp -a scp "${ROOTDIR}"/bin/
+
+    mkdir -m 700 "${ROOTDIR}"/etc/dropbear
+    mkdir -m 700 "${ROOTDIR}"/root/.ssh
 }
 
 build_dropbear() {
