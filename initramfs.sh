@@ -401,6 +401,7 @@ g8os_root() {
     cp -a "${CONFDIR}"/nsswitch.conf "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/hosts "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/passwd "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/profile "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/group "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/shells "${ROOTDIR}"/etc/
 }

@@ -34,8 +34,8 @@ install_dropbear() {
     make DESTDIR="${ROOTDIR}" install
     cp -a scp "${ROOTDIR}"/bin/
 
-    mkdir -m 700 "${ROOTDIR}"/etc/dropbear
-    mkdir -m 700 "${ROOTDIR}"/root/.ssh
+    mkdir -p -m 700 "${ROOTDIR}"/etc/dropbear
+    mkdir -p -m 700 "${ROOTDIR}"/root/.ssh
 }
 
 build_dropbear() {
