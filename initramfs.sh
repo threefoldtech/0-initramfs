@@ -369,6 +369,7 @@ g8os_root() {
     mkdir -p "${ROOTDIR}"/var/run
     mkdir -p "${ROOTDIR}"/var/log
     mkdir -p "${ROOTDIR}"/var/lock
+    mkdir -p "${ROOTDIR}"/var/cache/containers
 
     # Ensure minimal login logs
     touch "${ROOTDIR}"/var/log/lastlog
