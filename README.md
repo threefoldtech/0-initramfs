@@ -8,17 +8,14 @@ This repository contains all that is needed to build the g8os-kernel and initram
 - [0.12.0](https://github.com/g8os/initramfs/tree/0.12.0) : used to build the [v0.12.0](https://github.com/g8os/core0/releases/tag/v0.12.0) of core0
 
 # Dependencies
-Under Ubuntu 16.04, you will need this in order to compile everything:
- - `golang` (version 1.8)
- - `xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git asciidoc xmlto libbison-dev flex libmnl-dev libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq`
+In order to compile all the initramfs without issues, you'll need to installes build-time dependencies.
 
-These dependencies are of course valid for any other system but adapt you'll have to adapt it to suit yours.
-
-On Gentoo, you probably already have all the dependancies.
+Please check the build process and use the dependencies listed there.
 
 ## Privileges
 You need to have root privilege to be able to execute all the scripts.
-Some parts need to chown/setuid/chmod files as root.
+
+Some parts need to `chown/setuid/chmod/mknod` files as root.
 
 # What does this script do ?
  - First, download and check checksum of all archives needed
@@ -41,6 +38,7 @@ Some parts need to chown/setuid/chmod files as root.
     - RocksDB (shared library)
     - GoRocksDB
     - eudev and kmod (used for hardware and modules management)
+    - dropbear (lightweight ssh server)
  - Clean, remove useless files, optimize (strip) files and copy system's config
  - Compile the kernel (and bundles initramfs in the kernel)
 
