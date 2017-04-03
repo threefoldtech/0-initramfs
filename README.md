@@ -56,6 +56,9 @@ The `initramfs.sh` script accepts multiple options:
  -c --cores       only (re)build core0 and coreX
  -k --kernel      only (re)build kernel (produce final image)
  -M --modules     only (re)build kernel modules
+ -e --extensions  only (re)build extensions
+ -l --clean       only clean staging files (extracted sources)
+ -m --mrproper    only remove staging files and clean the root
  -h --help        display this help message
 ```
 
@@ -123,3 +126,29 @@ mkdir -p /mnt/g8os-iso/EFI/BOOT
 cp staging/vmlinuz.efi /mnt/EFI/BOOT/BOOTX64.EFI
 umount /mnt/g8os-iso
 ```
+
+# Extensions
+
+You can add your own building extension-scripts to customize the initramfs.
+
+During the build process, after `cores` and before `kernel` process, all directories under `extensions` folder will be
+parsed and executed. To make a working extension, you just need a `extension-name.sh` script on the root directory of your extension.
+
+Exemple:
+```
+extensions/
+  my-extension/
+    some-stuff/
+    another-stuff/
+    my-extension.sh
+  another-extension/
+    README.md
+    another-extension.sh
+```
+
+During the extension build phase, your extension script will be `sourced`, not forked, which means that you have access
+to all the variables used during the build script process.
+
+**Be careful, you could override some variable used by `initramfs.sh` itself and break the build process.**
+
+You can rebuild only your extension by calling `initramfs.sh --extensions`
