@@ -314,7 +314,7 @@ ensure_libs() {
 }
 
 #
-# Cleaner
+# Cleaner and optimizer
 #
 mknod_die() {
     echo "[-] mknod need root access, please run this command as root:"
@@ -362,6 +362,9 @@ optimize_size() {
     popd
 }
 
+#
+# Configuration
+#
 g8os_root() {
     # Copy init
     echo "[+] installing init script"
@@ -464,6 +467,9 @@ end_summary() {
     echo "[+] kernel size: $kernel_size"
 }
 
+#
+# Files cleaner
+#
 remove_staging() {
     echo "[+] cleaning ${WORKDIR}"
     rm -rf "${WORKDIR}"/*
@@ -478,6 +484,9 @@ remove_root() {
     echo "[+] root cleared"
 }
 
+#
+# Main stuff
+#
 main() {
     #
     # Display some informations
