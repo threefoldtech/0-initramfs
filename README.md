@@ -8,7 +8,7 @@ This repository contains all that is needed to build the g8os-kernel and initram
 - [0.12.0](https://github.com/g8os/initramfs/tree/0.12.0) : used to build the [v0.12.0](https://github.com/g8os/core0/releases/tag/v0.12.0) of core0
 
 # Dependencies
-In order to compile all the initramfs without issues, you'll need to installes build-time dependencies.
+In order to compile all the initramfs without issues, you'll need to installe build-time dependencies.
 
 Please check the build process and use the dependencies listed there.
 
@@ -106,6 +106,12 @@ Just boot it. The kernel image is EFI bootable.
 
 If you have an EFI Shell, just run the kernel like any EFI executable.
 If you don't have the shell or want to boot it automaticaly, put the kernel in `/EFI/BOOT/BOOTX64.EFI` in a FAT partition.
+
+## How to test the kernel with QEMU
+You can run the kernel and get the kernel output on your console from qemu directly
+```
+qemu-system-x86_64 -kernel vmlinuz.efi -m 2048 -enable-kvm -cpu host -net nic,model=e1000 -net bridge,br=vm0 -nographic -serial null -serial mon:stdio
+```
 
 ## How to create a 'bootable' (EFI) image
 ```shell
