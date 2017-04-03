@@ -7,13 +7,14 @@ WORKDIR="${PWD}/staging"
 CONFDIR="${PWD}/config"
 ROOTDIR="${PWD}/root"
 INTERNAL="${PWD}/internals/"
+EXTENDIR="${PWD}/extensions/"
 
 MAKEOPTS="-j 4"
 
 #
 # Flags
 #
-OPTS=$(getopt -o dbtcklmMh --long download,busybox,tools,cores,kernel,modules,clean,mrproper,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o dbtckMelmh --long download,busybox,tools,cores,kernel,modules,extensions,clean,mrproper,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
@@ -30,6 +31,7 @@ if [ "$OPTS" != " --" ]; then
     DO_CORES=0
     DO_KERNEL=0
     DO_KMODULES=0
+    DO_EXTENSIONS=0
     DO_CLEAN=0
     DO_MRPROPER=0
 
@@ -38,14 +40,15 @@ fi
 
 while true; do
     case "$1" in
-        -d | --download) DO_DOWNLOAD=1; shift ;;
-        -b | --busybox)  DO_BUSYBOX=1;  shift ;;
-        -t | --tools)    DO_TOOLS=1;    shift ;;
-        -c | --cores)    DO_CORES=1;    shift ;;
-        -k | --kernel)   DO_KERNEL=1;   shift ;;
-        -M | --modules)  DO_KMODULES=1; shift ;;
-        -l | --clean)    DO_CLEAN=1;    shift ;;
-        -m | --mrproper) DO_MRPROPER=1; shift ;;
+        -d | --download)   DO_DOWNLOAD=1;   shift ;;
+        -b | --busybox)    DO_BUSYBOX=1;    shift ;;
+        -t | --tools)      DO_TOOLS=1;      shift ;;
+        -c | --cores)      DO_CORES=1;      shift ;;
+        -k | --kernel)     DO_KERNEL=1;     shift ;;
+        -M | --modules)    DO_KMODULES=1;   shift ;;
+        -e | --extensions) DO_EXTENSIONS=1; shift ;;
+        -l | --clean)      DO_CLEAN=1;      shift ;;
+        -m | --mrproper)   DO_MRPROPER=1;   shift ;;
         -h | --help)
             echo "Usage:"
             echo " -d --download    only download and extract archives"
@@ -54,6 +57,7 @@ while true; do
             echo " -c --cores       only (re)build core0 and coreX"
             echo " -k --kernel      only (re)build kernel (vmlinuz, produce final image)"
             echo " -M --modules     only (re)build kernel modules"
+            echo " -e --extensions  only (re)build extensions"
             echo " -l --clean       only clean staging files (extracted sources)"
             echo " -m --mrproper    only remove staging files and clean the root"
             echo " -h --help        display this help message"
@@ -148,6 +152,7 @@ prepare() {
     mkdir -p "${DISTFILES}"
     mkdir -p "${WORKDIR}"
     mkdir -p "${ROOTDIR}"
+    mkdir -p "${EXTENDIR}"
 
     mkdir -p "${ROOTDIR}"/usr/lib
 
@@ -407,6 +412,45 @@ g8os_root() {
     cp -a "${CONFDIR}"/shells "${ROOTDIR}"/etc/
 }
 
+#
+# Extensions support
+#
+build_extensions() {
+    pushd "${EXTENDIR}"
+    echo "[+] entering extensions system"
+
+    for extension in *; do
+        # skip if no extensions found
+        [[ $extension == '*' ]] && break
+
+        if [ ! -d "${extension}" ]; then
+            echo "[-] ${extension}: not a directory"
+            continue
+        fi
+
+        pushd "${extension}"
+
+        if [ ! -f "${extension}.sh" ]; then
+            echo "[-] ${extension}: no callable script found"
+            continue
+        fi
+
+        echo "[+] building extension: ${extension}"
+
+        # call extension
+        . ./"${extension}.sh"
+
+        popd
+    done
+
+    echo "[+] extensions executed"
+
+    popd
+}
+
+#
+# Helpers
+#
 get_size() {
     du -shc $1 | tail -1 | awk '{ print $1 }'
 }
@@ -493,6 +537,10 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
         build_cores
+    fi
+
+    if [[ $DO_ALL == 1 ]] || [[ $DO_EXTENSIONS == 1 ]]; then
+        build_extensions
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
