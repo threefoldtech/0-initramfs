@@ -5,7 +5,7 @@ This repository contains all that is needed to build the g8os-kernel and initram
 - [0.9.0](https://github.com/g8os/initramfs/tree/0.9.0) : used to build the [v0.9.0](https://github.com/g8os/core0/releases/tag/v0.9.0) of core0
 - [0.10.0](https://github.com/g8os/initramfs/tree/0.10.0) : used to build the [v0.10.0](https://github.com/g8os/core0/releases/tag/v0.10.0) of core0
 - [0.11.0](https://github.com/g8os/initramfs/tree/0.11.0) : used to build the [v0.11.0](https://github.com/g8os/core0/releases/tag/v0.11.0) of core0
-- [0.12.0](https://github.com/g8os/initramfs/tree/0.12.0) : used to build the [v0.12.0](https://github.com/g8os/core0/releases/tag/v0.12.0) of core0
+- [1.0.0](https://github.com/g8os/initramfs/tree/0.1.0) : used to build the [v1.0.0](https://github.com/g8os/core0/releases/tag/v0.1.0) of core0
 
 # Dependencies
 In order to compile all the initramfs without issues, you'll need to installe build-time dependencies.
