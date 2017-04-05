@@ -1,5 +1,5 @@
-KERNEL_VERSION="4.7.2"
-KERNEL_CHECKSUM="ae493473d074185205a54bc8ad49c3b4"
+KERNEL_VERSION="4.9.11"
+KERNEL_CHECKSUM="98761ce71c603199fe6fcce600c60772"
 KERNEL_LINK="https://www.kernel.org/pub/linux/kernel/v4.x/linux-${KERNEL_VERSION}.tar.xz"
 
 download_kernel() {
@@ -15,14 +15,23 @@ extract_kernel() {
 
 prepare_kernel() {
     echo "[+] copying kernel configuration"
-    cp "${CONFDIR}/kernel-config" .config
+    cp "${CONFDIR}/kernel-config-generic" .config
 
     # FIXME: add patch for secureboot
 }
 
 compile_kernel() {
-    echo "[+] compiling the kernel"
-    make ${MAKEOPTS}
+    if [[ $DO_ALL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
+        echo "[+] compiling the kernel (modules)"
+        make ${MAKEOPTS} modules
+        make INSTALL_MOD_PATH="${ROOTDIR}" modules_install
+        depmod -a -b "${ROOTDIR}" "${KERNEL_VERSION}-g8os"
+    fi
+
+    if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]]; then
+        echo "[+] compiling the kernel (vmlinuz)"
+        make ${MAKEOPTS}
+    fi
 }
 
 install_kernel() {

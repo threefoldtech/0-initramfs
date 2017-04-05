@@ -4,7 +4,7 @@ after = ["net"]
 running_delay = -1
 
 [startup.routing.args]
-stdin = """
+script = """
 # Enable ip forwarding
 echo 1 > /proc/sys/net/ipv4/ip_forward
 """

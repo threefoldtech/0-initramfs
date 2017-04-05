@@ -3,13 +3,13 @@ ZEROTIER_CHECKSUM="5e381f0864797886b3b3bf20beb49bba"
 ZEROTIER_LINK="https://github.com/zerotier/ZeroTierOne/archive/${ZEROTIER_VERSION}.tar.gz"
 
 download_zerotier() {
-    download_file $ZEROTIER_LINK $ZEROTIER_CHECKSUM
+    download_file $ZEROTIER_LINK $ZEROTIER_CHECKSUM zerotier-${ZEROTIER_VERSION}.tar.gz
 }
 
 extract_zerotier() {
     if [ ! -d "ZeroTierOne-${ZEROTIER_VERSION}" ]; then
         echo "[+] extracting: ZeroTierOne-${ZEROTIER_VERSION}"
-        tar -xf ${DISTFILES}/${ZEROTIER_VERSION}.tar.gz -C .
+        tar -xf ${DISTFILES}/zerotier-${ZEROTIER_VERSION}.tar.gz -C .
     fi
 }
 

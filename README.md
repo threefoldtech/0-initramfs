@@ -5,19 +5,17 @@ This repository contains all that is needed to build the g8os-kernel and initram
 - [0.9.0](https://github.com/g8os/initramfs/tree/0.9.0) : used to build the [v0.9.0](https://github.com/g8os/core0/releases/tag/v0.9.0) of core0
 - [0.10.0](https://github.com/g8os/initramfs/tree/0.10.0) : used to build the [v0.10.0](https://github.com/g8os/core0/releases/tag/v0.10.0) of core0
 - [0.11.0](https://github.com/g8os/initramfs/tree/0.11.0) : used to build the [v0.11.0](https://github.com/g8os/core0/releases/tag/v0.11.0) of core0
+- [1.0.0](https://github.com/g8os/initramfs/tree/0.1.0) : used to build the [v1.0.0](https://github.com/g8os/core0/releases/tag/v0.1.0) of core0
 
 # Dependencies
-Under Ubuntu 16.04, you will need this in order to compile everything:
- - `golang` (version 1.7)
- - `xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git asciidoc xmlto libbison-dev flex libmnl-dev libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq`
+In order to compile all the initramfs without issues, you'll need to installe build-time dependencies.
 
-These dependencies are of course valid for any other system but adapt you'll have to adapt it to suit yours.
-
-On Gentoo, you probably already have all the dependancies.
+Please check the build process and use the dependencies listed there.
 
 ## Privileges
 You need to have root privilege to be able to execute all the scripts.
-Some parts need to chown/setuid/chmod files as root.
+
+Some parts need to `chown/setuid/chmod/mknod` files as root.
 
 # What does this script do ?
  - First, download and check checksum of all archives needed
@@ -36,7 +34,12 @@ Some parts need to chown/setuid/chmod files as root.
     - nftables (used for firewalling and routing)
     - iproute2 (used for network namespace support)
     - socat (used for some tcp/port forwarding)
- - Clean and remove useless files
+    - unionfs-fuse (used for internal fuse layers)
+    - RocksDB (shared library)
+    - GoRocksDB
+    - eudev and kmod (used for hardware and modules management)
+    - dropbear (lightweight ssh server)
+ - Clean, remove useless files, optimize (strip) files and copy system's config
  - Compile the kernel (and bundles initramfs in the kernel)
 
 
@@ -52,6 +55,10 @@ The `initramfs.sh` script accepts multiple options:
  -t --tools       only (re)build tools (ssl, fuse, ...)
  -c --cores       only (re)build core0 and coreX
  -k --kernel      only (re)build kernel (produce final image)
+ -M --modules     only (re)build kernel modules
+ -e --extensions  only (re)build extensions
+ -l --clean       only clean staging files (extracted sources)
+ -m --mrproper    only remove staging files and clean the root
  -h --help        display this help message
 ```
 
@@ -69,28 +76,33 @@ You can disable this and join another network by editing/moving/copying `conf/ro
 
 From the root of this repository, create a docker container
 ```shell
-docker run -v $(pwd):/initramfs -ti ubuntu:16.04 /bin/bash
+docker run -ti --name g8osbuilder ubuntu:16.04 /bin/bash
 ```
+
+Don't try to mount the initramfs repo, the build will fail.
 
 Then from inside the docker
 ```shell
 # install dependencies for building
 apt-get update
 apt-get install -y asciidoc xmlto --no-install-recommends
-apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq
+apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq liblz4-dev libsnappy-dev libbz2-dev libssl-dev gperf libelf-dev libkmod-dev liblzma-dev git kmod
 
 # install go
-curl https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz > go1.7.3.linux-amd64.tar.gz
-tar -C /usr/local -xzf go1.7.3.linux-amd64.tar.gz
+curl https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz > /tmp/go1.8.linux-amd64.tar.gz
+tar -C /usr/local -xzf /tmp/go1.8.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 mkdir /gopath
 export GOPATH=/gopath
+
+#clone the repo
+git clone https://github.com/g8os/initramfs.git
 
 # start the build
 cd /initramfs
 bash initramfs.sh
 ```
-The result of the build will be located in `staging/vmlinuz.efi`
+The result of the build will be located in `staging/vmlinuz.efi` so copy it out of the docker by executing `docker cp g8osbuilder:/initramfs/staging/vmlinuz.efi .`
 
 # I have the kernel, what can I do with it ?
 Just boot it. The kernel image is EFI bootable.
@@ -98,12 +110,45 @@ Just boot it. The kernel image is EFI bootable.
 If you have an EFI Shell, just run the kernel like any EFI executable.
 If you don't have the shell or want to boot it automaticaly, put the kernel in `/EFI/BOOT/BOOTX64.EFI` in a FAT partition.
 
-example how to create a boot disk
-```shell
-dd if=/dev/zero of=g8os.img bs=1M count=64
-mkfs.vfat g8os.iso
-mount g8os.iso /mnt
-mkdir -p /mnt/EFI/BOOT
-cp staging/vmlinuz.efi /mnt/EFI/BOOT/BOOTX64.EFI
-umount /mnt
+## How to test the kernel with QEMU
+You can run the kernel and get the kernel output on your console from qemu directly
 ```
+qemu-system-x86_64 -kernel vmlinuz.efi -m 2048 -enable-kvm -cpu host -net nic,model=e1000 -net bridge,br=vm0 -nographic -serial null -serial mon:stdio
+```
+
+## How to create a 'bootable' (EFI) image
+```shell
+dd if=/dev/zero of=/tmp/g8os.img bs=1M count=256
+mkfs.vfat /tmp/g8os.iso
+mkdir -p /mnt/g8os-iso
+mount g8os.iso /mnt/g8os-iso
+mkdir -p /mnt/g8os-iso/EFI/BOOT
+cp staging/vmlinuz.efi /mnt/EFI/BOOT/BOOTX64.EFI
+umount /mnt/g8os-iso
+```
+
+# Extensions
+
+You can add your own building extension-scripts to customize the initramfs.
+
+During the build process, after `cores` and before `kernel` process, all directories under `extensions` folder will be
+parsed and executed. To make a working extension, you just need a `extension-name.sh` script on the root directory of your extension.
+
+Exemple:
+```
+extensions/
+  my-extension/
+    some-stuff/
+    another-stuff/
+    my-extension.sh
+  another-extension/
+    README.md
+    another-extension.sh
+```
+
+During the extension build phase, your extension script will be `sourced`, not forked, which means that you have access
+to all the variables used during the build script process.
+
+**Be careful, you could override some variable used by `initramfs.sh` itself and break the build process.**
+
+You can rebuild only your extension by calling `initramfs.sh --extensions`

@@ -5,7 +5,9 @@ echo "==             G8OS INITRAMFS             =="
 echo "============================================"
 
 echo "[+] creating ram filesystem"
-mount -t tmpfs tmpfs /mnt/root -o size=256M
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -t tmpfs tmpfs /mnt/root -o size=512M
 mount -t devtmpfs devtmpfs /dev
 
 echo "[+] building ram filesystem"
@@ -35,6 +37,19 @@ mount -t devpts devpts $target/dev/pts
 
 echo "[+] setting environment"
 export PATH
+
+echo "[+] loading drivers"
+udevadm hwdb --update
+
+udevd --daemon
+udevadm trigger --action=add --type=subsystems
+udevadm trigger --action=add --type=devices
+udevadm settle
+
+kill $(pidof udevd)
+
+umount /proc
+umount /sys
 
 echo "[+] switching root"
 exec switch_root /mnt/root /sbin/core0

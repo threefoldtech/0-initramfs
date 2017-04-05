@@ -7,13 +7,14 @@ WORKDIR="${PWD}/staging"
 CONFDIR="${PWD}/config"
 ROOTDIR="${PWD}/root"
 INTERNAL="${PWD}/internals/"
+EXTENDIR="${PWD}/extensions/"
 
 MAKEOPTS="-j 4"
 
 #
 # Flags
 #
-OPTS=$(getopt -o dbtcklmh --long download,busybox,tools,cores,kernel,clean,mrproper,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o dbtckMelmh --long download,busybox,tools,cores,kernel,modules,extensions,clean,mrproper,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
@@ -29,6 +30,8 @@ if [ "$OPTS" != " --" ]; then
     DO_TOOLS=0
     DO_CORES=0
     DO_KERNEL=0
+    DO_KMODULES=0
+    DO_EXTENSIONS=0
     DO_CLEAN=0
     DO_MRPROPER=0
 
@@ -37,20 +40,24 @@ fi
 
 while true; do
     case "$1" in
-        -d | --download) DO_DOWNLOAD=1; shift ;;
-        -b | --busybox)  DO_BUSYBOX=1;  shift ;;
-        -t | --tools)    DO_TOOLS=1;    shift ;;
-        -c | --cores)    DO_CORES=1;    shift ;;
-        -k | --kernel)   DO_KERNEL=1;   shift ;;
-        -l | --clean)    DO_CLEAN=1;    shift ;;
-        -m | --mrproper) DO_MRPROPER=1; shift ;;
+        -d | --download)   DO_DOWNLOAD=1;   shift ;;
+        -b | --busybox)    DO_BUSYBOX=1;    shift ;;
+        -t | --tools)      DO_TOOLS=1;      shift ;;
+        -c | --cores)      DO_CORES=1;      shift ;;
+        -k | --kernel)     DO_KERNEL=1;     shift ;;
+        -M | --modules)    DO_KMODULES=1;   shift ;;
+        -e | --extensions) DO_EXTENSIONS=1; shift ;;
+        -l | --clean)      DO_CLEAN=1;      shift ;;
+        -m | --mrproper)   DO_MRPROPER=1;   shift ;;
         -h | --help)
             echo "Usage:"
             echo " -d --download    only download and extract archives"
             echo " -b --busybox     only (re)build busybox"
             echo " -t --tools       only (re)build tools (ssl, fuse, ...)"
             echo " -c --cores       only (re)build core0 and coreX"
-            echo " -k --kernel      only (re)build kernel (produce final image)"
+            echo " -k --kernel      only (re)build kernel (vmlinuz, produce final image)"
+            echo " -M --modules     only (re)build kernel modules"
+            echo " -e --extensions  only (re)build extensions"
             echo " -l --clean       only clean staging files (extracted sources)"
             echo " -m --mrproper    only remove staging files and clean the root"
             echo " -h --help        display this help message"
@@ -83,6 +90,11 @@ done
 . "${INTERNAL}"/libvirt.sh
 . "${INTERNAL}"/openssl.sh
 . "${INTERNAL}"/dmidecode.sh
+. "${INTERNAL}"/unionfs-fuse.sh
+. "${INTERNAL}"/gorocksdb.sh
+. "${INTERNAL}"/eudev.sh
+. "${INTERNAL}"/kmod.sh
+. "${INTERNAL}"/dropbear.sh
 
 #
 # Utilities
@@ -140,6 +152,7 @@ prepare() {
     mkdir -p "${DISTFILES}"
     mkdir -p "${WORKDIR}"
     mkdir -p "${ROOTDIR}"
+    mkdir -p "${EXTENDIR}"
 
     mkdir -p "${ROOTDIR}"/usr/lib
 
@@ -157,7 +170,12 @@ prepare() {
 # First argument need to be the url, second is the md5 hash
 #
 download_file() {
-    output=$(basename "$1")
+    if [ "$3" != "" ]; then
+        output=$3
+    else
+        output=$(basename "$1")
+    fi
+
     echo "[+] downloading: ${output}"
 
     if [ -f "${output}" ]; then
@@ -196,6 +214,11 @@ download_all() {
     download_libvirt
     download_openssl
     download_dmidecode
+    download_unionfs
+    download_gorocksdb
+    download_eudev
+    download_kmod
+    download_dropbear
 
     popd
 }
@@ -223,6 +246,11 @@ extract_all() {
     extract_libvirt
     extract_openssl
     extract_dmidecode
+    extract_unionfs
+    extract_gorocksdb
+    extract_eudev
+    extract_kmod
+    extract_dropbear
 
     popd
 }
@@ -286,7 +314,7 @@ ensure_libs() {
 }
 
 #
-# Cleaner
+# Cleaner and optimizer
 #
 mknod_die() {
     echo "[-] mknod need root access, please run this command as root:"
@@ -304,7 +332,6 @@ clean_root() {
     rm -rf lib/*.a
     rm -rf lib/*.la
     rm -rf etc/init.d
-    rm -rf etc/udev
     rm -rf usr/lib/*.a
     rm -rf usr/lib/*.la
     rm -rf usr/share/doc
@@ -318,17 +345,48 @@ clean_root() {
     popd
 }
 
+optimize_size() {
+    echo "[+] optimizing binaries size"
+    pushd "${ROOTDIR}"
+
+    for file in $(find ./bin ./sbin ./libexec ./usr/bin ./usr/sbin ./usr/libexec ./usr/lib -type f); do
+        # dumping 4 first bytes
+        header=$(dd if=$file bs=1 count=4 2> /dev/null | hexdump -e '/1 "%02X"')
+
+        # checking if it's a ELF file
+        if [ "$header" == "7F454C46" ]; then
+            strip --strip-debug $file || true
+        fi
+    done
+
+    popd
+}
+
+#
+# Configuration
+#
 g8os_root() {
-    # copy init
+    # Copy init
     echo "[+] installing init script"
     cp "${CONFDIR}/init" "${ROOTDIR}/init"
     chmod +x "${ROOTDIR}/init"
 
-    # ensure minimal /dev and /mnt
+    # Ensure minimal system directories and symlinks
     echo "[+] creating default directories and files"
     mkdir -p "${ROOTDIR}"/mnt/root
     mkdir -p "${ROOTDIR}"/var/run
     mkdir -p "${ROOTDIR}"/var/log
+    mkdir -p "${ROOTDIR}"/var/lock
+    mkdir -p "${ROOTDIR}"/var/cache/containers
+
+    # Ensure minimal login logs
+    touch "${ROOTDIR}"/var/log/lastlog
+    touch "${ROOTDIR}"/var/log/wtmp
+
+    # Legacy mtab symlink
+    pushd "${ROOTDIR}/etc"
+    ln -sf /proc/mounts mtab
+    popd
 
     # Ensure /run -> /var/run
     pushd "${ROOTDIR}"
@@ -342,9 +400,9 @@ g8os_root() {
     fi
 
     echo "[+] installing g8os configuration"
-    rm -rf "${ROOTDIR}"/root/conf
-    cp -a "${CONFDIR}"/root "${ROOTDIR}"/root/conf
-    cp -a "${CONFDIR}"/g8os "${ROOTDIR}"/etc/
+    mkdir -p "${ROOTDIR}"/etc/g8os
+    cp -a "${CONFDIR}"/g8os/* "${ROOTDIR}"/etc/g8os/
+    cp -a "${CONFDIR}"/g8os-conf/* "${ROOTDIR}"/etc/g8os/conf/
 
     # System configuration
     cp -a "${CONFDIR}"/udhcp "${ROOTDIR}"/usr/share/
@@ -352,9 +410,50 @@ g8os_root() {
     cp -a "${CONFDIR}"/nsswitch.conf "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/hosts "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/passwd "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/profile "${ROOTDIR}"/etc/
     cp -a "${CONFDIR}"/group "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/shells "${ROOTDIR}"/etc/
 }
 
+#
+# Extensions support
+#
+build_extensions() {
+    pushd "${EXTENDIR}"
+    echo "[+] entering extensions system"
+
+    for extension in *; do
+        # skip if no extensions found
+        [[ $extension == '*' ]] && break
+
+        if [ ! -d "${extension}" ]; then
+            echo "[-] ${extension}: not a directory"
+            continue
+        fi
+
+        pushd "${extension}"
+
+        if [ ! -f "${extension}.sh" ]; then
+            echo "[-] ${extension}: no callable script found"
+            continue
+        fi
+
+        echo "[+] building extension: ${extension}"
+
+        # call extension
+        . ./"${extension}.sh"
+
+        popd
+    done
+
+    echo "[+] extensions executed"
+
+    popd
+}
+
+#
+# Helpers
+#
 get_size() {
     du -shc $1 | tail -1 | awk '{ print $1 }'
 }
@@ -368,6 +467,9 @@ end_summary() {
     echo "[+] kernel size: $kernel_size"
 }
 
+#
+# Files cleaner
+#
 remove_staging() {
     echo "[+] cleaning ${WORKDIR}"
     rm -rf "${WORKDIR}"/*
@@ -382,6 +484,9 @@ remove_root() {
     echo "[+] root cleared"
 }
 
+#
+# Main stuff
+#
 main() {
     #
     # Display some informations
@@ -432,15 +537,25 @@ main() {
         build_qemu
         build_libvirt
         build_dmidecode
+        build_unionfs
+        build_gorocksdb
+        build_eudev
+        build_kmod
+        build_dropbear
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
         build_cores
     fi
 
-    if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]]; then
+    if [[ $DO_ALL == 1 ]] || [[ $DO_EXTENSIONS == 1 ]]; then
+        build_extensions
+    fi
+
+    if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
         ensure_libs
         clean_root
+        optimize_size
         g8os_root
         build_kernel
         end_summary
