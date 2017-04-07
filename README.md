@@ -114,7 +114,7 @@ If you don't have the shell or want to boot it automaticaly, put the kernel in `
 ## How to test the kernel with QEMU
 You can run the kernel and get the kernel output on your console from qemu directly
 ```
-qemu-system-x86_64 -kernel vmlinuz.efi -m 2048 -enable-kvm -cpu host -net nic,model=e1000 -net bridge,br=vm0 -nographic -serial null -serial mon:stdio
+qemu-system-x86_64 -kernel vmlinuz.efi -m 2048 -enable-kvm -cpu host -net nic,model=e1000 -net bridge,br=vm0 -nographic -serial null -serial mon:stdio -append console=ttyS1,115200n8
 ```
 
 ## How to create a 'bootable' (EFI) image
