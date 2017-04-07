@@ -2,11 +2,16 @@ CORES_VERSION="1.1-0-alpha"
 G8UFS_VERSION="1.0.0"
 
 prepare_cores() {
-    echo "[+] loading source code: g8os cores"
+    echo "[+] loading source code: core0"
     go get -d -v github.com/g8os/core0/core0
+
+    echo "[+] loading source code: coreX"
     go get -d -v github.com/g8os/core0/coreX
+
+    echo "[+] loading source code: g8ufs"
     go get -d -v github.com/g8os/g8ufs
 
+    echo "[+] ensure core0 to branch: ${CORES_VERSION}"
     pushd $GOPATH/src/github.com/g8os/core0
     branch=$(git rev-parse --abbrev-ref HEAD)
     if [ "$branch" != $CORES_VERSION ]; then
@@ -15,6 +20,7 @@ prepare_cores() {
     fi
     popd
 
+    echo "[+] ensure g8ufs to branch: ${G8UFS_VERSION}"
     pushd $GOPATH/src/github.com/g8os/g8ufs
     branch=$(git rev-parse --abbrev-ref HEAD)
     if [ "$branch" != $G8UFS_VERSION ]; then
