@@ -371,6 +371,9 @@ g8os_root() {
     cp "${CONFDIR}/init" "${ROOTDIR}/init"
     chmod +x "${ROOTDIR}/init"
 
+    cp "${CONFDIR}/init-debug" "${ROOTDIR}/init-debug"
+    chmod +x "${ROOTDIR}/init-debug"
+
     # Ensure minimal system directories and symlinks
     echo "[+] creating default directories and files"
     mkdir -p "${ROOTDIR}"/mnt/root
