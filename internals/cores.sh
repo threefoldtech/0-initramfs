@@ -1,4 +1,4 @@
-CORES_VERSION="1.0.0"
+CORES_VERSION="1.1-0-alpha"
 G8UFS_VERSION="1.0.0"
 
 prepare_cores() {
