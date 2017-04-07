@@ -153,3 +153,34 @@ to all the variables used during the build script process.
 **Be careful, you could override some variable used by `initramfs.sh` itself and break the build process.**
 
 You can rebuild extensions by calling `initramfs.sh --extensions`
+
+# 'Hot' debug (inject files without rebuilding the vmlinuz)
+Rebuilding the vmlinuz can take relatively long time, when you want to only change one config file
+or do some small changes to the root image, this can become really painful to rebuild it each time.
+
+In debug mode (enabled by default now), you can override the root filesystem, the step before `core0` starts, which
+means that you can even overwrite `core0` binary.
+
+The `/init-debug` script is executed just before `/init` does the `switch_root` to the real filesystem, this script
+will search if `/dev/sda1` exists, if it exists, mounting it as `vfat` filesystem in read-only mode, checking for debug
+files then copying them.
+
+## Requirement
+- A `vfat` filesystem on `/dev/sda1`
+- A file called `.g8os-debug` on the root of `/dev/sda1`
+- The whole content of `/dev/sda1` will be copied (overwriting existing files) on the real root
+
+## QEMU
+This way enable you to easily overwrite the system with your debug file from your local machine, with qemu.
+
+Add `-drive file=fat:/debug-files,format=raw` as **first** drive argument to your qemu command line.
+
+### Quick help
+```
+mkdir /tmp/g8os-debug/
+touch /tmp/g8os-debug/.g8os-debug
+echo World > /tmp/g8os-debug/hello
+
+qemu-system-x86_64 -drive file=fat:/tmp/g8os-debug,format=raw $QEMU_CMD_LINE
+```
+This will add `/hello` to your running g8os.
