@@ -14,18 +14,18 @@ prepare_cores() {
     echo "[+] ensure core0 to branch: ${CORES_VERSION}"
     pushd $GOPATH/src/github.com/g8os/core0
     branch=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$branch" != $CORES_VERSION ]; then
-        git fetch origin ${CORES_VERSION}:${CORES_VERSION}
-        git checkout ${CORES_VERSION}
+    if [ "$branch" != "${CORES_VERSION}" ]; then
+        git fetch origin "${CORES_VERSION}:${CORES_VERSION}"
+        git checkout "${CORES_VERSION}"
     fi
     popd
 
     echo "[+] ensure g8ufs to branch: ${G8UFS_VERSION}"
     pushd $GOPATH/src/github.com/g8os/g8ufs
     branch=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$branch" != $G8UFS_VERSION ]; then
-        git fetch origin ${G8UFS_VERSION}:${G8UFS_VERSION}
-        git checkout ${G8UFS_VERSION}
+    if [ "$branch" != "${G8UFS_VERSION}" ]; then
+        git fetch origin "${G8UFS_VERSION}:${G8UFS_VERSION}"
+        git checkout "${G8UFS_VERSION}"
     fi
     popd
 }
