@@ -117,6 +117,13 @@ You can run the kernel and get the kernel output on your console from qemu direc
 qemu-system-x86_64 -kernel vmlinuz.efi -m 2048 -enable-kvm -cpu host -net nic,model=e1000 -net bridge,br=vm0 -nographic -serial null -serial mon:stdio -append console=ttyS1,115200n8
 ```
 
+## How to test the kernel with xhyve (OSX)
+Install [xhyve](https://github.com/mist64/xhyve#installation).
+```
+xhyve -m 1G -c 2 -s 0:0,hostbridge -s 31,lpc -l com1 -l com2,stdio -s 2:0,virtio-net -f kexec,vmlinuz.efi,,earlyprintk=serial console=ttyS1 acpi=off
+```
+
+
 ## How to create a 'bootable' (EFI) image
 ```shell
 dd if=/dev/zero of=/tmp/g8os.img bs=1M count=256
