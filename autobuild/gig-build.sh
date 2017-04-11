@@ -15,3 +15,7 @@ export GOPATH=/gopath
 # start the build
 cd /initramfs
 bash initramfs.sh
+
+# installing kernel to remote directory
+mkdir -p /target
+cp /initramfs/staging/vmlinuz.efi /target/
