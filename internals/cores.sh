@@ -43,6 +43,7 @@ compile_cores() {
 install_cores() {
     echo "[+] copying binaries"
     cp -a bin/* "${ROOTDIR}/sbin/"
+    cp -a tools/* "${ROOTDIR}/bin/"
     cp -a ../g8ufs/cmd/cmd "${ROOTDIR}/sbin/g8ufs"
 
     echo "[+] installing configuration"
