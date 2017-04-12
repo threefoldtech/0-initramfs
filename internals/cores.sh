@@ -1,5 +1,5 @@
 CORES_VERSION="1.1.0-alpha"
-G8UFS_VERSION="1.0.0"
+G8UFS_VERSION="1.1.0-alpha"
 
 prepare_cores() {
     echo "[+] loading source code: core0"
