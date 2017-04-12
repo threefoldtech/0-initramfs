@@ -10,17 +10,7 @@ rm -rf /target/*
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=/gopath
 
-echo "[+] updating to version: $1"
-cd $GOPATH/src/github.com/g8os/core0
-
-echo "[+] fetching code"
-git fetch origin "$1:$1"
-
-echo "[+] checkout repository"
-git checkout 1.1.0-alpha
-git pull origin 1.1.0-alpha
-
-sed -i "/CORES_VERSION=/c\CORES_VERSION=\"$1\"" /initramfs/internals/cores.sh
+sed -i "/G8UFS_VERSION=/c\G8UFS_VERSION=\"$1\"" /initramfs/internals/cores.sh
 
 # start the build
 cd /initramfs
