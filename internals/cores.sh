@@ -35,8 +35,8 @@ compile_cores() {
     make
 
     echo "[+] compiling g8ufs"
-    pushd ../g8ufs/cmd
-    go build -ldflags "-s -w"
+    pushd ../g8ufs
+    make
     popd
 }
 
@@ -44,7 +44,7 @@ install_cores() {
     echo "[+] copying binaries"
     cp -a bin/* "${ROOTDIR}/sbin/"
     cp -a tools/* "${ROOTDIR}/bin/"
-    cp -a ../g8ufs/cmd/cmd "${ROOTDIR}/sbin/g8ufs"
+    cp -a ../g8ufs/g8ufs "${ROOTDIR}/sbin/"
 
     echo "[+] installing configuration"
     mkdir -p "${ROOTDIR}/etc/g8os/conf"
