@@ -30,8 +30,6 @@ install_rocksdb() {
 prepare_gorocksdb() {
     echo "[+] preparing gorocksdb"
 
-    pwd
-
     CGO_CFLAGS="-I${WORKDIR}/rocksdb-${ROCKSDB_VERSION}/include" \
     CGO_LDFLAGS="-L${WORKDIR}/rocksdb-${ROCKSDB_VERSION} -lrocksdb -lstdc++ -lm -lz -lbz2 -lsnappy -llz4" \
       go get -v github.com/tecbot/gorocksdb
@@ -44,9 +42,6 @@ compile_gorocksdb() {
 
 install_gorocksdb() {
     echo "[+] installing gorocksdb"
-    # cp -av mount.unionfs "${ROOTDIR}"/usr/bin/
-    # cp -av src/unionfs "${ROOTDIR}"/usr/bin/
-    # cp -av src/unionfsctl "${ROOTDIR}"/usr/bin/
 }
 
 build_gorocksdb() {
