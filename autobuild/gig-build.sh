@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# preparing environment
+mkdir -p /target
+rm -rf /target/*
+
 # install dependencies for building
 apt-get update
 apt-get install -y asciidoc xmlto --no-install-recommends
@@ -17,5 +21,4 @@ cd /initramfs
 bash initramfs.sh
 
 # installing kernel to remote directory
-mkdir -p /target
 cp /initramfs/staging/vmlinuz.efi /target/

@@ -4,6 +4,9 @@ if [ "$1" == "" ]; then
     exit 1
 fi
 
+mkdir -p /target
+rm -rf /target/*
+
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=/gopath
 
@@ -22,5 +25,4 @@ cd /initramfs
 bash initramfs.sh --cores --kernel
 
 # installing kernel to remote directory
-mkdir -p /target
 cp /initramfs/staging/vmlinuz.efi /target/
