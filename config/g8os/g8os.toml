@@ -11,11 +11,6 @@ url = "redis://127.0.0.1:6379"
 password = ""
 
 [logging]
-    [logging.db]
-    type = "DB"
-    address = "/var/log/g8os"
-    levels = [2, 4, 7, 8, 9, 11]  # (all error messages + debug) empty for all
-
     [logging.console]
     type = "console"
     levels = [1, 2, 4, 7, 8, 9]
@@ -30,7 +25,7 @@ password = ""
 interval = 60000 # milliseconds (1 min)
 
 [stats.redis]
-enabled = false
+enabled = true
 flush_interval = 100 # millisecond
 address = "127.0.0.1:6379"
 
