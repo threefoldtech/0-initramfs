@@ -20,6 +20,8 @@ echo "[+] checkout repository"
 git checkout 1.1.0-alpha
 git pull origin 1.1.0-alpha
 
+sed -i "/CORES_VERSION=/c\CORES_VERSION=\"$1\"" /initramfs/internals/cores.sh
+
 # start the build
 cd /initramfs
 bash initramfs.sh --cores --kernel
