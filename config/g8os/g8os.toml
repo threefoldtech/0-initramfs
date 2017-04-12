@@ -26,7 +26,7 @@ interval = 60000 # milliseconds (1 min)
 
 [stats.redis]
 enabled = true
-flush_interval = 100 # millisecond
+flush_interval = 1 # second
 address = "127.0.0.1:6379"
 
 [globals]
