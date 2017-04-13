@@ -9,7 +9,10 @@ ROOTDIR="${PWD}/root"
 INTERNAL="${PWD}/internals/"
 EXTENDIR="${PWD}/extensions/"
 
-MAKEOPTS="-j 4"
+# By default, we compiles with (number of cpu threads + 1)
+# you can changes this to reduce computer load
+JOBS=$(($(grep -c 'bogomips' /proc/cpuinfo) + 1))
+MAKEOPTS="-j ${JOBS}"
 
 #
 # Flags
