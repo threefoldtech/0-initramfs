@@ -18,6 +18,8 @@ prepare_cores() {
         git fetch origin "${CORES_VERSION}:${CORES_VERSION}"
         git checkout "${CORES_VERSION}"
     fi
+
+    git pull origin "${CORES_VERSION}"
     popd
 
     echo "[+] ensure g8ufs to branch: ${G8UFS_VERSION}"
@@ -27,6 +29,8 @@ prepare_cores() {
         git fetch origin "${G8UFS_VERSION}:${G8UFS_VERSION}"
         git checkout "${G8UFS_VERSION}"
     fi
+
+    git pull origin "${G8UFS_VERSION}"
     popd
 }
 
