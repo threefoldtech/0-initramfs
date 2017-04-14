@@ -24,4 +24,3 @@ bash initramfs.sh
 # installing kernel to remote directory
 echo "[+] moving kernel to /target"
 cp -v /initramfs/staging/vmlinuz.efi /target/
-ls /target
