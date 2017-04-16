@@ -13,7 +13,7 @@ password = ""
 [logging]
     [logging.console]
     type = "console"
-    levels = [1, 2, 4, 7, 8, 9]
+    levels = [2, 4, 7, 8, 9]
 
     [logging.redis]
     type = "redis"
