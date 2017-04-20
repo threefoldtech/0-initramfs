@@ -26,7 +26,7 @@ extract_nftables() {
 build_libnftnl() {
     echo "[+] building libnftnl"
     ./configure --prefix "${ROOTDIR}"/usr/
-    make
+    make ${MAKEOPTS}
     make install
 }
 

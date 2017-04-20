@@ -478,7 +478,7 @@ build_extensions() {
 # Helpers
 #
 get_size() {
-    du -shc $1 | tail -1 | awk '{ print $1 }'
+    du -shc --apparent-size $1 | tail -1 | awk '{ print $1 }'
 }
 
 end_summary() {
