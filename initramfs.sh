@@ -365,6 +365,23 @@ optimize_size() {
     popd
 }
 
+clean_busybox_outdated() {
+    echo "[+] removing busybox symlinks not needed anymore"
+
+    pushd "${ROOTDIR}"/usr
+    for file in sbin/*; do
+        # our script install mostly everything under /usr
+        # /sbin/ contains mainly busybox symlink
+        # we can safely remove /sbin stuff if we already have it on /usr/sbin
+        # this improve the system stability by providing more advanced feature
+        # (eg: util-linux blkid and not busybox one)
+        if [ -e ../$file ]; then
+            rm -f ../$file
+        fi
+    done
+    popd
+}
+
 #
 # Configuration
 #
@@ -562,6 +579,7 @@ main() {
         ensure_libs
         clean_root
         optimize_size
+        clean_busybox_outdated
         g8os_root
         build_kernel
         end_summary
