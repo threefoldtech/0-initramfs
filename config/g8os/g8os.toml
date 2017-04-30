@@ -30,4 +30,4 @@ flush_interval = 1 # second
 address = "127.0.0.1:6379"
 
 [globals]
-fuse_storage = "ardb://hub.gig.tech:16379"
+storage = "ardb://hub.gig.tech:16379"
