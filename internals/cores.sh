@@ -49,6 +49,10 @@ install_cores() {
     cp -a bin/* "${ROOTDIR}/sbin/"
     cp -a tools/* "${ROOTDIR}/bin/"
     cp -a ../g8ufs/g8ufs "${ROOTDIR}/sbin/"
+    pushd "${ROOTDIR}/sbin"
+    ln -sf corectl reboot
+    ln -sf corectl poweroff
+    popd
 
     echo "[+] installing configuration"
     mkdir -p "${ROOTDIR}/etc/g8os/conf"
