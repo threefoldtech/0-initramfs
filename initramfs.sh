@@ -98,6 +98,7 @@ done
 . "${INTERNAL}"/eudev.sh
 . "${INTERNAL}"/kmod.sh
 . "${INTERNAL}"/dropbear.sh
+. "${INTERNAL}"/smartmontools.sh
 
 #
 # Utilities
@@ -222,6 +223,7 @@ download_all() {
     download_eudev
     download_kmod
     download_dropbear
+    download_smartmon
 
     popd
 }
@@ -254,6 +256,7 @@ extract_all() {
     extract_eudev
     extract_kmod
     extract_dropbear
+    extract_smartmon
 
     popd
 }
@@ -565,6 +568,7 @@ main() {
         build_eudev
         build_kmod
         build_dropbear
+        build_smartmon
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
