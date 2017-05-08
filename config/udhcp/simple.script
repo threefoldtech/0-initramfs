@@ -33,6 +33,12 @@ case "$1" in
 				: $(( metric += 1 ))
 			done
 		fi
+		if [ -n "$hostname" ] ; then
+			hostname "$hostname"
+			sed -i /^127.0.0.1/d /etc/hosts
+			echo "127.0.0.1 localhost" >> /etc/hosts
+			echo "127.0.0.1 $hostname" >> /etc/hosts
+		fi
 
 		echo "Recreating $RESOLV_CONF"
 		# If the file is a symlink somewhere (like /etc/resolv.conf
