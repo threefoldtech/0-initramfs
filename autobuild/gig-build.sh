@@ -17,6 +17,10 @@ export PATH=$PATH:/usr/local/go/bin
 mkdir /gopath
 export GOPATH=/gopath
 
+# adding extensions
+cd /initramfs/extensions
+git clone https://github.com/g8os/initramfs-gig
+
 # start the build
 cd /initramfs
 bash initramfs.sh
