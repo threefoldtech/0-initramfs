@@ -7,7 +7,7 @@ download_smartmon() {
 }
 
 extract_smartmon() {
-    if [ ! -d "smartmontools-${SMARTMON_VERSION}.tar.gz" ]; then
+    if [ ! -d "smartmontools-${SMARTMON_VERSION}" ]; then
         echo "[+] extracting: smartmontools-${SMARTMON_VERSION}"
         tar -xf ${DISTFILES}/smartmontools-${SMARTMON_VERSION}.tar.gz -C .
     fi
