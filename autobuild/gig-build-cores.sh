@@ -12,6 +12,10 @@ export GOPATH=/gopath
 
 sed -i "/CORES_VERSION=/c\CORES_VERSION=\"$1\"" /initramfs/internals/cores.sh
 
+# updating dependencies
+cd /initramfs/extensions/initramfs-gig
+git pull
+
 # start the build
 cd /initramfs
 bash initramfs.sh --cores --kernel

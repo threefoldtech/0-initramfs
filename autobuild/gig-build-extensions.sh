@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 if [ "$1" == "" ]; then
     echo "[-] missing remote version"
     exit 1

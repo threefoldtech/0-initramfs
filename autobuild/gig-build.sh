@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ "$1" == "" ]; then
+    echo "[-] missing remote version"
+    exit 1
+fi
+
 # preparing environment
 mkdir -p /target
 rm -rf /target/*
@@ -19,7 +24,7 @@ export GOPATH=/gopath
 
 # adding extensions
 cd /initramfs/extensions
-git clone https://github.com/g8os/initramfs-gig
+git clone -b "$1" https://github.com/g8os/initramfs-gig
 
 # start the build
 cd /initramfs
