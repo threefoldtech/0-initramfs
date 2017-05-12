@@ -1,6 +1,6 @@
-ROCKSDB_VERSION="5.1.2"
-ROCKSDB_CHECKSUM="b682f574363edfea0e2f7dbf01fc0e5b"
-ROCKSDB_LINK="https://github.com/facebook/rocksdb/archive/v${ROCKSDB_VERSION}.tar.gz"
+ROCKSDB_VERSION="c2be43430722e26472e299c8c6b9bc9e1d2d46ec"
+ROCKSDB_CHECKSUM="44074efba10f8e2e5464c9b95d4b5597"
+ROCKSDB_LINK="https://github.com/facebook/rocksdb/archive/${ROCKSDB_VERSION}.tar.gz"
 
 download_gorocksdb() {
     download_file $ROCKSDB_LINK $ROCKSDB_CHECKSUM rocksdb-${ROCKSDB_VERSION}.tar.gz
@@ -19,7 +19,7 @@ prepare_rocksdb() {
 
 compile_rocksdb() {
     echo "[+] compiling rocksdb"
-    PORTABLE=1 make shared_lib ${MAKEOPTS}
+    PORTABLE=1 make ${MAKEOPTS} shared_lib
 }
 
 install_rocksdb() {
