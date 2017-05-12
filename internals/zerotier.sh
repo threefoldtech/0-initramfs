@@ -1,5 +1,5 @@
-ZEROTIER_VERSION="1.2.2"
-ZEROTIER_CHECKSUM="429c93082e48d595907ca600f00b46bd"
+ZEROTIER_VERSION="1.2.4"
+ZEROTIER_CHECKSUM="f0b127bd0919e8af841336cd70a954a6"
 ZEROTIER_LINK="https://github.com/zerotier/ZeroTierOne/archive/${ZEROTIER_VERSION}.tar.gz"
 
 download_zerotier() {
