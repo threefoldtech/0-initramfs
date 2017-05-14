@@ -51,5 +51,10 @@ kill $(pidof udevd)
 umount /proc
 umount /sys
 
+echo "[+] checking for debug files"
+if [ -e /init-debug ]; then
+    ash /init-debug
+fi
+
 echo "[+] switching root"
 exec switch_root /mnt/root /sbin/core0

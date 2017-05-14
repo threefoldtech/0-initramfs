@@ -1,26 +1,36 @@
-CORES_VERSION="1.0.0"
-G8UFS_VERSION="1.0.0"
+CORES_VERSION="1.1.0-alpha"
+G8UFS_VERSION="1.1.0-alpha"
 
 prepare_cores() {
-    echo "[+] loading source code: g8os cores"
+    echo "[+] loading source code: core0"
     go get -d -v github.com/g8os/core0/core0
+
+    echo "[+] loading source code: coreX"
     go get -d -v github.com/g8os/core0/coreX
+
+    echo "[+] loading source code: g8ufs"
     go get -d -v github.com/g8os/g8ufs
 
+    echo "[+] ensure core0 to branch: ${CORES_VERSION}"
     pushd $GOPATH/src/github.com/g8os/core0
     branch=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$branch" != $CORES_VERSION ]; then
-        git fetch origin ${CORES_VERSION}:${CORES_VERSION}
-        git checkout ${CORES_VERSION}
+    if [ "$branch" != "${CORES_VERSION}" ]; then
+        git fetch origin "${CORES_VERSION}:${CORES_VERSION}"
+        git checkout "${CORES_VERSION}"
     fi
+
+    git pull origin "${CORES_VERSION}"
     popd
 
+    echo "[+] ensure g8ufs to branch: ${G8UFS_VERSION}"
     pushd $GOPATH/src/github.com/g8os/g8ufs
     branch=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$branch" != $G8UFS_VERSION ]; then
-        git fetch origin ${G8UFS_VERSION}:${G8UFS_VERSION}
-        git checkout ${G8UFS_VERSION}
+    if [ "$branch" != "${G8UFS_VERSION}" ]; then
+        git fetch origin "${G8UFS_VERSION}:${G8UFS_VERSION}"
+        git checkout "${G8UFS_VERSION}"
     fi
+
+    git pull origin "${G8UFS_VERSION}"
     popd
 }
 
@@ -29,15 +39,20 @@ compile_cores() {
     make
 
     echo "[+] compiling g8ufs"
-    pushd ../g8ufs/cmd
-    go build -ldflags "-s -w"
+    pushd ../g8ufs
+    make
     popd
 }
 
 install_cores() {
     echo "[+] copying binaries"
-    cp -a bin/coreX bin/core0 "${ROOTDIR}/sbin/"
-    cp -a ../g8ufs/cmd/cmd "${ROOTDIR}/sbin/g8ufs"
+    cp -a bin/* "${ROOTDIR}/sbin/"
+    cp -a tools/* "${ROOTDIR}/bin/"
+    cp -a ../g8ufs/g8ufs "${ROOTDIR}/sbin/"
+    pushd "${ROOTDIR}/sbin"
+    ln -sf corectl reboot
+    ln -sf corectl poweroff
+    popd
 
     echo "[+] installing configuration"
     mkdir -p "${ROOTDIR}/etc/g8os/conf"

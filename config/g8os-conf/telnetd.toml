@@ -1,6 +1,0 @@
-[startup.telnetd]
-name = "core.system"
-
-[startup.telnetd.args]
-name = "telnetd"
-args = ["-l", "/bin/ash", "-F"]

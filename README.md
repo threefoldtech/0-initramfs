@@ -5,7 +5,8 @@ This repository contains all that is needed to build the g8os-kernel and initram
 - [0.9.0](https://github.com/g8os/initramfs/tree/0.9.0) : used to build the [v0.9.0](https://github.com/g8os/core0/releases/tag/v0.9.0) of core0
 - [0.10.0](https://github.com/g8os/initramfs/tree/0.10.0) : used to build the [v0.10.0](https://github.com/g8os/core0/releases/tag/v0.10.0) of core0
 - [0.11.0](https://github.com/g8os/initramfs/tree/0.11.0) : used to build the [v0.11.0](https://github.com/g8os/core0/releases/tag/v0.11.0) of core0
-- [1.0.0](https://github.com/g8os/initramfs/tree/0.1.0) : used to build the [v1.0.0](https://github.com/g8os/core0/releases/tag/v0.1.0) of core0
+- [1.0.0](https://github.com/g8os/initramfs/tree/1.0.0) : used to build the [v1.0.0](https://github.com/g8os/core0/releases/tag/v1.0.0) of core0
+- [1.1.0-alpha2](https://github.com/g8os/initramfs/releases/tag/v1.1.0-alpha-2) : used to build the [v1.1.0-alpha-2](https://github.com/g8os/core0/releases/tag/v1.1.0-alpha-2) of core0
 
 # Dependencies
 In order to compile all the initramfs without issues, you'll need to installe build-time dependencies.
@@ -86,7 +87,7 @@ Then from inside the docker
 # install dependencies for building
 apt-get update
 apt-get install -y asciidoc xmlto --no-install-recommends
-apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq liblz4-dev libsnappy-dev libbz2-dev libssl-dev gperf libelf-dev libkmod-dev liblzma-dev git kmod
+apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq liblz4-dev libsnappy-dev libbz2-dev libssl-dev gperf libelf-dev libkmod-dev liblzma-dev git kmod libvirt-dev libcap-dev
 
 # install go
 curl https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz > /tmp/go1.8.linux-amd64.tar.gz
@@ -113,8 +114,15 @@ If you don't have the shell or want to boot it automaticaly, put the kernel in `
 ## How to test the kernel with QEMU
 You can run the kernel and get the kernel output on your console from qemu directly
 ```
-qemu-system-x86_64 -kernel vmlinuz.efi -m 2048 -enable-kvm -cpu host -net nic,model=e1000 -net bridge,br=vm0 -nographic -serial null -serial mon:stdio
+qemu-system-x86_64 -kernel vmlinuz.efi -m 2048 -enable-kvm -cpu host -net nic,model=e1000 -net bridge,br=vm0 -nographic -serial null -serial mon:stdio -append console=ttyS1,115200n8
 ```
+
+## How to test the kernel with xhyve (OSX)
+Install [xhyve](https://github.com/mist64/xhyve#installation).
+```
+xhyve -m 1G -c 2 -s 0:0,hostbridge -s 31,lpc -l com1 -l com2,stdio -s 2:0,virtio-net -f kexec,vmlinuz.efi,,earlyprintk=serial console=ttyS1 acpi=off
+```
+
 
 ## How to create a 'bootable' (EFI) image
 ```shell
@@ -151,4 +159,35 @@ to all the variables used during the build script process.
 
 **Be careful, you could override some variable used by `initramfs.sh` itself and break the build process.**
 
-You can rebuild only your extension by calling `initramfs.sh --extensions`
+You can rebuild extensions by calling `initramfs.sh --extensions`
+
+# 'Hot' debug (inject files without rebuilding the vmlinuz)
+Rebuilding the vmlinuz can take relatively long time, when you want to only change one config file
+or do some small changes to the root image, this can become really painful to rebuild it each time.
+
+In debug mode (enabled by default now), you can override the root filesystem, the step before `core0` starts, which
+means that you can even overwrite `core0` binary.
+
+The `/init-debug` script is executed just before `/init` does the `switch_root` to the real filesystem, this script
+will search if `/dev/sda1` exists, if it exists, mounting it as `vfat` filesystem in read-only mode, checking for debug
+files then copying them.
+
+## Requirement
+- A `vfat` filesystem on `/dev/sda1`
+- A file called `.g8os-debug` on the root of `/dev/sda1`
+- The whole content of `/dev/sda1` will be copied (overwriting existing files) on the real root
+
+## QEMU
+This way enable you to easily overwrite the system with your debug file from your local machine, with qemu.
+
+Add `-drive file=fat:/debug-files,format=raw` as **first** drive argument to your qemu command line.
+
+### Quick help
+```
+mkdir /tmp/g8os-debug/
+touch /tmp/g8os-debug/.g8os-debug
+echo World > /tmp/g8os-debug/hello
+
+qemu-system-x86_64 -drive file=fat:/tmp/g8os-debug,format=raw $QEMU_CMD_LINE
+```
+This will add `/hello` to your running g8os.

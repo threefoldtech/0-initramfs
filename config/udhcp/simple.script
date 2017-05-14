@@ -1,7 +1,7 @@
 #!/bin/sh
 # udhcpc script edited by Tim Riker <Tim@Rikers.org>
 
-RESOLV_CONF="/etc/resolv.conf"
+RESOLV_CONF="${ROOT}/etc/resolv.conf"
 
 [ -n "$1" ] || { echo "Error: should be called from udhcpc"; exit 1; }
 
@@ -32,6 +32,12 @@ case "$1" in
 				route add default gw $i dev $interface metric $metric
 				: $(( metric += 1 ))
 			done
+		fi
+		if [ -n "$hostname" ] ; then
+			hostname "$hostname"
+			sed -i /^127.0.0.1/d /etc/hosts
+			echo "127.0.0.1 localhost" >> /etc/hosts
+			echo "127.0.0.1 $hostname" >> /etc/hosts
 		fi
 
 		echo "Recreating $RESOLV_CONF"

@@ -1,0 +1,26 @@
+#!/bin/busybox sh
+echo ""
+echo "=================================================="
+echo "== DEBUG INIT SCRIPT - DO NOT USE IN PRODUCTION =="
+echo "=================================================="
+
+target="/mnt/root"
+
+# no need to remove it, we still are on the initramfs disk
+# it will be cleared during switch_root
+mkdir /debug
+
+if [ ! -e /dev/sda1 ]; then
+    echo "[-] no debug disk found"
+    exit 0
+fi
+
+if ! mount /dev/sda1 /debug -t vfat -o ro; then
+    exit 0
+fi
+
+if [ -f /debug/.g8os-debug ]; then
+    cp -arv /debug/* $target
+fi
+
+umount /debug

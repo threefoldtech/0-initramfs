@@ -9,7 +9,10 @@ ROOTDIR="${PWD}/root"
 INTERNAL="${PWD}/internals/"
 EXTENDIR="${PWD}/extensions/"
 
-MAKEOPTS="-j 4"
+# By default, we compiles with (number of cpu threads + 1)
+# you can changes this to reduce computer load
+JOBS=$(($(grep -c 'bogomips' /proc/cpuinfo) + 1))
+MAKEOPTS="-j ${JOBS}"
 
 #
 # Flags
@@ -95,6 +98,7 @@ done
 . "${INTERNAL}"/eudev.sh
 . "${INTERNAL}"/kmod.sh
 . "${INTERNAL}"/dropbear.sh
+. "${INTERNAL}"/smartmontools.sh
 
 #
 # Utilities
@@ -219,6 +223,7 @@ download_all() {
     download_eudev
     download_kmod
     download_dropbear
+    download_smartmon
 
     popd
 }
@@ -251,6 +256,7 @@ extract_all() {
     extract_eudev
     extract_kmod
     extract_dropbear
+    extract_smartmon
 
     popd
 }
@@ -362,6 +368,23 @@ optimize_size() {
     popd
 }
 
+clean_busybox_outdated() {
+    echo "[+] removing busybox symlinks not needed anymore"
+
+    pushd "${ROOTDIR}"/usr
+    for file in sbin/*; do
+        # our script install mostly everything under /usr
+        # /sbin/ contains mainly busybox symlink
+        # we can safely remove /sbin stuff if we already have it on /usr/sbin
+        # this improve the system stability by providing more advanced feature
+        # (eg: util-linux blkid and not busybox one)
+        if [ -e ../$file ]; then
+            rm -f ../$file
+        fi
+    done
+    popd
+}
+
 #
 # Configuration
 #
@@ -370,6 +393,9 @@ g8os_root() {
     echo "[+] installing init script"
     cp "${CONFDIR}/init" "${ROOTDIR}/init"
     chmod +x "${ROOTDIR}/init"
+
+    cp "${CONFDIR}/init-debug" "${ROOTDIR}/init-debug"
+    chmod +x "${ROOTDIR}/init-debug"
 
     # Ensure minimal system directories and symlinks
     echo "[+] creating default directories and files"
@@ -455,7 +481,7 @@ build_extensions() {
 # Helpers
 #
 get_size() {
-    du -shc $1 | tail -1 | awk '{ print $1 }'
+    du -shc --apparent-size $1 | tail -1 | awk '{ print $1 }'
 }
 
 end_summary() {
@@ -542,6 +568,7 @@ main() {
         build_eudev
         build_kmod
         build_dropbear
+        build_smartmon
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
@@ -556,6 +583,7 @@ main() {
         ensure_libs
         clean_root
         optimize_size
+        clean_busybox_outdated
         g8os_root
         build_kernel
         end_summary
