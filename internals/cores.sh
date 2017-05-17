@@ -47,7 +47,7 @@ compile_cores() {
 install_cores() {
     echo "[+] copying binaries"
     cp -a bin/* "${ROOTDIR}/sbin/"
-    cp -a tools/* "${ROOTDIR}/bin/"
+    cp -a tools/* "${ROOTDIR}/usr/bin/"
     cp -a ../g8ufs/g8ufs "${ROOTDIR}/sbin/"
     pushd "${ROOTDIR}/sbin"
     ln -sf corectl reboot
