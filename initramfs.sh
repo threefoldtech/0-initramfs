@@ -80,7 +80,6 @@ done
 . "${INTERNAL}"/ca-certificates.sh
 . "${INTERNAL}"/libfuse.sh
 . "${INTERNAL}"/parted.sh
-. "${INTERNAL}"/redis.sh
 . "${INTERNAL}"/util-linux.sh
 . "${INTERNAL}"/btrfs-progs.sh
 . "${INTERNAL}"/zerotier.sh
@@ -207,7 +206,6 @@ download_all() {
     download_certs
     download_parted
     download_linuxutil
-    download_redis
     download_btrfs
     download_zerotier
     download_dnsmasq
@@ -240,7 +238,6 @@ extract_all() {
     extract_certs
     extract_parted
     extract_linuxutil
-    extract_redis
     extract_btrfs
     extract_zerotier
     extract_dnsmasq
@@ -553,7 +550,6 @@ main() {
         build_certs
         build_parted
         build_linuxutil
-        build_redis
         build_btrfs
         build_zerotier
         build_dnsmasq

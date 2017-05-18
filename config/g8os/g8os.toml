@@ -6,24 +6,19 @@ include = ["/etc/g8os/conf"]
 log_level = "info"
 network = "/etc/g8os/network.toml"
 
-[logging]
-    [logging.console]
-    type = "console"
-    levels = [2, 4, 7, 8, 9]
+[containers]
+max_count = 1000
 
-    [logging.redis]
-    type = "redis"
-    levels = [1, 2, 4, 7, 8, 9]
-    address = "127.0.0.1:6379"
-    batch_size = 1000
+[logging.file]
+levels = [2, 4, 7, 8, 9]
+
+[logging.ledis]
+levels = [1, 2, 4, 7, 8, 9]
+size = 10000 # how many log lines to keep in ledis
 
 [stats]
-interval = 60000 # milliseconds (1 min)
-
-[stats.redis]
 enabled = true
-flush_interval = 1 # second
-address = "127.0.0.1:6379"
+flush_interval = 1 # seconds
 
 [globals]
 storage = "ardb://hub.gig.tech:16379"
