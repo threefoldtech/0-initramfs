@@ -1,7 +1,6 @@
 [startup.udevd]
 name = "core.system"
 after = ["init"]
-protected = true
 
 [startup.udevd.args]
 name = "udevd"
