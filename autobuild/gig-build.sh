@@ -22,9 +22,9 @@ export PATH=$PATH:/usr/local/go/bin
 mkdir /gopath
 export GOPATH=/gopath
 
-# adding extensions
+# adding extensions (fallback to master if branch not found)
 cd /initramfs/extensions
-git clone -b "$1" https://github.com/g8os/initramfs-gig
+git clone -b "$1" https://github.com/g8os/initramfs-gig || git clone https://github.com/g8os/initramfs-gig
 
 # start the build
 cd /initramfs
