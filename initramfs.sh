@@ -515,7 +515,7 @@ main() {
     # Display some informations
     #
     echo "================================"
-    echo "==   G8OS Initramfs Builder   =="
+    echo "=  Zero-OS 0-Initramfs Builder ="
     echo "================================"
     echo ""
 

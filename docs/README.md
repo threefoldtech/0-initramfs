@@ -1,1 +1,1 @@
-G8OS Initramfs Builder
+Zero-OS 0-Initramfs Builder

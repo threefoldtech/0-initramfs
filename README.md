@@ -1,12 +1,12 @@
-# G8OS Initramfs Builder
-This repository contains all that is needed to build the g8os-kernel and initramfs to start our root filesystem.
+# Zero-OS Initramfs Builder
+This repository contains all that is needed to build the Zero-OS-kernel and initramfs to start our root filesystem.
 
 ## Releases:
-- [0.9.0](https://github.com/g8os/initramfs/tree/0.9.0) : used to build the [v0.9.0](https://github.com/g8os/core0/releases/tag/v0.9.0) of core0
-- [0.10.0](https://github.com/g8os/initramfs/tree/0.10.0) : used to build the [v0.10.0](https://github.com/g8os/core0/releases/tag/v0.10.0) of core0
-- [0.11.0](https://github.com/g8os/initramfs/tree/0.11.0) : used to build the [v0.11.0](https://github.com/g8os/core0/releases/tag/v0.11.0) of core0
-- [1.0.0](https://github.com/g8os/initramfs/tree/1.0.0) : used to build the [v1.0.0](https://github.com/g8os/core0/releases/tag/v1.0.0) of core0
-- [1.1.0-alpha2](https://github.com/g8os/initramfs/releases/tag/v1.1.0-alpha-2) : used to build the [v1.1.0-alpha-2](https://github.com/g8os/core0/releases/tag/v1.1.0-alpha-2) of core0
+- [0.9.0](https://github.com/Zero-OS/initramfs/tree/0.9.0) : used to build the [v0.9.0](https://github.com/Zero-OS/core0/releases/tag/v0.9.0) of core0
+- [0.10.0](https://github.com/Zero-OS/initramfs/tree/0.10.0) : used to build the [v0.10.0](https://github.com/Zero-OS/core0/releases/tag/v0.10.0) of core0
+- [0.11.0](https://github.com/Zero-OS/initramfs/tree/0.11.0) : used to build the [v0.11.0](https://github.com/Zero-OS/core0/releases/tag/v0.11.0) of core0
+- [1.0.0](https://github.com/Zero-OS/initramfs/tree/1.0.0) : used to build the [v1.0.0](https://github.com/Zero-OS/core0/releases/tag/v1.0.0) of core0
+- [1.1.0-alpha2](https://github.com/Zero-OS/initramfs/releases/tag/v1.1.0-alpha-2) : used to build the [v1.1.0-alpha-2](https://github.com/Zero-OS/core0/releases/tag/v1.1.0-alpha-2) of core0
 
 # Dependencies
 In order to compile all the initramfs without issues, you'll need to installe build-time dependencies.
@@ -77,7 +77,7 @@ You can disable this and join another network by editing/moving/copying `conf/ro
 
 From the root of this repository, create a docker container
 ```shell
-docker run -ti --name g8osbuilder ubuntu:16.04 /bin/bash
+docker run -ti --name zero-os-builder ubuntu:16.04 /bin/bash
 ```
 
 Don't try to mount the initramfs repo, the build will fail.
@@ -97,13 +97,13 @@ mkdir /gopath
 export GOPATH=/gopath
 
 #clone the repo
-git clone https://github.com/g8os/initramfs.git
+git clone https://github.com/Zero-OS/initramfs.git
 
 # start the build
 cd /initramfs
 bash initramfs.sh
 ```
-The result of the build will be located in `staging/vmlinuz.efi` so copy it out of the docker by executing `docker cp g8osbuilder:/initramfs/staging/vmlinuz.efi .`
+The result of the build will be located in `staging/vmlinuz.efi` so copy it out of the docker by executing `docker cp zero-os-builder:/initramfs/staging/vmlinuz.efi .`
 
 # I have the kernel, what can I do with it ?
 Just boot it. The kernel image is EFI bootable.
@@ -126,13 +126,13 @@ xhyve -m 1G -c 2 -s 0:0,hostbridge -s 31,lpc -l com1 -l com2,stdio -s 2:0,virtio
 
 ## How to create a 'bootable' (EFI) image
 ```shell
-dd if=/dev/zero of=/tmp/g8os.img bs=1M count=256
-mkfs.vfat /tmp/g8os.iso
-mkdir -p /mnt/g8os-iso
-mount g8os.iso /mnt/g8os-iso
-mkdir -p /mnt/g8os-iso/EFI/BOOT
+dd if=/dev/zero of=/tmp/zero-os.img bs=1M count=256
+mkfs.vfat /tmp/zero-os.iso
+mkdir -p /mnt/zero-os-iso
+mount Zero-OS.iso /mnt/zero-os-iso
+mkdir -p /mnt/zero-os-iso/EFI/BOOT
 cp staging/vmlinuz.efi /mnt/EFI/BOOT/BOOTX64.EFI
-umount /mnt/g8os-iso
+umount /mnt/zero-os-iso
 ```
 
 # Extensions
@@ -174,7 +174,7 @@ files then copying them.
 
 ## Requirement
 - A `vfat` filesystem on `/dev/sda1`
-- A file called `.g8os-debug` on the root of `/dev/sda1`
+- A file called `.zero-os-debug` on the root of `/dev/sda1`
 - The whole content of `/dev/sda1` will be copied (overwriting existing files) on the real root
 
 ## QEMU
@@ -184,10 +184,10 @@ Add `-drive file=fat:/debug-files,format=raw` as **first** drive argument to you
 
 ### Quick help
 ```
-mkdir /tmp/g8os-debug/
-touch /tmp/g8os-debug/.g8os-debug
-echo World > /tmp/g8os-debug/hello
+mkdir /tmp/zero-os-debug/
+touch /tmp/zero-os-debug/.zero-os-debug
+echo World > /tmp/zero-os-debug/hello
 
-qemu-system-x86_64 -drive file=fat:/tmp/g8os-debug,format=raw $QEMU_CMD_LINE
+qemu-system-x86_64 -drive file=fat:/tmp/zero-os-debug,format=raw $QEMU_CMD_LINE
 ```
-This will add `/hello` to your running g8os.
+This will add `/hello` to your running Zero-OS.

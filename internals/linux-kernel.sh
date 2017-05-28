@@ -25,7 +25,7 @@ compile_kernel() {
         echo "[+] compiling the kernel (modules)"
         make ${MAKEOPTS} modules
         make INSTALL_MOD_PATH="${ROOTDIR}" modules_install
-        depmod -a -b "${ROOTDIR}" "${KERNEL_VERSION}-g8os"
+        depmod -a -b "${ROOTDIR}" "${KERNEL_VERSION}-Zero-OS"
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]]; then
