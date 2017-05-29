@@ -1,0 +1,10 @@
+--- nestlex.c.orig	2016-12-06 08:40:37.652812188 +0000
++++ nestlex.c	2016-12-06 08:40:11.891705145 +0000
+@@ -6,6 +6,7 @@
+ 
+ #include "config.h"
+ #include "mytypes.h"
++#include <stddef.h>
+ 
+ #include "sysincludes.h"
+ 

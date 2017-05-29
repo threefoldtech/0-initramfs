@@ -1,6 +1,8 @@
 #!/bin/bash
-if [ "$1" == "" ]; then
-    echo "[-] missing remote version"
+set -e
+
+if [ "$1" == "" ] || [ "$2" == "" ]; then
+    echo "[-] missing remote version or repository name"
     exit 1
 fi
 
@@ -10,15 +12,15 @@ rm -rf /target/*
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=/gopath
 
-sed -i "/CORES_VERSION=/c\CORES_VERSION=\"$1\"" /initramfs/internals/cores.sh
+sed -i "/CORES_VERSION=/c\CORES_VERSION=\"$1\"" "/$2/internals/cores.sh"
 
 # updating dependencies
-cd /initramfs/extensions/initramfs-gig
+cd "/$2/extensions/initramfs-gig"
 git pull
 
 # start the build
-cd /initramfs
+cd "$2"
 bash initramfs.sh --cores --kernel
 
 # installing kernel to remote directory
-cp /initramfs/staging/vmlinuz.efi /target/
+cp "/$2/staging/vmlinuz.efi" /target/

@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-if [ "$1" == "" ]; then
-    echo "[-] missing remote version"
+if [ "$1" == "" ] || [ "$2" == "" ]; then
+    echo "[-] missing remote version or repository name"
     exit 1
 fi
 
@@ -23,13 +23,13 @@ mkdir /gopath
 export GOPATH=/gopath
 
 # adding extensions (fallback to master if branch not found)
-cd /initramfs/extensions
+cd "/$2/extensions"
 git clone -b "$1" https://github.com/g8os/initramfs-gig || git clone https://github.com/g8os/initramfs-gig
 
 # start the build
-cd /initramfs
+cd "/$2"
 bash initramfs.sh
 
 # installing kernel to remote directory
 echo "[+] moving kernel to /target"
-cp -v /initramfs/staging/vmlinuz.efi /target/
+cp -v "/$2/staging/vmlinuz.efi" /target/
