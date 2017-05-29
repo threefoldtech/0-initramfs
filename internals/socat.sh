@@ -17,10 +17,10 @@ prepare_socat() {
     echo "[+] configuring socat"
     ./configure --disable-openssl
 
-    if [ ! -f socat-1.7.3.1-ubuntu.patch ]; then
-        echo "[+] downloading patch"
-        curl -s https://gist.githubusercontent.com/maxux/a5472530dd88b3480d745388d81e4c7f/raw/743be4c422aedd342be23bfcb45f4cb51967c73b/socat-1.7.3.1-ubuntu.patch > socat-1.7.3.1-ubuntu.patch
-        patch -p0 < socat-1.7.3.1-ubuntu.patch
+    if [ ! -f .patched_socat-1.7.3.1-ubuntu.patch ]; then
+        echo "[+] applying patch"
+        patch -p0 < ${PATCHESDIR}/socat-1.7.3.1-ubuntu.patch
+        touch .patched_socat-1.7.3.1-ubuntu.patch
     fi
 }
 

@@ -8,6 +8,7 @@ CONFDIR="${PWD}/config"
 ROOTDIR="${PWD}/root"
 INTERNAL="${PWD}/internals/"
 EXTENDIR="${PWD}/extensions/"
+PATCHESDIR="${PWD}/patches/"
 
 # By default, we compiles with (number of cpu threads + 1)
 # you can changes this to reduce computer load

@@ -17,10 +17,10 @@ prepare_parted() {
     echo "[+] configuring parted"
     ./configure --prefix "${ROOTDIR}"/usr --disable-device-mapper
 
-    if [ ! -f parted-3.2-devmapper.patch ]; then
-        echo "[+] downloading patch"
-        curl -s https://gist.githubusercontent.com/maxux/a5472530dd88b3480d745388d81e4c7f/raw/d5b67d7bd7714178b3ebe35a2836f64ccaa32431/parted-3.2-devmapper.patch > parted-3.2-devmapper.patch
-        patch -p1 < parted-3.2-devmapper.patch
+    if [ ! -f .patched_parted-3.2-devmapper.patch ]; then
+        echo "[+] applying patch"
+        patch -p1 < ${PATCHESDIR}/parted-3.2-devmapper.patch
+        touch .patched_parted-3.2-devmapper.patch
     fi
 }
 
