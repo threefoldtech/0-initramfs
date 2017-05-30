@@ -19,7 +19,7 @@ cd "/$2/extensions/initramfs-gig"
 git pull
 
 # start the build
-cd "$2"
+cd "/$2"
 bash initramfs.sh --cores --kernel
 
 # installing kernel to remote directory
