@@ -5,4 +5,4 @@ protected = true
 
 [startup.ntpd.args]
 name = "ntpd"
-args = ["-n", "-d"]
+args = ["-n"]
