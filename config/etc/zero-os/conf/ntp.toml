@@ -1,5 +1,6 @@
 [startup.ntpd]
 name = "core.system"
+after = ["init"]
 protected = true
 
 [startup.ntpd.args]
