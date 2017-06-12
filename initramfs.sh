@@ -389,10 +389,10 @@ clean_busybox_outdated() {
 g8os_root() {
     # Copy init
     echo "[+] installing init script"
-    cp "${CONFDIR}/init" "${ROOTDIR}/init"
+    cp "${CONFDIR}/init/init" "${ROOTDIR}/init"
     chmod +x "${ROOTDIR}/init"
 
-    cp "${CONFDIR}/init-debug" "${ROOTDIR}/init-debug"
+    cp "${CONFDIR}/init/init-debug" "${ROOTDIR}/init-debug"
     chmod +x "${ROOTDIR}/init-debug"
 
     # Ensure minimal system directories and symlinks
@@ -423,20 +423,11 @@ g8os_root() {
         mknod -m 622 "${ROOTDIR}"/dev/console c 5 1 || mknod_die
     fi
 
-    echo "[+] installing g8os configuration"
-    mkdir -p "${ROOTDIR}"/etc/g8os
-    cp -a "${CONFDIR}"/g8os/* "${ROOTDIR}"/etc/g8os/
-    cp -a "${CONFDIR}"/g8os-conf/* "${ROOTDIR}"/etc/g8os/conf/
-
     # System configuration
-    cp -a "${CONFDIR}"/udhcp "${ROOTDIR}"/usr/share/
-    cp -a "${CONFDIR}"/nftables.conf "${ROOTDIR}"/etc/
-    cp -a "${CONFDIR}"/nsswitch.conf "${ROOTDIR}"/etc/
-    cp -a "${CONFDIR}"/hosts "${ROOTDIR}"/etc/
-    cp -a "${CONFDIR}"/passwd "${ROOTDIR}"/etc/
-    cp -a "${CONFDIR}"/profile "${ROOTDIR}"/etc/
-    cp -a "${CONFDIR}"/group "${ROOTDIR}"/etc/
-    cp -a "${CONFDIR}"/shells "${ROOTDIR}"/etc/
+    cp -a "${CONFDIR}"/etc/* "${ROOTDIR}"/etc/
+
+    # System scripts
+    cp -a "${CONFDIR}"/usr/udhcp "${ROOTDIR}"/usr/share/
 }
 
 #

@@ -57,4 +57,4 @@ if [ -e /init-debug ]; then
 fi
 
 echo "[+] switching root"
-exec switch_root /mnt/root /sbin/core0
+exec switch_root /mnt/root /sbin/core0 -c /etc/zero-os/zero-os.toml

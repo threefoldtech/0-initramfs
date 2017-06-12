@@ -15,7 +15,7 @@ extract_kernel() {
 
 prepare_kernel() {
     echo "[+] copying kernel configuration"
-    cp "${CONFDIR}/kernel-config-generic" .config
+    cp "${CONFDIR}/build/kernel-config-generic" .config
 
     # FIXME: add patch for secureboot
 }

@@ -55,9 +55,9 @@ install_cores() {
     popd
 
     echo "[+] installing configuration"
-    mkdir -p "${ROOTDIR}/etc/g8os/conf"
-    cp -a core0/conf/* "${ROOTDIR}"/etc/g8os/conf/
-    rm -f "${ROOTDIR}"/etc/g8os/conf/README.md
+    mkdir -p "${ROOTDIR}/etc/zero-os/conf"
+    cp -a core0/conf/* "${ROOTDIR}"/etc/zero-os/conf/
+    rm -f "${ROOTDIR}"/etc/zero-os/conf/README.md
 }
 
 build_cores() {

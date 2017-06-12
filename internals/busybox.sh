@@ -15,7 +15,7 @@ extract_busybox() {
 
 prepare_busybox() {
     echo "[+] copying busybox configuration"
-    cp "${CONFDIR}/busybox-config" .config
+    cp "${CONFDIR}/build/busybox-config" .config
 }
 
 compile_busybox() {
@@ -29,7 +29,7 @@ install_busybox() {
 }
 
 build_busybox() {
-    pushd "$WORKDIR/busybox-${BUSYBOX_VERSION}"
+    pushd "${WORKDIR}/busybox-${BUSYBOX_VERSION}"
 
     prepare_busybox
     compile_busybox
