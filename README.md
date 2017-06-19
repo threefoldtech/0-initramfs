@@ -82,7 +82,7 @@ docker run -ti --name zero-os-builder ubuntu:16.04 /bin/bash
 
 Don't try to mount the initramfs repo, the build will fail.
 
-Then from inside the docker
+Then from inside the docker (we assume your current working directory is `/`)
 ```shell
 # install dependencies for building
 apt-get update
@@ -92,18 +92,18 @@ apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoc
 # install go
 curl https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz > /tmp/go1.8.linux-amd64.tar.gz
 tar -C /usr/local -xzf /tmp/go1.8.linux-amd64.tar.gz
-export PATH=$PATH:/usr/local/go/bin
 mkdir /gopath
+export PATH=$PATH:/usr/local/go/bin
 export GOPATH=/gopath
 
-#clone the repo
-git clone https://github.com/Zero-OS/initramfs.git
+# clone the initramfs repository
+git clone https://github.com/zero-os/0-initramfs
 
 # start the build
-cd /initramfs
+cd /0-initramfs
 bash initramfs.sh
 ```
-The result of the build will be located in `staging/vmlinuz.efi` so copy it out of the docker by executing `docker cp zero-os-builder:/initramfs/staging/vmlinuz.efi .`
+The result of the build will be located in `staging/vmlinuz.efi` so copy it out of the docker by executing `docker cp zero-os-builder:/0-initramfs/staging/vmlinuz.efi .`
 
 # I have the kernel, what can I do with it ?
 Just boot it. The kernel image is EFI bootable.
