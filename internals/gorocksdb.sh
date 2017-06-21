@@ -1,5 +1,5 @@
-ROCKSDB_VERSION="c2be43430722e26472e299c8c6b9bc9e1d2d46ec"
-ROCKSDB_CHECKSUM="44074efba10f8e2e5464c9b95d4b5597"
+ROCKSDB_VERSION="2e64f450dc73104f3ba56651e82abf35ef59f74e"
+ROCKSDB_CHECKSUM="c6f5e96755d5999d5a9d69ca8cc1e6a2"
 ROCKSDB_LINK="https://github.com/facebook/rocksdb/archive/${ROCKSDB_VERSION}.tar.gz"
 
 download_gorocksdb() {
