@@ -16,7 +16,6 @@ size = 10000 # how many log lines to keep
 
 [stats]
 enabled = true
-flush_interval = 1 # seconds
 
 [globals]
 storage = "ardb://hub.gig.tech:16379"
