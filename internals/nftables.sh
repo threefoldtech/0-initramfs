@@ -1,9 +1,9 @@
-NFTABLES_VERSION="0.6"
-NFTABLES_CHECKSUM="fd320e35fdf14b7be795492189b13dae"
+NFTABLES_VERSION="0.7"
+NFTABLES_CHECKSUM="4c005e76a15a029afaba71d7db21d065"
 NFTABLES_LINK="https://www.netfilter.org/projects/nftables/files/nftables-${NFTABLES_VERSION}.tar.bz2"
 
-LIBNFTNL_VERSION="1.0.6"
-LIBNFTNL_CHECKSUM="6d7f9f161538ca7efd535dcc70caf964"
+LIBNFTNL_VERSION="1.0.7"
+LIBNFTNL_CHECKSUM="82183867168eb6644926c48b991b8aac"
 LIBNFTNL_LINK="http://www.iptables.org/projects/libnftnl/files/libnftnl-${LIBNFTNL_VERSION}.tar.bz2"
 
 download_nftables() {
@@ -40,6 +40,9 @@ prepare_nftables() {
 
     # Force to skip documentation compilation
     echo "all:" > doc/Makefile
+
+    # Patching nftables
+    patch -p1 < "${PATCHESDIR}/nftables-0.7-dest-ip-port.patch"
 }
 
 compile_nftables() {
