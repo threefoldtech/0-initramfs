@@ -1,6 +1,0 @@
-[startup.dropbear]
-name = "core.system"
-
-[startup.dropbear.args]
-name = "dropbear"
-args = ["-R", "-F", "-m", "-s", "-j", "-k", "-E"]

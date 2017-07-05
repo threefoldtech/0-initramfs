@@ -97,7 +97,7 @@ done
 . "${INTERNAL}"/gorocksdb.sh
 . "${INTERNAL}"/eudev.sh
 . "${INTERNAL}"/kmod.sh
-. "${INTERNAL}"/dropbear.sh
+. "${INTERNAL}"/openssh.sh
 . "${INTERNAL}"/smartmontools.sh
 
 #
@@ -221,7 +221,7 @@ download_all() {
     download_gorocksdb
     download_eudev
     download_kmod
-    download_dropbear
+    download_openssh
     download_smartmon
 
     popd
@@ -253,7 +253,7 @@ extract_all() {
     extract_gorocksdb
     extract_eudev
     extract_kmod
-    extract_dropbear
+    extract_openssh
     extract_smartmon
 
     popd
@@ -555,7 +555,7 @@ main() {
         build_gorocksdb
         build_eudev
         build_kmod
-        build_dropbear
+        build_openssh
         build_smartmon
     fi
 
