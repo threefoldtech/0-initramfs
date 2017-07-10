@@ -99,6 +99,7 @@ done
 . "${INTERNAL}"/kmod.sh
 . "${INTERNAL}"/openssh.sh
 . "${INTERNAL}"/smartmontools.sh
+. "${INTERNAL}"/netcat.sh
 
 #
 # Utilities
@@ -223,6 +224,7 @@ download_all() {
     download_kmod
     download_openssh
     download_smartmon
+    download_netcat
 
     popd
 }
@@ -255,6 +257,7 @@ extract_all() {
     extract_kmod
     extract_openssh
     extract_smartmon
+    extract_netcat
 
     popd
 }
@@ -557,6 +560,7 @@ main() {
         build_kmod
         build_openssh
         build_smartmon
+        build_netcat
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
