@@ -39,7 +39,10 @@ Some parts need to `chown/setuid/chmod/mknod` files as root.
     - RocksDB (shared library)
     - GoRocksDB
     - eudev and kmod (used for hardware and modules management)
-    - dropbear (lightweight ssh server)
+    - smartmontools (used for S.M.A.R.T monitoring)
+    - dmidecode (optional dependency for libvirt and management)
+    - OpenSSH (client and server)
+    - netcat6 (needed by libvirt migration)
  - Clean, remove useless files, optimize (strip) files and copy system's config
  - Compile the kernel (and bundles initramfs in the kernel)
 
