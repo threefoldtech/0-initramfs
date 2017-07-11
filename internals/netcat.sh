@@ -14,6 +14,20 @@ extract_netcat() {
 }
 
 prepare_netcat() {
+    if [ ! -f .patched_netcat6-1.0-unix-sockets.patch ]; then
+        echo "[+] patching netcat"
+        patch -p1 < ${PATCHESDIR}/netcat6-1.0-unix-sockets.patch
+        patch -p1 < ${PATCHESDIR}/netcat6-1.0-automake-1.14.patch
+        touch .patched_netcat6-1.0-unix-sockets.patch
+    fi
+
+    echo "[+] autoreconf netcat"
+    autopoint --force
+    aclocal -I config
+    autoconf --force
+    autoheader
+    automake --add-missing --copy --force-missing --force-missing
+
     echo "[+] configuring netcat"
     ./configure --disable-bluez
 }
