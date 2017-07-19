@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Initramfs Building mode, possible values are: debug, release
+BUILDMODE="debug"
+
 # You need to use absolutes path
 DISTFILES="${PWD}/archives"
 WORKDIR="${PWD}/staging"
@@ -18,7 +21,7 @@ MAKEOPTS="-j ${JOBS}"
 #
 # Flags
 #
-OPTS=$(getopt -o dbtckMelmh --long download,busybox,tools,cores,kernel,modules,extensions,clean,mrproper,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o dbtckMelmrh --long download,busybox,tools,cores,kernel,modules,extensions,clean,mrproper,release,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
@@ -44,15 +47,16 @@ fi
 
 while true; do
     case "$1" in
-        -d | --download)   DO_DOWNLOAD=1;   shift ;;
-        -b | --busybox)    DO_BUSYBOX=1;    shift ;;
-        -t | --tools)      DO_TOOLS=1;      shift ;;
-        -c | --cores)      DO_CORES=1;      shift ;;
-        -k | --kernel)     DO_KERNEL=1;     shift ;;
-        -M | --modules)    DO_KMODULES=1;   shift ;;
-        -e | --extensions) DO_EXTENSIONS=1; shift ;;
-        -l | --clean)      DO_CLEAN=1;      shift ;;
-        -m | --mrproper)   DO_MRPROPER=1;   shift ;;
+        -d | --download)   DO_DOWNLOAD=1;       shift ;;
+        -b | --busybox)    DO_BUSYBOX=1;        shift ;;
+        -t | --tools)      DO_TOOLS=1;          shift ;;
+        -c | --cores)      DO_CORES=1;          shift ;;
+        -k | --kernel)     DO_KERNEL=1;         shift ;;
+        -M | --modules)    DO_KMODULES=1;       shift ;;
+        -e | --extensions) DO_EXTENSIONS=1;     shift ;;
+        -l | --clean)      DO_CLEAN=1;          shift ;;
+        -m | --mrproper)   DO_MRPROPER=1;       shift ;;
+        -r | --release)    BUILDMODE="release"; shift ;;
         -h | --help)
             echo "Usage:"
             echo " -d --download    only download and extract archives"
@@ -64,6 +68,7 @@ while true; do
             echo " -e --extensions  only (re)build extensions"
             echo " -l --clean       only clean staging files (extracted sources)"
             echo " -m --mrproper    only remove staging files and clean the root"
+            echo " -r --release     force a release build"
             echo " -h --help        display this help message"
             exit 1
         shift ;;
@@ -140,6 +145,8 @@ prepare() {
         echo "[-] gopath not defined"
         exit 1
     fi
+
+    echo "[+] building mode: ${BUILDMODE}"
 
     if [ $UID != 0 ]; then
         echo "[-]"
@@ -395,8 +402,11 @@ g8os_root() {
     cp "${CONFDIR}/init/init" "${ROOTDIR}/init"
     chmod +x "${ROOTDIR}/init"
 
-    cp "${CONFDIR}/init/init-debug" "${ROOTDIR}/init-debug"
-    chmod +x "${ROOTDIR}/init-debug"
+    if [ "${BUILDMODE}" = "debug" ]; then
+        echo "[+] installing debug init script"
+        cp "${CONFDIR}/init/init-debug" "${ROOTDIR}/init-debug"
+        chmod +x "${ROOTDIR}/init-debug"
+    fi
 
     # Ensure minimal system directories and symlinks
     echo "[+] creating default directories and files"
