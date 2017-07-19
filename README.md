@@ -9,9 +9,9 @@ This repository contains all that is needed to build the Zero-OS-kernel and init
 - [1.1.0-alpha2](https://github.com/Zero-OS/initramfs/releases/tag/v1.1.0-alpha-2) : used to build the [v1.1.0-alpha-2](https://github.com/Zero-OS/core0/releases/tag/v1.1.0-alpha-2) of core0
 
 # Dependencies
-In order to compile all the initramfs without issues, you'll need to installe build-time dependencies.
+In order to compile all the initramfs without issues, you'll need to install build-time dependencies.
 
-Please check the build process and use the dependencies listed there.
+Please check the build process and use the dependencies listed there (see `autobuild` directory).
 
 ## Privileges
 You need to have root privilege to be able to execute all the scripts.
@@ -63,6 +63,7 @@ The `initramfs.sh` script accepts multiple options:
  -e --extensions  only (re)build extensions
  -l --clean       only clean staging files (extracted sources)
  -m --mrproper    only remove staging files and clean the root
+ -r --release     force a release build
  -h --help        display this help message
 ```
 
@@ -71,10 +72,14 @@ The option `--kernel` is useful if you changes something on the root directory a
 If you are modifying core0/coreX, you can simply use `--cores --kernel` options and the cores will be rebuilt and the initramfs rebuilt after.
 This will produce a new image with the latest changes.
 
-### Customize build
-You can customise your build for some service, for exemple, you can configure a private ZeroTier Network to join during boot.
-You need to add your own services to `conf/root/` directory. By default you will join ZeroTier Earth network.
-You can disable this and join another network by editing/moving/copying `conf/root/zerotier-public.toml` file.
+## Build mode
+By default, initramfs will compiles in `debug` mode, which contains some extra debug options.
+
+To produce a `release` (aka **production** build), there is two options:
+- Using `--release` option during build
+- Override `BUILDMODE` variable defined on the top of `initramfs.sh`
+
+This is obvious but, **do not use a debug version in a production environment.**
 
 ## Build using a docker container
 
@@ -90,7 +95,7 @@ Then from inside the docker (we assume your current working directory is `/`)
 # install dependencies for building
 apt-get update
 apt-get install -y asciidoc xmlto --no-install-recommends
-apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq liblz4-dev libsnappy-dev libbz2-dev libssl-dev gperf libelf-dev libkmod-dev liblzma-dev git kmod libvirt-dev libcap-dev
+apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq liblz4-dev libsnappy-dev libbz2-dev libssl-dev gperf libelf-dev libkmod-dev liblzma-dev git kmod libvirt-dev libcap-dev autopoint
 
 # install go
 curl https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz > /tmp/go1.8.linux-amd64.tar.gz
@@ -159,6 +164,15 @@ extensions/
 
 During the extension build phase, your extension script will be `sourced`, not forked, which means that you have access
 to all the variables used during the build script process.
+
+You can use this extension way to copy extra configuration files, edit some default value on files, etc.
+
+Here are some useful variables you can use on your extension, they all points to a directory:
+```
+DISTFILES  - sources archive downloaded
+WORKDIR    - extracted (and compiled) sources
+ROOTDIR    - the target root directory (contains the initramfs contents)
+```
 
 **Be careful, you could override some variable used by `initramfs.sh` itself and break the build process.**
 
