@@ -105,6 +105,7 @@ done
 . "${INTERNAL}"/openssh.sh
 . "${INTERNAL}"/smartmontools.sh
 . "${INTERNAL}"/netcat.sh
+. "${INTERNAL}"/ork.sh
 
 #
 # Utilities
@@ -571,6 +572,7 @@ main() {
         build_openssh
         build_smartmon
         build_netcat
+        build_ork
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
