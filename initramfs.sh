@@ -106,6 +106,7 @@ done
 . "${INTERNAL}"/smartmontools.sh
 . "${INTERNAL}"/netcat.sh
 . "${INTERNAL}"/ork.sh
+. "${INTERNAL}"/restic.sh
 
 #
 # Utilities
@@ -233,6 +234,7 @@ download_all() {
     download_openssh
     download_smartmon
     download_netcat
+    download_restic
 
     popd
 }
@@ -266,6 +268,7 @@ extract_all() {
     extract_openssh
     extract_smartmon
     extract_netcat
+    extract_restic
 
     popd
 }
@@ -573,6 +576,7 @@ main() {
         build_smartmon
         build_netcat
         build_ork
+        build_restic
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
