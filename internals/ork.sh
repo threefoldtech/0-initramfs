@@ -14,6 +14,7 @@ prepare_ork() {
     fi
 
     git pull origin "${ORK_VERSION}"
+    go get -v ./...
     popd
 
 }
