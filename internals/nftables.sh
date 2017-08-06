@@ -42,7 +42,11 @@ prepare_nftables() {
     echo "all:" > doc/Makefile
 
     # Patching nftables
-    patch -p1 < "${PATCHESDIR}/nftables-0.7-dest-ip-port.patch"
+    if [ ! -f .patched_nftables-0.7-dest-ip-port.patch ]; then
+        echo "[+] patching nftables"
+        patch -p1 < "${PATCHESDIR}/nftables-0.7-dest-ip-port.patch"
+        touch .patched_nftables-0.7-dest-ip-port.patch
+    fi
 }
 
 compile_nftables() {

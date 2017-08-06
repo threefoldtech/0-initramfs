@@ -21,7 +21,7 @@ MAKEOPTS="-j ${JOBS}"
 #
 # Flags
 #
-OPTS=$(getopt -o dbtckMelmrh --long download,busybox,tools,cores,kernel,modules,extensions,clean,mrproper,release,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o dbtckMeolmrh --long download,busybox,tools,cores,kernel,modules,extensions,ork,clean,mrproper,release,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
@@ -41,6 +41,7 @@ if [ "$OPTS" != " --" ]; then
     DO_EXTENSIONS=0
     DO_CLEAN=0
     DO_MRPROPER=0
+    DO_ORK=0
 
     eval set -- "$OPTS"
 fi
@@ -54,6 +55,7 @@ while true; do
         -k | --kernel)     DO_KERNEL=1;         shift ;;
         -M | --modules)    DO_KMODULES=1;       shift ;;
         -e | --extensions) DO_EXTENSIONS=1;     shift ;;
+        -o | --ork)        DO_ORK=1;            shift ;;
         -l | --clean)      DO_CLEAN=1;          shift ;;
         -m | --mrproper)   DO_MRPROPER=1;       shift ;;
         -r | --release)    BUILDMODE="release"; shift ;;
@@ -66,6 +68,7 @@ while true; do
             echo " -k --kernel      only (re)build kernel (vmlinuz, produce final image)"
             echo " -M --modules     only (re)build kernel modules"
             echo " -e --extensions  only (re)build extensions"
+            echo " -o --ork         only (re)build ork protection"
             echo " -l --clean       only clean staging files (extracted sources)"
             echo " -m --mrproper    only remove staging files and clean the root"
             echo " -r --release     force a release build"
@@ -572,6 +575,9 @@ main() {
         build_openssh
         build_smartmon
         build_netcat
+    fi
+
+    if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
         build_ork
     fi
 
