@@ -53,3 +53,10 @@ build_netcat() {
 
     popd
 }
+
+registrar_netcat() {
+    DOWNLOADERS+=(download_netcat)
+    EXTRACTORS+=(extract_netcat)
+}
+
+registrar_netcat

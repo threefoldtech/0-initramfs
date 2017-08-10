@@ -34,3 +34,10 @@ build_zerotier() {
 
     popd
 }
+
+registrar_zerotier() {
+    DOWNLOADERS+=(download_zerotier)
+    EXTRACTORS+=(extract_zerotier)
+}
+
+registrar_zerotier

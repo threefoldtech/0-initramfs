@@ -38,3 +38,10 @@ build_unionfs() {
 
     popd
 }
+
+registrar_unionfs() {
+    DOWNLOADERS+=(download_unionfs)
+    EXTRACTORS+=(extract_unionfs)
+}
+
+registrar_unionfs

@@ -47,3 +47,9 @@ build_qemu() {
     popd
 }
 
+registrar_qemu() {
+    DOWNLOADERS+=(download_qemu)
+    EXTRACTORS+=(extract_qemu)
+}
+
+registrar_qemu

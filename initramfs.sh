@@ -82,33 +82,18 @@ while true; do
 done
 
 #
-# Including sub-system
+# Including sub-system (auto loading the whole directory)
 #
-. "${INTERNAL}"/linux-kernel.sh
-. "${INTERNAL}"/busybox.sh
-. "${INTERNAL}"/ca-certificates.sh
-. "${INTERNAL}"/libfuse.sh
-. "${INTERNAL}"/parted.sh
-. "${INTERNAL}"/util-linux.sh
-. "${INTERNAL}"/btrfs-progs.sh
-. "${INTERNAL}"/zerotier.sh
-. "${INTERNAL}"/cores.sh
-. "${INTERNAL}"/dnsmasq.sh
-. "${INTERNAL}"/nftables.sh
-. "${INTERNAL}"/iproute2.sh
-. "${INTERNAL}"/socat.sh
-. "${INTERNAL}"/qemu.sh
-. "${INTERNAL}"/libvirt.sh
-. "${INTERNAL}"/openssl.sh
-. "${INTERNAL}"/dmidecode.sh
-. "${INTERNAL}"/unionfs-fuse.sh
-. "${INTERNAL}"/gorocksdb.sh
-. "${INTERNAL}"/eudev.sh
-. "${INTERNAL}"/kmod.sh
-. "${INTERNAL}"/openssh.sh
-. "${INTERNAL}"/smartmontools.sh
-. "${INTERNAL}"/netcat.sh
-. "${INTERNAL}"/ork.sh
+modules=0
+DOWNLOADERS=()
+EXTRACTORS=()
+
+for module in "${INTERNAL}"/*.sh; do
+    # loading submodule
+    . "${module}"
+
+    modules=$(($modules + 1))
+done
 
 #
 # Utilities
@@ -151,6 +136,7 @@ prepare() {
     fi
 
     echo "[+] building mode: ${BUILDMODE}"
+    echo "[+] ${modules} submodules loaded"
 
     if [ $UID != 0 ]; then
         echo "[-]"
@@ -213,29 +199,9 @@ download_file() {
 download_all() {
     pushd $DISTFILES
 
-    download_kernel
-    download_busybox
-    download_fuse
-    download_certs
-    download_parted
-    download_linuxutil
-    download_btrfs
-    download_zerotier
-    download_dnsmasq
-    download_nftables
-    download_iproute2
-    download_socat
-    download_qemu
-    download_libvirt
-    download_openssl
-    download_dmidecode
-    download_unionfs
-    download_gorocksdb
-    download_eudev
-    download_kmod
-    download_openssh
-    download_smartmon
-    download_netcat
+    for downloader in ${DOWNLOADERS[@]}; do
+        $downloader
+    done
 
     popd
 }
@@ -246,29 +212,9 @@ download_all() {
 extract_all() {
     pushd "$WORKDIR"
 
-    extract_kernel
-    extract_busybox
-    extract_fuse
-    extract_certs
-    extract_parted
-    extract_linuxutil
-    extract_btrfs
-    extract_zerotier
-    extract_dnsmasq
-    extract_nftables
-    extract_iproute2
-    extract_socat
-    extract_qemu
-    extract_libvirt
-    extract_openssl
-    extract_dmidecode
-    extract_unionfs
-    extract_gorocksdb
-    extract_eudev
-    extract_kmod
-    extract_openssh
-    extract_smartmon
-    extract_netcat
+    for extractor in ${EXTRACTORS[@]}; do
+        $extractor
+    done
 
     popd
 }

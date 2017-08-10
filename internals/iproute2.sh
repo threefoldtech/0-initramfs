@@ -41,3 +41,10 @@ build_iproute2() {
 
     popd
 }
+
+registrar_iproute2() {
+    DOWNLOADERS+=(download_iproute2)
+    EXTRACTORS+=(extract_iproute2)
+}
+
+registrar_iproute2

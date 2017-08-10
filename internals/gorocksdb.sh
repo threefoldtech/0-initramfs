@@ -59,3 +59,10 @@ build_gorocksdb() {
 
     popd
 }
+
+registrar_gorocksdb() {
+    DOWNLOADERS+=(download_gorocksdb)
+    EXTRACTORS+=(extract_gorocksdb)
+}
+
+registrar_gorocksdb

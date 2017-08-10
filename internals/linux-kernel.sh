@@ -48,3 +48,10 @@ build_kernel() {
 
     popd
 }
+
+registrar_kernel() {
+    DOWNLOADERS+=(download_kernel)
+    EXTRACTORS+=(extract_kernel)
+}
+
+registrar_kernel
