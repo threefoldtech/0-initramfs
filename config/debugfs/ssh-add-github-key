@@ -1,0 +1,27 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "" ]; then
+    echo "[-] missing github username"
+    exit 1
+fi
+
+TARGET="$1"
+
+echo "[+] authorizing ${TARGET}"
+
+SK=$(wget -q https://github.com/${TARGET}.keys -O - | tail -1)
+
+if [ "$SK" == "Not Found" ]; then
+	echo "[-] user not found"
+	exit 1
+fi
+
+mkdir -p /root/.ssh
+
+if ! grep "$SK" /root/.ssh/authorized_keys > /dev/null 2>&1; then
+	echo "$SK ${TARGET}@github" >> /root/.ssh/authorized_keys
+	echo "[+] key authorized"
+else
+	echo "[-] already authorized"
+fi
