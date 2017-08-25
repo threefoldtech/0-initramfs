@@ -15,7 +15,7 @@ echo "[+] ensure debug environment sanity"
 umount -r ${debugroot}/image 2> /dev/null
 umount -r ${debugroot}/backend/ro 2> /dev/null
 
-backendaddr=$(grep 'storage = ' /etc/zero-os/zero-os.toml | cut -d'"' -f2)
+backendaddr=$(grep '^storage = ' /etc/zero-os/zero-os.toml | cut -d'"' -f2)
 
 # killing previous debugfs instance
 if ps aux | grep g8ufs | grep -q debugfs; then
