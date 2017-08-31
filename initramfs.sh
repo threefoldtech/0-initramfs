@@ -29,7 +29,7 @@ fi
 
 DO_ALL=1
 
-if [ "$OPTS" != " --" ]; then
+if [ "$OPTS" != " --" ] && [ "$OPTS" != " --release --" ]; then
     DO_ALL=0
 
     DO_DOWNLOAD=0
