@@ -24,11 +24,17 @@ export GOPATH=/gopath
 
 # adding extensions (fallback to master if branch not found)
 cd "/$2/extensions"
-git clone -b "$1" https://github.com/g8os/initramfs-gig || git clone https://github.com/g8os/initramfs-gig
+git clone -b "$1" https://github.com/zero-os/initramfs-gig || git clone https://github.com/zero-os/initramfs-gig
+
+# checkings arguments
+arguments=""
+if [ "${1:0:7}" = "release" ]; then
+    arguments="--release"
+fi
 
 # start the build
 cd "/$2"
-bash initramfs.sh
+bash initramfs.sh ${arguments}
 
 # installing kernel to remote directory
 echo "[+] moving kernel to /target"
