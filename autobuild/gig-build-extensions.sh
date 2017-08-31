@@ -22,9 +22,15 @@ fi
 
 git pull origin "$1"
 
+# checkings arguments
+arguments="--extensions --kernel"
+if [ "${1:0:7}" = "release" ]; then
+    arguments="--extensions --kernel --release"
+fi
+
 # start the build
 cd "/$2"
-bash initramfs.sh --extensions --kernel
+bash initramfs.sh ${arguments}
 
 # installing kernel to remote directory
 cp "/$2/staging/vmlinuz.efi" /target/
