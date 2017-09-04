@@ -1,0 +1,7 @@
+[startup."ork.job"]
+name = "core.system"
+after = ["init"]
+protected = true
+
+[startup."ork.job".args]
+name = "0-ork"
