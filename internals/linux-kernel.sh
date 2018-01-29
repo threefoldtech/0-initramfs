@@ -1,5 +1,5 @@
-KERNEL_VERSION="4.9.35"
-KERNEL_CHECKSUM="9b72bca09f8192ff645b354a4f7960ea"
+KERNEL_VERSION="4.9.78"
+KERNEL_CHECKSUM="b449e1b9770dfec9c919fab59f490658"
 KERNEL_LINK="https://www.kernel.org/pub/linux/kernel/v4.x/linux-${KERNEL_VERSION}.tar.xz"
 
 download_kernel() {
