@@ -32,6 +32,9 @@ if [ "${1:0:7}" = "release" ]; then
     arguments="--release"
 fi
 
+# setting up environment
+export INTERACTIVE="false"
+
 # start the build
 cd "/$2"
 bash initramfs.sh ${arguments}

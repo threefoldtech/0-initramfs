@@ -201,7 +201,11 @@ download_file() {
     fi
 
     # Download the file
-    curl -L -k --progress-bar -C - -o "${output}" $1
+    if [ "${INTERACTIVE}" == "false" ]; then
+        curl -L -k -o "${output}" $1
+    else
+        curl -L -k --progress-bar -C - -o "${output}" $1
+    fi
 
     # Checksum the downloaded file
     checksum ${output} $2 || false
