@@ -1,6 +1,6 @@
-ROCKSDB_VERSION="5.8"
-ROCKSDB_CHECKSUM="44e3a4c3234ba715aae215488ee79bae"
-ROCKSDB_LINK="https://github.com/facebook/rocksdb/archive/v${ROCKSDB_VERSION}.tar.gz"
+ROCKSDB_VERSION="439855a7743a10bc036c7bc05563521500b83068"
+ROCKSDB_CHECKSUM="331c51c2f8028c14e7c152c3c18d4c25"
+ROCKSDB_LINK="https://github.com/facebook/rocksdb/archive/${ROCKSDB_VERSION}.tar.gz"
 
 download_gorocksdb() {
     download_file $ROCKSDB_LINK $ROCKSDB_CHECKSUM rocksdb-${ROCKSDB_VERSION}.tar.gz
