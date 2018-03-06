@@ -110,6 +110,7 @@ done
 . "${INTERNAL}"/netcat.sh
 . "${INTERNAL}"/ork.sh
 . "${INTERNAL}"/restic.sh
+. "${INTERNAL}"/redis.sh
 
 #
 # Utilities
@@ -242,6 +243,7 @@ download_all() {
     download_smartmon
     download_netcat
     download_restic
+    download_redis
 
     popd
 }
@@ -276,6 +278,7 @@ extract_all() {
     extract_smartmon
     extract_netcat
     extract_restic
+    extract_redis
 
     popd
 }
@@ -586,6 +589,7 @@ main() {
         build_openssh
         build_smartmon
         build_netcat
+        build_redis
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
