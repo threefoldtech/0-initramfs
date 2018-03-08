@@ -3,10 +3,7 @@ G8UFS_VERSION="master"
 
 prepare_cores() {
     echo "[+] loading source code: core0"
-    go get -d -v github.com/zero-os/0-core/core0
-
-    echo "[+] loading source code: coreX"
-    go get -d -v github.com/zero-os/0-core/coreX
+    go get -d -v -u github.com/zero-os/0-core/apps/core0
 
     echo "[+] loading source code: g8ufs"
     go get -d -v github.com/zero-os/0-fs
