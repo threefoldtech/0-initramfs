@@ -62,7 +62,7 @@ install_cores() {
 
     echo "	[+] installing configuration"
     mkdir -p "${ROOTDIR}/etc/zero-os/conf"
-    cp -a core0/conf/* "${ROOTDIR}"/etc/zero-os/conf/
+    cp -a apps/core0/conf/* "${ROOTDIR}"/etc/zero-os/conf/
     rm -f "${ROOTDIR}"/etc/zero-os/conf/README.md
     popd
 
