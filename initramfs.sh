@@ -413,10 +413,19 @@ clean_root() {
 clean_staging() {
     echo "[+] cleaning staging files"
 
+    # removing archives
     rm -rf "${DISTFILES}"/*
+
+    # saving kernel
+    rm -rf "${TMPDIR}"/*
     mv -f "${WORKDIR}"/linux-* "${TMPDIR}"/
     mv -f "${WORKDIR}"/vmlinuz* "${TMPDIR}"/
+
+    # cleaning staging files
     rm -rf "${WORKDIR}"/*
+
+    # restoring kernel
+    mv "${TMPDIR}"/* "${WORKDIR}"/
 }
 
 optimize_size() {
