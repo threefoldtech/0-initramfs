@@ -27,7 +27,7 @@ cd "/$2/extensions"
 git clone -b "$1" https://github.com/zero-os/initramfs-gig || git clone https://github.com/zero-os/initramfs-gig
 
 # checkings arguments
-arguments="--compact "
+arguments="--all --compact "
 if [ "${1:0:7}" = "release" ]; then
     arguments="--release"
 fi
