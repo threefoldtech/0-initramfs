@@ -9,6 +9,7 @@ DISTFILES="${PWD}/archives"
 WORKDIR="${PWD}/staging"
 CONFDIR="${PWD}/config"
 ROOTDIR="${PWD}/root"
+TMPDIR="${PWD}/tmp"
 INTERNAL="${PWD}/internals/"
 EXTENDIR="${PWD}/extensions/"
 PATCHESDIR="${PWD}/patches/"
@@ -21,7 +22,7 @@ MAKEOPTS="-j ${JOBS}"
 #
 # Flags
 #
-OPTS=$(getopt -o dbtckMeolmrh --long download,busybox,tools,cores,kernel,modules,extensions,ork,clean,mrproper,release,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o adbtckMeolmzrh --long all,download,busybox,tools,cores,kernel,modules,extensions,ork,clean,mrproper,compact,release,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
@@ -42,12 +43,14 @@ if [ "$OPTS" != " --" ] && [ "$OPTS" != " --release --" ]; then
     DO_CLEAN=0
     DO_MRPROPER=0
     DO_ORK=0
+    DO_COMPACT=0
 
     eval set -- "$OPTS"
 fi
 
 while true; do
     case "$1" in
+        -a | --all)        DO_ALL=1;            shift ;;
         -d | --download)   DO_DOWNLOAD=1;       shift ;;
         -b | --busybox)    DO_BUSYBOX=1;        shift ;;
         -t | --tools)      DO_TOOLS=1;          shift ;;
@@ -57,10 +60,12 @@ while true; do
         -e | --extensions) DO_EXTENSIONS=1;     shift ;;
         -o | --ork)        DO_ORK=1;            shift ;;
         -l | --clean)      DO_CLEAN=1;          shift ;;
+        -z | --compact)    DO_COMPACT=1;        shift ;;
         -m | --mrproper)   DO_MRPROPER=1;       shift ;;
         -r | --release)    BUILDMODE="release"; shift ;;
         -h | --help)
             echo "Usage:"
+            echo " -a --all         do everything (default, like no argument)"
             echo " -d --download    only download and extract archives"
             echo " -b --busybox     only (re)build busybox"
             echo " -t --tools       only (re)build tools (ssl, fuse, ...)"
@@ -71,6 +76,7 @@ while true; do
             echo " -o --ork         only (re)build ork protection"
             echo " -l --clean       only clean staging files (extracted sources)"
             echo " -m --mrproper    only remove staging files and clean the root"
+            echo " -z --compact     clean staging file when compilation is done (except kernel)"
             echo " -r --release     force a release build"
             echo " -h --help        display this help message"
             exit 1
@@ -404,6 +410,14 @@ clean_root() {
     popd
 }
 
+clean_staging() {
+    echo "[+] cleaning staging files"
+
+    rm -rf "${DISTFILES}"/*
+    mv -f "${WORKDIR}"/linux-* "${TMPDIR}"/
+    rm -rf "${WORKDIR}"/*
+}
+
 optimize_size() {
     echo "[+] optimizing binaries size"
     pushd "${ROOTDIR}"
@@ -644,6 +658,10 @@ main() {
         g8os_root
         build_kernel
         end_summary
+    fi
+
+    if [[ $DO_COMPACT == 1 ]]; then
+        clean_staging
     fi
 }
 

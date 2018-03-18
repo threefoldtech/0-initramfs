@@ -19,7 +19,7 @@ apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoc
 curl https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz > /tmp/go1.8.linux-amd64.tar.gz
 tar -C /usr/local -xzf /tmp/go1.8.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
-mkdir /gopath
+mkdir -p /gopath
 export GOPATH=/gopath
 
 # adding extensions (fallback to master if branch not found)
@@ -27,7 +27,7 @@ cd "/$2/extensions"
 git clone -b "$1" https://github.com/zero-os/initramfs-gig || git clone https://github.com/zero-os/initramfs-gig
 
 # checkings arguments
-arguments=""
+arguments="--compact "
 if [ "${1:0:7}" = "release" ]; then
     arguments="--release"
 fi
