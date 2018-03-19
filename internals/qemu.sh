@@ -1,16 +1,14 @@
-QEMU_VERSION="2.8.0"
-QEMU_CHECKSUM="17940dce063b6ce450a12e719a6c9c43"
-QEMU_LINK="http://wiki.qemu-project.org/download/qemu-${QEMU_VERSION}.tar.bz2"
+QEMU_REPOSITORY="https://github.com/maxux/qemu"
+QEMU_BRANCH="zerodb"
 
 download_qemu() {
-    download_file $QEMU_LINK $QEMU_CHECKSUM
+    download_git $QEMU_REPOSITORY $QEMU_BRANCH
 }
 
 extract_qemu() {
-    if [ ! -d "qemu-${QEMU_VERSION}" ]; then
-        echo "[+] extracting: qemu-${QEMU_VERSION}"
-        tar -xf ${DISTFILES}/qemu-${QEMU_VERSION}.tar.bz2 -C .
-    fi
+    echo "[+] refreshing: qemu-${QEMU_BRANCH}"
+    rm -rf ./qemu-${QEMU_BRANCH}
+    cp -a ${DISTFILES}/qemu ./qemu-${QEMU_BRANCH}
 }
 
 prepare_qemu() {
@@ -38,7 +36,7 @@ install_qemu() {
 }
 
 build_qemu() {
-    pushd "${WORKDIR}/qemu-${QEMU_VERSION}"
+    pushd "${WORKDIR}/qemu-${QEMU_BRANCH}"
 
     prepare_qemu
     compile_qemu
