@@ -212,6 +212,37 @@ download_file() {
     checksum ${output} $2 || false
 }
 
+download_git() {
+    repository="$1"
+    branch="$2"
+    tag="$3"
+
+    target=$(basename "${repository}")
+    logfile="${target}-git.log"
+
+    echo "Loading ${repository}" > "${logfile}"
+
+    if [ -d "${target}" ]; then
+        echo "[+] updating: ${repository} [${branch}]"
+
+        # Ensure branch is up-to-date
+        pushd "${target}"
+
+        git fetch -u origin "${branch}:${branch}"
+
+        git checkout "${branch}" >> "${logfile}" 2>&1
+        git pull origin "${branch}" >> "${logfile}" 2>&1
+
+        [[ ! -z "$tag" ]] && git reset --hard "$tag" >> "${logfile}"
+
+        popd
+        return
+    fi
+
+    echo "[+] cloning: ${repository} [${branch}]"
+    git clone -b "${branch}" "${repository}"
+}
+
 #
 # Downloads all the archives, if the archive is already present
 # a retry will be done (if the previous file was not downloaded correctly)
