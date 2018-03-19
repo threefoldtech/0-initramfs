@@ -420,6 +420,7 @@ clean_staging() {
     rm -rf "${TMPDIR}"/*
     mv -f "${WORKDIR}"/linux-* "${TMPDIR}"/
     mv -f "${WORKDIR}"/vmlinuz* "${TMPDIR}"/
+    mv -f "${WORKDIR}"/rocksdb* "${TMPDIR}"/
 
     # cleaning staging files
     rm -rf "${WORKDIR}"/*
