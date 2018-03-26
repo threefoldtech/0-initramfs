@@ -8,7 +8,7 @@ name = "udevd"
 
 [startup.udevtrigger]
 name = "bash"
-after = ["init"]
+after = ["udevd"]
 running_delay = -1
 
 [startup.udevtrigger.args]
