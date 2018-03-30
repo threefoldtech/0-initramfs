@@ -117,6 +117,7 @@ done
 . "${INTERNAL}"/ork.sh
 . "${INTERNAL}"/restic.sh
 . "${INTERNAL}"/redis.sh
+. "${INTERNAL}"/ethtool.sh
 
 #
 # Utilities
@@ -281,6 +282,7 @@ download_all() {
     download_netcat
     download_restic
     download_redis
+    download_ethtool
 
     popd
 }
@@ -316,6 +318,7 @@ extract_all() {
     extract_netcat
     extract_restic
     extract_redis
+    extract_ethtool
 
     popd
 }
@@ -646,6 +649,7 @@ main() {
         build_smartmon
         build_netcat
         build_redis
+        build_ethtool
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
