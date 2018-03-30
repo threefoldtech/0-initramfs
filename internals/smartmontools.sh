@@ -38,3 +38,9 @@ build_smartmon() {
     popd
 }
 
+registrar_smartmon() {
+    DOWNLOADERS+=(download_smartmon)
+    EXTRACTORS+=(extract_smartmon)
+}
+
+registrar_smartmon

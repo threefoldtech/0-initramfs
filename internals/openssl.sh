@@ -45,3 +45,10 @@ build_openssl() {
 
     popd
 }
+
+registrar_openssl() {
+    DOWNLOADERS+=(download_openssl)
+    EXTRACTORS+=(extract_openssl)
+}
+
+registrar_openssl

@@ -41,3 +41,10 @@ build_parted() {
 
     popd
 }
+
+registrar_parted() {
+    DOWNLOADERS+=(download_parted)
+    EXTRACTORS+=(extract_parted)
+}
+
+registrar_parted

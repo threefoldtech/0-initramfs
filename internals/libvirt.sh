@@ -78,3 +78,10 @@ build_libvirt() {
 
     popd
 }
+
+registrar_libvirt() {
+    DOWNLOADERS+=(download_libvirt)
+    EXTRACTORS+=(extract_libvirt)
+}
+
+registrar_libvirt

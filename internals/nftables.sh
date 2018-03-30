@@ -72,3 +72,10 @@ build_nftables() {
 
     popd
 }
+
+registrar_nftables() {
+    DOWNLOADERS+=(download_nftables)
+    EXTRACTORS+=(extract_nftables)
+}
+
+registrar_nftables

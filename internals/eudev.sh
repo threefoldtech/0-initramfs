@@ -38,3 +38,10 @@ build_eudev() {
 
     popd
 }
+
+registrar_eudev() {
+    DOWNLOADERS+=(download_eudev)
+    EXTRACTORS+=(extract_eudev)
+}
+
+registrar_eudev

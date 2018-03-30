@@ -53,3 +53,10 @@ build_certs() {
 
     popd
 }
+
+registrar_certs() {
+    DOWNLOADERS+=(download_certs)
+    EXTRACTORS+=(extract_certs)
+}
+
+registrar_certs

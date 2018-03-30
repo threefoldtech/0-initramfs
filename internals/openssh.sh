@@ -55,3 +55,10 @@ build_openssh() {
 
     popd
 }
+
+registrar_openssh() {
+    DOWNLOADERS+=(download_openssh)
+    EXTRACTORS+=(extract_openssh)
+}
+
+registrar_openssh
