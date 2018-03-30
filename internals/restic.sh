@@ -36,3 +36,11 @@ build_restic() {
 
     popd
 }
+
+registrar_restic() {
+    DOWNLOADERS+=(download_restic)
+    EXTRACTORS+=(extract_restic)
+}
+
+registrar_restic
+

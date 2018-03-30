@@ -38,3 +38,9 @@ build_ethtool() {
     popd
 }
 
+registrar_ethtool() {
+    DOWNLOADERS+=(download_ethtool)
+    EXTRACTORS+=(extract_ethtool)
+}
+
+registrar_ethtool
