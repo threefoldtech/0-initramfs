@@ -1,0 +1,46 @@
+[startup."zrobot-port"]
+name = "nft.open_port"
+after = ["net"]
+
+[startup."zrobot-port".args]
+port = 6600
+
+[startup."zrobot-vol"]
+name = "bash"
+running_delay = -1
+
+[startup."zrobot-vol".args]
+script = """
+set -e
+
+ROOT=/var/cache
+
+btrfs subvol create ${ROOT}/zrobot || true
+
+for dir in ssh data config jsconfig; do
+    mkdir -p ${ROOT}/zrobot/${dir}
+done
+"""
+
+[startup.zrobot]
+name = "corex.create-sync"
+tags = ["zrobot"]
+protected = true
+after = ["zrobot-port", "zrobot-vol"]
+
+[startup.zrobot.args]
+root = "https://hub.gig.tech/gig-autobuilder/zero-os-0-robot-autostart-0.5.1.flist"
+name = "zrobot"
+privileged = false
+host_network = false
+port = {6600=6600}
+nics = [{type="default"}]
+
+#mount all zrobot essential directories
+#on persisted cache
+[startup.zrobot.args.mount]
+"/var/cache/zrobot/ssh" = "/root/.ssh"
+"/var/cache/zrobot/data" = "/opt/var/data/zrobot/zrobot_data"
+"/var/cache/zrobot/config" = "/opt/code/local/stdorg/config"
+"/var/cache/zrobot/jsconfig" = "/js9host/cfg"
+"/var/run/redis.sock" = "/tmp/redis.sock"
