@@ -41,3 +41,10 @@ build_socat() {
 
     popd
 }
+
+registrar_socat() {
+    DOWNLOADERS+=(download_socat)
+    EXTRACTORS+=(extract_socat)
+}
+
+registrar_socat

@@ -37,3 +37,10 @@ build_busybox() {
 
     popd
 }
+
+registrar_busybox() {
+    DOWNLOADERS+=(download_busybox)
+    EXTRACTORS+=(extract_busybox)
+}
+
+registrar_busybox

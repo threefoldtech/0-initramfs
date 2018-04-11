@@ -35,3 +35,10 @@ build_btrfs() {
 
     popd
 }
+
+registrar_btrfs() {
+    DOWNLOADERS+=(download_btrfs)
+    EXTRACTORS+=(extract_btrfs)
+}
+
+registrar_btrfs

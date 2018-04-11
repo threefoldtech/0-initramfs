@@ -41,3 +41,10 @@ build_dnsmasq() {
 
     popd
 }
+
+registrar_dnsmasq() {
+    DOWNLOADERS+=(download_dnsmasq)
+    EXTRACTORS+=(extract_dnsmasq)
+}
+
+registrar_dnsmasq

@@ -35,3 +35,10 @@ build_redis() {
 
     popd
 }
+
+registrar_redis() {
+    DOWNLOADERS+=(download_redis)
+    EXTRACTORS+=(extract_redis)
+}
+
+registrar_redis

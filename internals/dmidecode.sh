@@ -37,3 +37,9 @@ build_dmidecode() {
     popd
 }
 
+registrar_dmidecode() {
+    DOWNLOADERS+=(download_dmidecode)
+    EXTRACTORS+=(extract_dmidecode)
+}
+
+registrar_dmidecode
