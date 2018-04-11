@@ -57,7 +57,7 @@ install_cores() {
     cp -a bin/* "${ROOTDIR}/sbin/"
     cp -a tools/* "${ROOTDIR}/usr/bin/"
 
-    echo "	[+] installing configuration"
+    echo "[+] installing configuration"
     mkdir -p "${ROOTDIR}/etc/zero-os/conf"
     cp -a apps/core0/conf/* "${ROOTDIR}"/etc/zero-os/conf/
     rm -f "${ROOTDIR}"/etc/zero-os/conf/README.md
