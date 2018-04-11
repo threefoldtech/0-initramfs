@@ -44,3 +44,10 @@ build_kmod() {
 
     popd
 }
+
+registrar_kmod() {
+    DOWNLOADERS+=(download_kmod)
+    EXTRACTORS+=(extract_kmod)
+}
+
+registrar_kmod

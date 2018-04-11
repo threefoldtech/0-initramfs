@@ -71,3 +71,10 @@ build_linuxutil() {
 
     popd
 }
+
+registrar_linuxutil() {
+    DOWNLOADERS+=(download_linuxutil)
+    EXTRACTORS+=(extract_linuxutil)
+}
+
+registrar_linuxutil

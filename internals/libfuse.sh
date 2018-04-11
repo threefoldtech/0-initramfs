@@ -37,3 +37,10 @@ build_fuse() {
 
     popd
 }
+
+registrar_fuse() {
+    DOWNLOADERS+=(download_fuse)
+    EXTRACTORS+=(extract_fuse)
+}
+
+registrar_fuse

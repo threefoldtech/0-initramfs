@@ -1,0 +1,74 @@
+--- arch/x86/mm/init_64.c.orig	2018-03-30 22:42:23.871760331 +0200
++++ arch/x86/mm/init_64.c	2018-03-30 22:42:33.091764935 +0200
+@@ -34,6 +34,9 @@
+ #include <linux/gfp.h>
+ #include <linux/kcore.h>
+ 
++#include <linux/delay.h>
++#include <linux/efi.h>
++
+ #include <asm/processor.h>
+ #include <asm/bios_ebda.h>
+ #include <asm/uaccess.h>
+@@ -1061,6 +1064,52 @@
+ 	set_memory_ro(start, (end - start) >> PAGE_SHIFT);
+ }
+ 
++static void secureboot_panic(char *str) {
++	unsigned long wait;
++
++	printk(KERN_ERR "%s\n", str);
++	for(;;) { msleep(100); }
++}
++
++static void secureboot_check(void) {
++	struct efivar_entry *entry = kmalloc(sizeof(struct efivar_entry), GFP_KERNEL);
++	u8 val;
++	unsigned long size = sizeof(val);
++
++	static efi_char16_t const sb_var_name[] = {
++		'S', 'e', 'c', 'u', 'r', 'e', 'B', 'o', 'o', 't', 0
++	};
++	static efi_char16_t sm_var_name[] = {
++		'S', 'e', 't', 'u', 'p', 'M', 'o', 'd', 'e', 0
++	};
++	
++	//
++	// SetupMode
++	//
++	memcpy(entry->var.VariableName, sm_var_name, sizeof(sm_var_name));
++	entry->var.VendorGuid = EFI_GLOBAL_VARIABLE_GUID;
++	
++	if(efivar_entry_get(entry, 0, &size, &val) != EFI_SUCCESS)
++		secureboot_panic("Zero-OS boot not authorized. (#1)");
++	
++	if(val == 1)
++		secureboot_panic("Zero-OS boot not authorized. (#2)");
++	
++	//
++	// SecureBoot
++	//
++	memcpy(entry->var.VariableName, sb_var_name, sizeof(sm_var_name));
++	
++	if(efivar_entry_get(entry, 0, &size, &val) != EFI_SUCCESS)
++		secureboot_panic("Zero-OS boot not authorized. (#3)");
++	
++	if(val == 0)
++		secureboot_panic("Zero-OS boot not authorized. (#4)");
++
++	printk(KERN_INFO "Zero-OS boot authorized\n");
++}
++
++
+ void mark_rodata_ro(void)
+ {
+ 	unsigned long start = PFN_ALIGN(_text);
+@@ -1076,6 +1125,8 @@
+ 
+ 	kernel_set_to_readonly = 1;
+ 
++	secureboot_check();
++	
+ 	/*
+ 	 * The rodata/data/bss/brk section (but not the kernel text!)
+ 	 * should also be not-executable.
