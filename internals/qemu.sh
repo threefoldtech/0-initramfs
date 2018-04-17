@@ -12,6 +12,9 @@ extract_qemu() {
 }
 
 prepare_qemu() {
+    echo "[+] disable debug zerodb"
+    sed -i '/#define DEBUG/d' block/zerodb.c
+
     echo "[+] preparing qemu"
     ./configure --prefix="${ROOTDIR}"/usr \
         --target-list="x86_64-softmmu" \
