@@ -1,9 +1,21 @@
-[startup."zrobot-port"]
+[startup."zrobot-port-pub"]
 name = "nft.open_port"
+# open on all interfaces
+condition = "not(zerotier)"
 after = ["net"]
 
-[startup."zrobot-port".args]
+[startup."zrobot-port-pub".args]
 port = 6600
+
+[startup."zrobot-port-zt"]
+name = "nft.open_port"
+# open on zerotier only
+condition = "zerotier"
+after = ["net"]
+
+[startup."zrobot-port-zt".args]
+port = 6600
+interface="zt0"
 
 [startup."zrobot-vol"]
 name = "bash"
@@ -26,7 +38,7 @@ done
 name = "corex.create-sync"
 tags = ["zrobot"]
 protected = true
-after = ["zrobot-port", "zrobot-vol"]
+after = ["zrobot-vol"]
 
 [startup.zrobot.args]
 root = "https://hub.gig.tech/gig-autobuilder/zero-os-0-robot-autostart-0.5.1.flist"
