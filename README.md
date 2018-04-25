@@ -224,7 +224,9 @@ Here is what we changed:
 - All `Special HID drivers`
 - All `CAN bus subsystem` disabled
 - All `Amateur Radio support` disabled
-- All `IrDA (infrared) subsystem` disabled
+- All `IrDA (infrared)` and `NFC subsystem` disabled
+- All `Bluetooth` and `CAIF` disabled
+- All `Wireless`, `WiMAX` and `RF switch` disabled
 - All `Data acquision support (comedi)` disabled
 - Filesystems `ext4`, `Raiserfs`, `JFS`, `XFS`, `GFS2`, `OCFS2`, `NILFS2`, `F2FS`, `NTFS` disabled
 - Modules are not compressed
