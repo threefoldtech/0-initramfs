@@ -1,4 +1,4 @@
-QEMU_REPOSITORY="https://github.com/maxux/qemu"
+QEMU_REPOSITORY="https://github.com/gigforks/qemu"
 QEMU_BRANCH="zerodb"
 
 download_qemu() {
