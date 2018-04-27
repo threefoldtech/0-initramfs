@@ -377,7 +377,7 @@ clean_root() {
 }
 
 clean_staging() {
-    success "[+] cleaning staging files"
+    echo "[+] cleaning staging files"
 
     # removing archives
     rm -rf "${DISTFILES}"/*
@@ -539,17 +539,17 @@ end_summary() {
 # Files cleaner
 #
 remove_staging() {
-    warning "[+] cleaning ${WORKDIR}"
+    echo "[+] cleaning ${WORKDIR}"
     rm -rf "${WORKDIR}"/*
 
-    success "[+] source cleared"
+    echo "[+] source cleared"
 }
 
 remove_root() {
-    warning "[+] cleaning ${ROOTDIR}"
+    echo "[+] cleaning ${ROOTDIR}"
     rm -rf "${ROOTDIR}"/*
 
-    success "[+] root cleared"
+    echo "[+] root cleared"
 }
 
 #
