@@ -567,8 +567,9 @@ main() {
         build_fuse
         build_openssl
         build_certs
-        build_parted
         build_linuxutil
+        build_parted
+        build_e2fsprogs
         build_btrfs
         build_zerotier
         build_dnsmasq
