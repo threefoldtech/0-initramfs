@@ -12,7 +12,7 @@ download_qemu() {
 }
 
 extract_qemu() {
-    echo "[+] refreshing: qemu-${QEMU_BRANCH}"
+    event "refreshing" "qemu-${QEMU_BRANCH}"
     rm -rf ./qemu-${QEMU_BRANCH}
     cp -a ${DISTFILES}/qemu ./qemu-${QEMU_BRANCH}
 }

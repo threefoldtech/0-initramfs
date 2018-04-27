@@ -16,6 +16,10 @@ extract_libvirt() {
 }
 
 prepare_libvirt() {
+    export BLKID_CFLAGS="-I${ROOTDIR}/usr/include"
+    export BLKID_LIBS="-L${ROOTDIR}/usr/lib"
+    export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig"
+
     echo "[+] preparing libvirt"
     ./configure --prefix=/ \
         --with-qemu \
@@ -67,6 +71,10 @@ compile_libvirt() {
 install_libvirt() {
     echo "[+] installing libvirt"
     make DESTDIR="${ROOTDIR}" install
+
+    unset PKG_CONFIG_PATH
+    unset BLKID_CFLAGS
+    unset BLKID_LIBS
 }
 
 build_libvirt() {
