@@ -25,7 +25,14 @@ extract_e2fsprogs() {
 
 prepare_e2fsprogs() {
     echo "[+] configuring e2fsprogs"
-    ./configure --prefix "${ROOTDIR}"/usr
+    ./configure --prefix "${ROOTDIR}"/usr \
+        --enable-symlink-install \
+        --enable-relative-symlinks \
+        --enable-symlink-build \
+        --disable-debugfs \
+        --disable-defrag \
+        --disable-e2initrd-helper \
+        --disable-fuse2fs
 }
 
 compile_e2fsprogs() {

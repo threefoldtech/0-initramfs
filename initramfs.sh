@@ -356,7 +356,7 @@ mknod_die() {
 }
 
 clean_root() {
-    success "[+] cleaning initramfs"
+    echo "[+] cleaning initramfs"
 
     pushd "${ROOTDIR}"
     mkdir -p dev mnt proc root sys tmp
