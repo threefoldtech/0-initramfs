@@ -113,13 +113,39 @@ popd() {
 }
 
 #
+# interface tools
+#
+green="\033[32;1m"
+orange="\033[33;1m"
+blue="\033[34;1m"
+cyan="\033[36;1m"
+white="\033[37;1m"
+clean="\033[0m"
+
+success() {
+    echo -e "${green}$1${clean}"
+}
+
+info() {
+    echo -e "${blue}$1${clean}"
+}
+
+warning() {
+    echo -e "${orange}$1${clean}"
+}
+
+event() {
+    echo -e "[+] ${blue}$1: ${clean}$2 ${orange}$3${clean}"
+}
+
+#
 # Check the md5 hash from a file ($1) and compare with $2
 #
 checksum() {
     checksum=$(md5sum "$1" | awk '{ print $1 }')
 
     if [ "${checksum}" == "$2" ]; then
-        echo "[+] checksum match"
+        # echo "[+] checksum match"
         return 0
     else
         echo "[-] checksum mismatch"
@@ -145,15 +171,15 @@ prepare() {
     echo "[+] ${modules} submodules loaded"
 
     if [ $UID != 0 ]; then
-        echo "[-]"
-        echo "[-] === WARNING ==="
-        echo "[-] initramfs files need to be chown root"
-        echo "[-] you need to run this script as root if you want"
-        echo "[-] a working root filesystem, you can build it without"
-        echo "[-] root privilege but you will hit trouble when running"
-        echo "[-] the kernel, you have been warned."
-        echo "[-] === WARNING ==="
-        echo "[-]"
+        warning "[-]"
+        warning "[-] === WARNING ==="
+        warning "[-] initramfs files need to be chown root"
+        warning "[-] you need to run this script as root if you want"
+        warning "[-] a working root filesystem, you can build it without"
+        warning "[-] root privilege but you will hit trouble when running"
+        warning "[-] the kernel, you have been warned."
+        warning "[-] === WARNING ==="
+        warning "[-]"
         sleep 1
     fi
 
@@ -184,7 +210,7 @@ download_file() {
         output=$(basename "$1")
     fi
 
-    echo "[+] downloading: ${output}"
+    event "downloading" "${output}"
 
     if [ -f "${output}" ]; then
         # Check for md5 before downloading the file
@@ -213,7 +239,7 @@ download_git() {
     echo "Loading ${repository}" > "${logfile}"
 
     if [ -d "${target}" ]; then
-        echo "[+] updating: ${repository} [${branch}]"
+        event "updating" "${repository}" "[${branch}]"
 
         # Ensure branch is up-to-date
         pushd "${target}"
@@ -229,7 +255,7 @@ download_git() {
         return
     fi
 
-    echo "[+] cloning: ${repository} [${branch}]"
+    event "cloning" "${repository}" "[${branch}]"
     git clone -b "${branch}" "${repository}"
 }
 
@@ -322,15 +348,15 @@ ensure_libs() {
 # Cleaner and optimizer
 #
 mknod_die() {
-    echo "[-] mknod need root access, please run this command as root:"
-    echo "[-]   mknod -m 622 "${ROOTDIR}"/dev/console c 5 1"
-    echo "[-] and try again."
+    warning "[-] mknod need root access, please run this command as root:"
+    warning "[-]   mknod -m 622 "${ROOTDIR}"/dev/console c 5 1"
+    warning "[-] and try again."
 
     exit 1
 }
 
 clean_root() {
-    echo "[+] cleaning initramfs"
+    success "[+] cleaning initramfs"
 
     pushd "${ROOTDIR}"
     mkdir -p dev mnt proc root sys tmp
@@ -351,7 +377,7 @@ clean_root() {
 }
 
 clean_staging() {
-    echo "[+] cleaning staging files"
+    success "[+] cleaning staging files"
 
     # removing archives
     rm -rf "${DISTFILES}"/*
@@ -504,7 +530,7 @@ end_summary() {
     root_size=$(get_size "${ROOTDIR}")
     kernel_size=$(get_size "${WORKDIR}"/vmlinuz.efi)
 
-    echo "[+] --- initramfs ready ---"
+    success "[+] --- initramfs ready ---"
     echo "[+] initramfs root size: $root_size"
     echo "[+] kernel size: $kernel_size"
 }
@@ -513,17 +539,17 @@ end_summary() {
 # Files cleaner
 #
 remove_staging() {
-    echo "[+] cleaning ${WORKDIR}"
+    warning "[+] cleaning ${WORKDIR}"
     rm -rf "${WORKDIR}"/*
 
-    echo "[+] source cleared"
+    success "[+] source cleared"
 }
 
 remove_root() {
-    echo "[+] cleaning ${ROOTDIR}"
+    warning "[+] cleaning ${ROOTDIR}"
     rm -rf "${ROOTDIR}"/*
 
-    echo "[+] root cleared"
+    success "[+] root cleared"
 }
 
 #
@@ -533,9 +559,9 @@ main() {
     #
     # Display some informations
     #
-    echo "================================"
-    echo "=  Zero-OS 0-Initramfs Builder ="
-    echo "================================"
+    info "================================"
+    info "=  Zero-OS 0-Initramfs Builder ="
+    info "================================"
     echo ""
 
     #
