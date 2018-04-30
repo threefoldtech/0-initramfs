@@ -337,7 +337,7 @@ ensure_libs() {
             fi
 
             # Grabbing library from host
-            cp -aL $lib lib/
+            cp -avL $lib lib/
         done
     done
 
