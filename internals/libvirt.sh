@@ -17,7 +17,7 @@ extract_libvirt() {
 
 prepare_libvirt() {
     export BLKID_CFLAGS="-I${ROOTDIR}/usr/include"
-    export BLKID_LIBS="-L${ROOTDIR}/usr/lib"
+    export BLKID_LIBS="-L${ROOTDIR}/usr/lib -lblkid"
     export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig"
 
     echo "[+] preparing libvirt"
