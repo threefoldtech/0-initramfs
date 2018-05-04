@@ -1,12 +1,11 @@
 # Zero-OS Initramfs Builder
 This repository contains all that is needed to build the Zero-OS-kernel and initramfs to start our root filesystem.
 
-## Releases:
-- [0.9.0](https://github.com/Zero-OS/initramfs/tree/0.9.0) : used to build the [v0.9.0](https://github.com/Zero-OS/core0/releases/tag/v0.9.0) of core0
-- [0.10.0](https://github.com/Zero-OS/initramfs/tree/0.10.0) : used to build the [v0.10.0](https://github.com/Zero-OS/core0/releases/tag/v0.10.0) of core0
-- [0.11.0](https://github.com/Zero-OS/initramfs/tree/0.11.0) : used to build the [v0.11.0](https://github.com/Zero-OS/core0/releases/tag/v0.11.0) of core0
-- [1.0.0](https://github.com/Zero-OS/initramfs/tree/1.0.0) : used to build the [v1.0.0](https://github.com/Zero-OS/core0/releases/tag/v1.0.0) of core0
-- [1.1.0-alpha2](https://github.com/Zero-OS/initramfs/releases/tag/v1.1.0-alpha-2) : used to build the [v1.1.0-alpha-2](https://github.com/Zero-OS/core0/releases/tag/v1.1.0-alpha-2) of core0
+# Branches
+- [master](https://github.com/zero-os/0-core/tree/master): production code
+- [development](https://github.com/zero-os/0-core/tree/development): staging code but should not be broken
+- `development-xxx`: staging feature, with risk of broken stuff
+- [release-threefold-edge.nodes-0001](https://github.com/zero-os/0-core/tree/release-threefold-edge.nodes-0001): threefold grid kernel release
 
 # Dependencies
 In order to compile all the initramfs without issues, you'll need to install build-time dependencies.
@@ -21,7 +20,7 @@ Some parts need to `chown/setuid/chmod/mknod` files as root.
 # What does this script do ?
  - First, download and check checksum of all archives needed
  - Extract the archives
- - Compiles:
+ - Compiles third-party software:
     - Busybox
     - Fuse (library and userland tools)
     - OpenSSL and SSL Certificates (ca-certificates)
@@ -37,13 +36,17 @@ Some parts need to `chown/setuid/chmod/mknod` files as root.
     - socat (used for some tcp/port forwarding)
     - unionfs-fuse (used for internal fuse layers)
     - RocksDB (shared library)
-    - GoRocksDB
+    - GoRocksDB (used for flist)
     - eudev and kmod (used for hardware and modules management)
     - smartmontools (used for S.M.A.R.T monitoring)
     - dmidecode (optional dependency for libvirt and management)
     - OpenSSH (client and server)
     - netcat6 (needed by libvirt migration)
- - Clean, remove useless files, optimize (strip) files and copy system's config
+ - Integrate core stuff:
+    - Compile `core0` and `coreX`
+    - Compile `0-fs` and `ztid`
+ - Clean, remove useless files, optimize (strip) files
+ - Copy system's configuration and init script
  - Compile the kernel (and bundles initramfs in the kernel)
 
 
@@ -83,35 +86,17 @@ This is obvious but, **do not use a debug version in a production environment.**
 
 ## Build using a docker container
 
-From the root of this repository, create a docker container
+Create a docker container
 ```shell
 docker run -ti --name zero-os-builder ubuntu:16.04 /bin/bash
 ```
 
-Don't try to mount the initramfs repo, the build will fail.
+- You need to use `ubuntu:16.04`, this is the only image we supports
+- Ensure to have the repository available on `/0-initramfs`.
+- Run `autobuild/gig-build.sh` script. This script take care
+- The result of the build will be located in `staging/vmlinuz.efi`
 
-Then from inside the docker (we assume your current working directory is `/`)
-```shell
-# install dependencies for building
-apt-get update
-apt-get install -y asciidoc xmlto --no-install-recommends
-apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq liblz4-dev libsnappy-dev libbz2-dev libssl-dev gperf libelf-dev libkmod-dev liblzma-dev git kmod libvirt-dev libcap-dev autopoint
-
-# install go
-curl https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz > /tmp/go1.8.linux-amd64.tar.gz
-tar -C /usr/local -xzf /tmp/go1.8.linux-amd64.tar.gz
-mkdir /gopath
-export PATH=$PATH:/usr/local/go/bin
-export GOPATH=/gopath
-
-# clone the initramfs repository
-git clone https://github.com/zero-os/0-initramfs
-
-# start the build
-cd /0-initramfs
-bash initramfs.sh
-```
-The result of the build will be located in `staging/vmlinuz.efi` so copy it out of the docker by executing `docker cp zero-os-builder:/0-initramfs/staging/vmlinuz.efi .`
+**Warning:** if you don't use Ubuntu 16.04 (at least for now), some build _and_ runtime issue can occures.
 
 # I have the kernel, what can I do with it ?
 Just boot it. The kernel image is EFI bootable.

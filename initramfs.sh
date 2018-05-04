@@ -590,7 +590,7 @@ main() {
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
-        build_ork
+        # build_ork
         build_restic
     fi
 
