@@ -587,6 +587,7 @@ main() {
         build_netcat
         build_redis
         build_ethtool
+        build_rtinfo
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
