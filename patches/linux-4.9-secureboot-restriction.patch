@@ -1,5 +1,5 @@
---- arch/x86/mm/init_64.c.orig	2018-03-30 22:42:23.871760331 +0200
-+++ arch/x86/mm/init_64.c	2018-03-30 22:42:33.091764935 +0200
+--- arch/x86/mm/init_64.c.orig	2018-04-12 13:16:49.167391954 +0200
++++ arch/x86/mm/init_64.c	2018-04-12 13:45:16.770381989 +0200
 @@ -34,6 +34,9 @@
  #include <linux/gfp.h>
  #include <linux/kcore.h>
@@ -10,15 +10,12 @@
  #include <asm/processor.h>
  #include <asm/bios_ebda.h>
  #include <asm/uaccess.h>
-@@ -1061,6 +1064,52 @@
+@@ -1061,6 +1064,55 @@
  	set_memory_ro(start, (end - start) >> PAGE_SHIFT);
  }
  
 +static void secureboot_panic(char *str) {
-+	unsigned long wait;
-+
-+	printk(KERN_ERR "%s\n", str);
-+	for(;;) { msleep(100); }
++	panic("Zero-OS boot not authorized. (%s)\n", str);
 +}
 +
 +static void secureboot_check(void) {
@@ -32,29 +29,35 @@
 +	static efi_char16_t sm_var_name[] = {
 +		'S', 'e', 't', 'u', 'p', 'M', 'o', 'd', 'e', 0
 +	};
-+	
++
++	//
++	// EFI Enabled
++	//
++	if(!efi_enabled(EFI_BOOT))
++		secureboot_panic("#0 - EFI");
++
 +	//
 +	// SetupMode
 +	//
 +	memcpy(entry->var.VariableName, sm_var_name, sizeof(sm_var_name));
 +	entry->var.VendorGuid = EFI_GLOBAL_VARIABLE_GUID;
-+	
++
 +	if(efivar_entry_get(entry, 0, &size, &val) != EFI_SUCCESS)
-+		secureboot_panic("Zero-OS boot not authorized. (#1)");
-+	
++		secureboot_panic("#1 - SetupMode");
++
 +	if(val == 1)
-+		secureboot_panic("Zero-OS boot not authorized. (#2)");
-+	
++		secureboot_panic("#2 - SetupMode");
++
 +	//
 +	// SecureBoot
 +	//
 +	memcpy(entry->var.VariableName, sb_var_name, sizeof(sm_var_name));
-+	
++
 +	if(efivar_entry_get(entry, 0, &size, &val) != EFI_SUCCESS)
-+		secureboot_panic("Zero-OS boot not authorized. (#3)");
-+	
++		secureboot_panic("#3 - SecureBoot");
++
 +	if(val == 0)
-+		secureboot_panic("Zero-OS boot not authorized. (#4)");
++		secureboot_panic("#4 - SecureBoot");
 +
 +	printk(KERN_INFO "Zero-OS boot authorized\n");
 +}
@@ -63,12 +66,12 @@
  void mark_rodata_ro(void)
  {
  	unsigned long start = PFN_ALIGN(_text);
-@@ -1076,6 +1125,8 @@
+@@ -1076,6 +1128,8 @@
  
  	kernel_set_to_readonly = 1;
  
 +	secureboot_check();
-+	
++
  	/*
  	 * The rodata/data/bss/brk section (but not the kernel text!)
  	 * should also be not-executable.
