@@ -601,7 +601,6 @@ main() {
         build_dnsmasq
         build_nftables
         build_iproute2
-        build_socat
         build_qemu
         build_libvirt
         build_dmidecode

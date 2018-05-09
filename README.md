@@ -33,7 +33,6 @@ Some parts need to `chown/setuid/chmod/mknod` files as root.
     - dnsmasq (used for dhcp on containers)
     - nftables (used for firewalling and routing)
     - iproute2 (used for network namespace support)
-    - socat (used for some tcp/port forwarding)
     - unionfs-fuse (used for internal fuse layers)
     - RocksDB (shared library)
     - GoRocksDB (used for flist)
