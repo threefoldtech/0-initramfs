@@ -192,3 +192,25 @@ echo World > /tmp/zero-os-debug/hello
 qemu-system-x86_64 -drive file=fat:/tmp/zero-os-debug,format=raw $QEMU_CMD_LINE
 ```
 This will add `/hello` to your running Zero-OS.
+
+## Kernel Configuration
+Kernel configuration is based on Arch Linux default kernel config file.
+
+Here is what we changed:
+- Default kernel command line customized
+- Initramfs is compressed using XZ
+- Default hostname set to `zero-os`
+- Build version name set to `Zero-OS`
+- Change default initramfs path to `../../root` to include our root system
+- All `Sound drivers` disabled
+- All `Multimedia drivers` disabled
+- Inputs `Mice`, `Joystick`, `Touchscreen`, `Tablets` and `Miscellaneous devices` disabled
+- All `Special HID drivers`
+- All `CAN bus subsystem` disabled
+- All `Amateur Radio support` disabled
+- All `IrDA (infrared)` and `NFC subsystem` disabled
+- All `Bluetooth` and `CAIF` disabled
+- All `Wireless`, `WiMAX` and `RF switch` disabled
+- All `Data acquision support (comedi)` disabled
+- Filesystems `ext4`, `Raiserfs`, `JFS`, `XFS`, `GFS2`, `OCFS2`, `NILFS2`, `F2FS`, `NTFS` disabled
+- Modules are not compressed
