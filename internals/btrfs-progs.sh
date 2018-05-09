@@ -15,7 +15,15 @@ extract_btrfs() {
 
 prepare_btrfs() {
     echo "[+] configuring btrfs-progs"
-    ./configure --prefix /usr --disable-documentation
+
+    export LIBS="-lblkid -luuid"
+    export CFLAGS="-I${ROOTDIR}/usr/include/ -g -O1 -Wall -D_FORTIFY_SOURCE=2"
+    export LDFLAGS="-L${ROOTDIR}/usr/lib/"
+    export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig"
+
+    ./configure --prefix /usr \
+        --disable-documentation \
+        --disable-convert
 }
 
 compile_btrfs() {
@@ -24,6 +32,11 @@ compile_btrfs() {
 
 install_btrfs() {
     make DESTDIR="${ROOTDIR}" install
+
+    unset LIBS
+    unset CFLAGS
+    unset LDFLAGS
+    unset PKG_CONFIG_PATH
 }
 
 build_btrfs() {

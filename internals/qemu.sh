@@ -1,12 +1,18 @@
-QEMU_REPOSITORY="https://github.com/maxux/qemu"
+QEMU_REPOSITORY="https://github.com/gigforks/qemu"
 QEMU_BRANCH="zerodb"
 
 download_qemu() {
     download_git $QEMU_REPOSITORY $QEMU_BRANCH
+
+    pushd ${DISTFILES}/qemu
+    git submodule update --init dtc
+    git submodule update --init ui/keycodemapdb
+    git submodule update --init capstone
+    popd
 }
 
 extract_qemu() {
-    echo "[+] refreshing: qemu-${QEMU_BRANCH}"
+    event "refreshing" "qemu-${QEMU_BRANCH}"
     rm -rf ./qemu-${QEMU_BRANCH}
     cp -a ${DISTFILES}/qemu ./qemu-${QEMU_BRANCH}
 }

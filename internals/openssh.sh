@@ -28,6 +28,7 @@ prepare_openssh() {
         --without-shadow \
         --disable-strip \
         --with-privsep-user=root \
+        --without-openssl-header-check \
         --with-ssl-dir="${ROOTDIR}"
 }
 
