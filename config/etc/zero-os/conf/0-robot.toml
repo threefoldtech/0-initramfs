@@ -34,7 +34,7 @@ type = "default"
 "6600"=6600
 
 [startup.zrobot.args."zerotier|port"]
-"zt0:6600"=6600
+"zt*:6600"=6600
 
 #mount all zrobot essential directories
 #on persisted cache
