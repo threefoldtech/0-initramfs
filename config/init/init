@@ -38,7 +38,7 @@ mount -t devpts devpts $target/dev/pts
 echo "[+] setting environment"
 export PATH
 
-echo "[+] loading drivers"
+echo "[+] probing drivers"
 udevadm hwdb --update
 
 udevd --daemon
@@ -47,6 +47,10 @@ udevadm trigger --action=add --type=devices
 udevadm settle
 
 kill $(pidof udevd)
+
+echo "[+] loading drivers"
+modprobe btrfs
+modprobe fuse
 
 umount /proc
 umount /sys
