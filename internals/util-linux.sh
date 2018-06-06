@@ -15,8 +15,14 @@ extract_linuxutil() {
 
 prepare_linuxutil() {
     echo "[+] configuring util-linux"
+
+    # disable tool one by one
+    # --disable-all-progs is too aggressive and
+    # don't let possibility to re-enable some specific
+    # default software
     ./configure --prefix "${ROOTDIR}"/usr \
         --disable-libfdisk \
+        --disable-partx \
         --disable-mount \
         --disable-zramctl \
         --disable-mountpoint \
@@ -50,7 +56,12 @@ prepare_linuxutil() {
         --disable-more \
         --disable-wall \
         --disable-pylibmount \
+        --disable-schedutils \
+        --disable-fsck \
+        --disable-minix \
+        --disable-rename \
         --disable-bash-completion \
+        --disable-fdformat \
         --without-python
 }
 
@@ -60,6 +71,26 @@ compile_linuxutil() {
 
 install_linuxutil() {
     make install
+
+    # remove tools not needed (busybox does it)
+    rm -f "${ROOTDIR}/usr/sbin/swapoff"
+    rm -f "${ROOTDIR}/usr/sbin/swapon"
+    rm -f "${ROOTDIR}/usr/sbin/swaplabel"
+    rm -f "${ROOTDIR}/usr/sbin/readprofile"
+    rm -f "${ROOTDIR}/usr/sbin/rtcwake"
+    rm -f "${ROOTDIR}/usr/sbin/ldattach"
+    rm -f "${ROOTDIR}/usr/sbin/ctrlaltdel"
+
+    rm -f "${ROOTDIR}/usr/bin/whereis"
+
+    rm -f "${ROOTDIR}/usr/bin/setarch"
+    rm -f "${ROOTDIR}/usr/bin/x86_64"
+    rm -f "${ROOTDIR}/usr/bin/i386"
+    rm -f "${ROOTDIR}/usr/bin/linux32"
+    rm -f "${ROOTDIR}/usr/bin/linux64"
+
+    rm -f "${ROOTDIR}/usr/bin/setterm"
+    rm -f "${ROOTDIR}/usr/bin/setsid"
 }
 
 build_linuxutil() {

@@ -14,6 +14,9 @@ extract_parted() {
 }
 
 prepare_parted() {
+    export LDFLAGS="-L${ROOTDIR}/usr/lib/"
+    export CFLAGS="-I${ROOTDIR}/usr/include"
+
     echo "[+] configuring parted"
     ./configure --prefix "${ROOTDIR}"/usr --disable-device-mapper
 
@@ -30,6 +33,9 @@ compile_parted() {
 
 install_parted() {
     make install
+
+    unset LDFLAGS
+    unset CFLAGS
 }
 
 build_parted() {

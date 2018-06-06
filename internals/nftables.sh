@@ -1,14 +1,19 @@
-NFTABLES_VERSION="0.7"
-NFTABLES_CHECKSUM="4c005e76a15a029afaba71d7db21d065"
+NFTABLES_VERSION="0.8.3"
+NFTABLES_CHECKSUM="a604501c10a302fa417410b16f293d2c"
 NFTABLES_LINK="https://www.netfilter.org/projects/nftables/files/nftables-${NFTABLES_VERSION}.tar.bz2"
 
-LIBNFTNL_VERSION="1.0.7"
-LIBNFTNL_CHECKSUM="82183867168eb6644926c48b991b8aac"
+LIBNFTNL_VERSION="1.0.9"
+LIBNFTNL_CHECKSUM="6c4f392faab5745933553b4354be5d8d"
 LIBNFTNL_LINK="http://www.iptables.org/projects/libnftnl/files/libnftnl-${LIBNFTNL_VERSION}.tar.bz2"
+
+LIBMNL_VERSION="1.0.4"
+LIBMNL_CHECKSUM="be9b4b5328c6da1bda565ac5dffadb2d"
+LIBMNL_LINK="https://netfilter.org/projects/libmnl/files/libmnl-${LIBMNL_VERSION}.tar.bz2"
 
 download_nftables() {
     download_file $NFTABLES_LINK $NFTABLES_CHECKSUM
     download_file $LIBNFTNL_LINK $LIBNFTNL_CHECKSUM
+    download_file $LIBMNL_LINK $LIBMNL_CHECKSUM
 }
 
 extract_nftables() {
@@ -21,11 +26,30 @@ extract_nftables() {
         echo "[+] extracting: libnftnl-${LIBNFTNL_VERSION}"
         tar -xf ${DISTFILES}/libnftnl-${LIBNFTNL_VERSION}.tar.bz2 -C .
     fi
+
+    if [ ! -d "libmnl-${LIBMNL_VERSION}" ]; then
+        echo "[+] extracting: libmnl-${LIBMNL_VERSION}"
+        tar -xf ${DISTFILES}/libmnl-${LIBMNL_VERSION}.tar.bz2 -C .
+    fi
+}
+
+build_libmnl() {
+    echo "[+] building libmnl"
+
+    ./configure --prefix "${ROOTDIR}"/usr/
+
+    make ${MAKEOPTS}
+    make install
 }
 
 build_libnftnl() {
     echo "[+] building libnftnl"
+
+    export LIBMNL_CFLAGS="-I${ROOTDIR}/usr/include"
+    export LIBMNL_LIBS="-L${ROOTDIR}/usr/lib -lmnl"
+
     ./configure --prefix "${ROOTDIR}"/usr/
+
     make ${MAKEOPTS}
     make install
 }
@@ -36,17 +60,11 @@ prepare_nftables() {
     export LIBNFTNL_CFLAGS="-I${ROOTDIR}/usr/include"
     export LIBNFTNL_LIBS="-L${ROOTDIR}/usr/lib -lnftnl"
 
-    ./configure --prefix "${ROOTDIR}"/usr --disable-debug --without-cli --with-mini-gmp
-
-    # Force to skip documentation compilation
-    echo "all:" > doc/Makefile
-
-    # Patching nftables
-    if [ ! -f .patched_nftables-0.7-dest-ip-port.patch ]; then
-        echo "[+] patching nftables"
-        patch -p1 < "${PATCHESDIR}/nftables-0.7-dest-ip-port.patch"
-        touch .patched_nftables-0.7-dest-ip-port.patch
-    fi
+    ./configure --prefix "${ROOTDIR}"/usr \
+        --disable-debug \
+        --without-cli \
+        --with-mini-gmp \
+        --disable-man-doc
 }
 
 compile_nftables() {
@@ -60,6 +78,10 @@ install_nftables() {
 }
 
 build_nftables() {
+    pushd "${WORKDIR}/libmnl-${LIBMNL_VERSION}"
+    build_libmnl
+    popd
+
     pushd "${WORKDIR}/libnftnl-${LIBNFTNL_VERSION}"
     build_libnftnl
     popd

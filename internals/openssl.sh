@@ -27,7 +27,7 @@ compile_openssl() {
 }
 
 install_openssl() {
-    make INSTALL_PREFIX="${ROOTDIR}" install
+    make INSTALL_PREFIX="${ROOTDIR}" install_sw
 
     # Removing useless ssl extra files
     rm -rf "${ROOTDIR}"/usr/ssl
