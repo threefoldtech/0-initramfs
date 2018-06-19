@@ -614,6 +614,7 @@ main() {
         build_redis
         build_ethtool
         build_rtinfo
+        build_seektime
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
