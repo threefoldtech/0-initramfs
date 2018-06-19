@@ -5,11 +5,8 @@ running_delay = -1
 [startup."zrobot-vol".args]
 script = """
 set -e
-
 ROOT=/var/cache
-
 btrfs subvol create ${ROOT}/zrobot || true
-
 for dir in ssh data config jsconfig; do
     mkdir -p ${ROOT}/zrobot/${dir}
 done
@@ -26,6 +23,11 @@ root = "https://hub.gig.tech/gig-autobuilder/zero-os-0-robot-autostart-developme
 name = "zrobot"
 privileged = false
 host_network = false
+
+[startup.zrobot.args.env]
+HOME = "/root"
+LC_ALL = "C.UTF-8"
+LANG = "C.UTF-8"
 
 [[startup.zrobot.args.nics]]
 type = "default"
@@ -44,3 +46,4 @@ type = "default"
 "/var/cache/zrobot/config" = "/opt/code/local/stdorg/config"
 "/var/cache/zrobot/jsconfig" = "/root/js9host/cfg"
 "/var/run/redis.sock" = "/tmp/redis.sock"
+
