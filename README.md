@@ -63,6 +63,7 @@ The `initramfs.sh` script accepts multiple options:
  -k --kernel      only (re)build kernel (produce final image)
  -M --modules     only (re)build kernel modules
  -e --extensions  only (re)build extensions
+ -n --nomirror    don't use a mirror to download files (use upstream)
  -l --clean       only clean staging files (extracted sources)
  -m --mrproper    only remove staging files and clean the root
  -r --release     force a release build
@@ -82,6 +83,15 @@ To produce a `release` (aka **production** build), there is two options:
 - Override `BUILDMODE` variable defined on the top of `initramfs.sh`
 
 This is obvious but, **do not use a debug version in a production environment.**
+
+## Mirror
+By default, all files (except git upstream repositories) use a mirror to download files.
+This mirror url is set on the initramfs.sh script itself.
+
+You can use the `--nomirror` flag to disable mirror and use upstream website. If you want to build
+your own mirror, you can simply use this flag to create your local mirror (`--download --nomirror` flags).
+
+You just need to expose the `archives` directory to a via a http server to provide a mirror.
 
 ## Build using a docker container
 
