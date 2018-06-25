@@ -14,6 +14,9 @@ INTERNAL="${PWD}/internals/"
 EXTENDIR="${PWD}/extensions/"
 PATCHESDIR="${PWD}/patches/"
 
+# Download mirror repository
+MIRRORSRC="https://download.gig.tech/initramfs-mirror/"
+
 # By default, we compiles with (number of cpu threads + 1)
 # you can changes this to reduce computer load
 JOBS=$(($(grep -c 'bogomips' /proc/cpuinfo) + 1))
@@ -22,13 +25,14 @@ MAKEOPTS="-j ${JOBS}"
 #
 # Flags
 #
-OPTS=$(getopt -o adbtckMeolmzrh --long all,download,busybox,tools,cores,kernel,modules,extensions,ork,clean,mrproper,compact,release,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o adbtckMeolmnzrh --long all,download,busybox,tools,cores,kernel,modules,extensions,ork,clean,mrproper,nomirror,compact,release,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
 fi
 
 DO_ALL=1
+USE_MIRROR=1
 
 if [ "$OPTS" != " --" ] && [ "$OPTS" != " --release --" ]; then
     DO_ALL=0
@@ -62,6 +66,7 @@ while true; do
         -l | --clean)      DO_CLEAN=1;          shift ;;
         -z | --compact)    DO_COMPACT=1;        shift ;;
         -m | --mrproper)   DO_MRPROPER=1;       shift ;;
+        -n | --nomirror)   USE_MIRROR=0;        shift ;;
         -r | --release)    BUILDMODE="release"; shift ;;
         -h | --help)
             echo "Usage:"
@@ -74,6 +79,7 @@ while true; do
             echo " -M --modules     only (re)build kernel modules"
             echo " -e --extensions  only (re)build extensions"
             echo " -o --ork         only (re)build ork protection"
+            echo " -n --nomirror    don't use a mirror to download files (use upstream)"
             echo " -l --clean       only clean staging files (extracted sources)"
             echo " -m --mrproper    only remove staging files and clean the root"
             echo " -z --compact     clean staging file when compilation is done (except kernel)"
@@ -204,10 +210,25 @@ prepare() {
 # First argument need to be the url, second is the md5 hash
 #
 download_file() {
-    if [ "$3" != "" ]; then
+    # set extra filename output or default output
+    if [ ! -z $3 ]; then
         output=$3
     else
         output=$(basename "$1")
+    fi
+
+    # set default url
+    fileurl=$1
+
+    # if we use a mirror we rewrite the url
+    if [ $USE_MIRROR == 1 ]; then
+        # if we use a custom filename, this
+        # filename will be used on the mirror site
+        if [ ! -z $3 ]; then
+            fileurl=$3
+        fi
+
+        fileurl="$MIRRORSRC/$(basename $fileurl)"
     fi
 
     event "downloading" "${output}"
@@ -219,9 +240,9 @@ download_file() {
 
     # Download the file
     if [ "${INTERACTIVE}" == "false" ]; then
-        curl -L -k -o "${output}" $1
+        curl -L -k -o "${output}" $fileurl
     else
-        curl -L -k --progress-bar -C - -o "${output}" $1
+        curl -L -k --progress-bar -C - -o "${output}" $fileurl
     fi
 
     # Checksum the downloaded file
@@ -614,6 +635,7 @@ main() {
         build_redis
         build_ethtool
         build_rtinfo
+        build_seektime
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
