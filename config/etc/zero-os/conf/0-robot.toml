@@ -19,7 +19,7 @@ protected = true
 after = ["zrobot-vol"]
 
 [startup.zrobot.args]
-root = "https://hub.gig.tech/gig-autobuilder/zero-os-0-robot-autostart-development.flist"
+root = "https://hub.gig.tech/gig-official-apps/zero-os-0-robot-autostart-latest.flist"
 name = "zrobot"
 privileged = false
 host_network = false
