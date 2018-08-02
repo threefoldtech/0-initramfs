@@ -9,7 +9,7 @@ prepare_cores() {
     go get -d -v github.com/threefoldtech/0-fs
 
     echo "[+] loading soruce code: ztid"
-    go get -d -v github.com/zero-os/ztid
+    go get -d -v github.com/threefoldtech/ztid
 
     echo "[+] ensure core0 to branch: ${CORES_VERSION}"
     pushd $GOPATH/src/github.com/threefoldtech/0-core
