@@ -2,10 +2,10 @@ CORES_VERSION="master"
 G8UFS_VERSION="master"
 
 prepare_cores() {
-    echo "[+] loading source code: core0"
+    echo "[+] loading source code: 0-core"
     go get -d -v -u github.com/threefoldtech/0-core/apps/core0
 
-    echo "[+] loading source code: g8ufs"
+    echo "[+] loading source code: 0-fs"
     go get -d -v github.com/threefoldtech/0-fs
 
     echo "[+] loading soruce code: ztid"
@@ -22,7 +22,7 @@ prepare_cores() {
     git pull origin "${CORES_VERSION}"
     popd
 
-    echo "[+] ensure g8ufs to branch: ${G8UFS_VERSION}"
+    echo "[+] ensure 0-fs to branch: ${G8UFS_VERSION}"
     pushd $GOPATH/src/github.com/threefoldtech/0-fs
     branch=$(git rev-parse --abbrev-ref HEAD)
     if [ "$branch" != "${G8UFS_VERSION}" ]; then
@@ -80,7 +80,7 @@ install_cores() {
 build_cores() {
     # We need to prepare first (download code)
     prepare_cores
-    pushd $GOPATH/src/github.com/zero-os
+    pushd $GOPATH/src/github.com/threefoldtech
 
     compile_cores
     install_cores
