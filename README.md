@@ -2,10 +2,10 @@
 This repository contains all that is needed to build the Zero-OS-kernel and initramfs to start our root filesystem.
 
 # Branches
-- [master](https://github.com/zero-os/0-core/tree/master): production code
-- [development](https://github.com/zero-os/0-core/tree/development): staging code but should not be broken
+- [master](https://github.com/threefoldtech/0-core/tree/master): production code
+- [development](https://github.com/threefoldtech/0-core/tree/development): staging code but should not be broken
 - `development-xxx`: staging feature, with risk of broken stuff
-- [release-threefold-edge.nodes-0001](https://github.com/zero-os/0-core/tree/release-threefold-edge.nodes-0001): threefold grid kernel release
+- [release-threefold-edge.nodes-0001](https://github.com/threefoldtech/0-core/tree/release-threefold-edge.nodes-0001): threefold grid kernel release
 
 # Dependencies
 In order to compile all the initramfs without issues, you'll need to install build-time dependencies.

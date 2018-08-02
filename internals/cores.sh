@@ -3,16 +3,16 @@ G8UFS_VERSION="master"
 
 prepare_cores() {
     echo "[+] loading source code: core0"
-    go get -d -v -u github.com/zero-os/0-core/apps/core0
+    go get -d -v -u github.com/threefoldtech/0-core/apps/core0
 
     echo "[+] loading source code: g8ufs"
-    go get -d -v github.com/zero-os/0-fs
+    go get -d -v github.com/threefoldtech/0-fs
 
     echo "[+] loading soruce code: ztid"
     go get -d -v github.com/zero-os/ztid
 
     echo "[+] ensure core0 to branch: ${CORES_VERSION}"
-    pushd $GOPATH/src/github.com/zero-os/0-core
+    pushd $GOPATH/src/github.com/threefoldtech/0-core
     branch=$(git rev-parse --abbrev-ref HEAD)
     if [ "$branch" != "${CORES_VERSION}" ]; then
         git fetch origin "${CORES_VERSION}:${CORES_VERSION}"
@@ -23,7 +23,7 @@ prepare_cores() {
     popd
 
     echo "[+] ensure g8ufs to branch: ${G8UFS_VERSION}"
-    pushd $GOPATH/src/github.com/zero-os/0-fs
+    pushd $GOPATH/src/github.com/threefoldtech/0-fs
     branch=$(git rev-parse --abbrev-ref HEAD)
     if [ "$branch" != "${G8UFS_VERSION}" ]; then
         git fetch origin "${G8UFS_VERSION}:${G8UFS_VERSION}"
