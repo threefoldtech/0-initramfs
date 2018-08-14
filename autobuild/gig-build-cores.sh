@@ -16,7 +16,7 @@ sed -i "/CORES_VERSION=/c\CORES_VERSION=\"$1\"" "/$2/internals/cores.sh"
 
 # force follow 'development'
 if [ "$1" == "development" ]; then
-   sed -i "/CORES_VERSION=/c\CORES_VERSION=\"$1\"" "/$2/internals/cores.sh"
+    sed -i "/G8UFS_VERSION=/c\G8UFS_VERSION=\"$1\"" "/$2/internals/cores.sh"
 fi
 
 # updating dependencies
