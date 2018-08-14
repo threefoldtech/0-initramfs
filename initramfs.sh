@@ -453,7 +453,7 @@ clean_busybox_outdated() {
 #
 # Configuration
 #
-g8os_root() {
+zero_os_root() {
     # Copy init
     echo "[+] installing init script"
     cp "${CONFDIR}/init/init" "${ROOTDIR}/init"
@@ -626,7 +626,6 @@ main() {
         build_libvirt
         build_dmidecode
         build_unionfs
-        build_gorocksdb
         build_eudev
         build_kmod
         build_openssh
@@ -636,6 +635,7 @@ main() {
         build_ethtool
         build_rtinfo
         build_seektime
+        build_zflist
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
@@ -656,7 +656,7 @@ main() {
         clean_root
         optimize_size
         clean_busybox_outdated
-        g8os_root
+        zero_os_root
         build_kernel
         end_summary
     fi
