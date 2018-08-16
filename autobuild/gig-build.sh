@@ -17,8 +17,8 @@ apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoc
 apt-get install -y libhiredis-dev libpixman-1-dev libb2-dev libsqlite3-dev libtar-dev libjansson-dev
 
 # install go
-curl https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz > /tmp/go1.8.linux-amd64.tar.gz
-tar -C /usr/local -xzf /tmp/go1.8.linux-amd64.tar.gz
+curl https://storage.googleapis.com/golang/go1.10.3.linux-amd64.tar.gz > /tmp/go1.10.3.linux-amd64.tar.gz
+tar -C /usr/local -xzf /tmp/go1.10.3.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 mkdir -p /gopath
 export GOPATH=/gopath

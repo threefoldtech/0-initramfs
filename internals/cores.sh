@@ -1,36 +1,33 @@
 CORES_VERSION="development"
 G8UFS_VERSION="development"
 
+github_force() {
+    if [ -d $3 ]; then
+        pushd $3
+        git checkout $2
+        git pull origin $2
+        popd
+
+    else
+        git clone https://github.com/$1 $3
+        pushd $3
+        git checkout $2
+        popd
+    fi
+}
+
 prepare_cores() {
     echo "[+] loading source code: 0-core"
-    go get -d -v -u github.com/threefoldtech/0-core/apps/core0
+    github_force threefoldtech/0-core $CORES_VERSION 0-core
 
     echo "[+] loading source code: 0-fs"
-    go get -d -v github.com/threefoldtech/0-fs
+    github_force threefoldtech/0-fs $G8UFS_VERSION 0-fs
 
     echo "[+] loading soruce code: ztid"
-    go get -d -v github.com/threefoldtech/ztid
+    github_force threefoldtech/ztid master ztid
 
-    echo "[+] ensure core0 to branch: ${CORES_VERSION}"
-    pushd $GOPATH/src/github.com/threefoldtech/0-core
-    branch=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$branch" != "${CORES_VERSION}" ]; then
-        git fetch origin "${CORES_VERSION}:${CORES_VERSION}"
-        git checkout "${CORES_VERSION}"
-    fi
-
-    git pull origin "${CORES_VERSION}"
-    popd
-
-    echo "[+] ensure 0-fs to branch: ${G8UFS_VERSION}"
-    pushd $GOPATH/src/github.com/threefoldtech/0-fs
-    branch=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$branch" != "${G8UFS_VERSION}" ]; then
-        git fetch origin "${G8UFS_VERSION}:${G8UFS_VERSION}"
-        git checkout "${G8UFS_VERSION}"
-    fi
-
-    git pull origin "${G8UFS_VERSION}"
+    pushd ztid
+    go get -v ./...
     popd
 }
 
@@ -78,10 +75,10 @@ install_cores() {
 }
 
 build_cores() {
-    # We need to prepare first (download code)
-    prepare_cores
+    mkdir -p $GOPATH/src/github.com/threefoldtech
     pushd $GOPATH/src/github.com/threefoldtech
 
+    prepare_cores
     compile_cores
     install_cores
 
