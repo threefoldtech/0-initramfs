@@ -23,7 +23,8 @@ compile_haveged() {
 }
 
 install_haveged() {
-    cp -avL src/haveged "${ROOTDIR}/usr/bin/"
+    cp -avL src/.libs/haveged "${ROOTDIR}/usr/bin/"
+    cp -avL src/.libs/libhavege.s* "${ROOTDIR}/usr/lib/"
 }
 
 build_haveged() {
