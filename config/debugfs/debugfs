@@ -5,7 +5,7 @@ debugroot="/mnt/debugfs"
 echo "[+] preparing debug environment"
 
 if [ ! -e /tmp/ubuntu-debugfs.flist ]; then
-    wget https://hub.gig.tech/gig-official-apps/ubuntu-debugfs.flist -O /tmp/ubuntu-debugfs.flist
+    wget https://hub.grid.tf/gig-official-apps/ubuntu-debugfs.flist -O /tmp/ubuntu-debugfs.flist
 fi
 
 mkdir -p ${debugroot}/backend
