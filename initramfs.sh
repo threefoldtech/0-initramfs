@@ -635,6 +635,7 @@ main() {
         build_rtinfo
         build_seektime
         build_zflist
+        build_haveged
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
