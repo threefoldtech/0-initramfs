@@ -26,18 +26,20 @@ case "$1" in
             echo "127.0.0.1 $hostname" >> /etc/hosts
         fi
 
-        echo "Recreating $RESOLV_CONF"
-        # If the file is a symlink somewhere (like /etc/resolv.conf
-        # pointing to /run/resolv.conf), make sure things work.
-        realconf=$(readlink -f "$RESOLV_CONF" 2>/dev/null || echo "$RESOLV_CONF")
-        tmpfile="$realconf-$$"
-        > "$tmpfile"
-        [ -n "$domain" ] && echo "search $domain" >> "$tmpfile"
-        for i in $dns ; do
-            echo " Adding DNS server $i"
-            echo "nameserver $i" >> "$tmpfile"
-        done
-        mv "$tmpfile" "$realconf"
+        if [ -n "$dns" ] ; then
+            echo "Recreating $RESOLV_CONF"
+            # If the file is a symlink somewhere (like /etc/resolv.conf
+            # pointing to /run/resolv.conf), make sure things work.
+            realconf=$(readlink -f "$RESOLV_CONF" 2>/dev/null || echo "$RESOLV_CONF")
+            tmpfile="$realconf-$$"
+            > "$tmpfile"
+            [ -n "$domain" ] && echo "search $domain" >> "$tmpfile"
+            for i in $dns ; do
+                echo " Adding DNS server $i"
+                echo "nameserver $i" >> "$tmpfile"
+            done
+            mv "$tmpfile" "$realconf"
+        fi
         ;;
 esac
 
