@@ -44,6 +44,6 @@ type = "default"
 "/var/cache/zrobot/ssh" = "/root/.ssh"
 "/var/cache/zrobot/data" = "/opt/var/data/zrobot/zrobot_data"
 "/var/cache/zrobot/config" = "/opt/code/local/stdorg/config"
-"/var/cache/zrobot/jsconfig" = "/root/js9host/cfg"
+"/var/cache/zrobot/jsconfig" = "/root/jumpscale/cfg"
 "/var/run/redis.sock" = "/tmp/redis.sock"
 
