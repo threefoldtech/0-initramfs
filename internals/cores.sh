@@ -4,6 +4,7 @@ G8UFS_VERSION="development"
 github_force() {
     if [ -d $3 ]; then
         pushd $3
+        git fetch
         git checkout $2
         git pull origin $2
         popd
