@@ -1,9 +1,9 @@
-NFTABLES_VERSION="0.8.3"
-NFTABLES_CHECKSUM="a604501c10a302fa417410b16f293d2c"
+NFTABLES_VERSION="0.9.0"
+NFTABLES_CHECKSUM="d4dcb61df80aa544b2e142e91d937635"
 NFTABLES_LINK="https://www.netfilter.org/projects/nftables/files/nftables-${NFTABLES_VERSION}.tar.bz2"
 
-LIBNFTNL_VERSION="1.0.9"
-LIBNFTNL_CHECKSUM="6c4f392faab5745933553b4354be5d8d"
+LIBNFTNL_VERSION="1.1.1"
+LIBNFTNL_CHECKSUM="c2d35f59cef2d142d5fa19e456b4afdc"
 LIBNFTNL_LINK="http://www.iptables.org/projects/libnftnl/files/libnftnl-${LIBNFTNL_VERSION}.tar.bz2"
 
 LIBMNL_VERSION="1.0.4"
@@ -62,7 +62,7 @@ prepare_nftables() {
 
     ./configure --prefix "${ROOTDIR}"/usr \
         --disable-debug \
-        --without-cli \
+        --with-json \
         --with-mini-gmp \
         --disable-man-doc
 }
