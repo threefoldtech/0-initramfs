@@ -60,8 +60,9 @@ prepare_nftables() {
     export LIBNFTNL_CFLAGS="-I${ROOTDIR}/usr/include"
     export LIBNFTNL_LIBS="-L${ROOTDIR}/usr/lib -lnftnl"
 
-    ./configure --prefix "${ROOTDIR}"/usr \
+    ./configure --prefix="/usr" \
         --disable-debug \
+        --with-cli \
         --with-json \
         --with-mini-gmp \
         --disable-man-doc
@@ -74,7 +75,7 @@ compile_nftables() {
 
 install_nftables() {
     echo "[+] installing nftables"
-    cp -a src/nft "${ROOTDIR}"/usr/sbin/
+    make DESTDIR=${ROOTDIR} install
 }
 
 build_nftables() {
