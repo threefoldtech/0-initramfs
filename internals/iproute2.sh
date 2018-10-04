@@ -16,6 +16,9 @@ extract_iproute2() {
 prepare_iproute2() {
     echo "[+] preparing iproute2"
     ./configure
+
+    # disable selinux, not needed
+    sed -i /SELINUX/d Config
 }
 
 compile_iproute2() {
@@ -26,10 +29,11 @@ compile_iproute2() {
 install_iproute2() {
     echo "[+] installing iproute2"
 
-    # Replace busybox symlink with the real binary
+    # replace busybox symlink with the real binary
     rm -f "${ROOTDIR}"/sbin/ip
-    cp -a ip/ip "${ROOTDIR}"/sbin/ip
     mkdir -p "${ROOTDIR}"/var/run/netns
+
+    make DESTDIR=${ROOTDIR} install
 }
 
 build_iproute2() {
