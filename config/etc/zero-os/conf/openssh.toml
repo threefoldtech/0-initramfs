@@ -1,5 +1,6 @@
 [startup.sshdkeys]
 name = "bash"
+condition = "debug"
 after = ["init"]
 running_delay = -1
 
@@ -13,6 +14,7 @@ ssh-keygen -f /etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
 
 [startup.sshd]
 name = "core.system"
+condition = "debug"
 after = ["sshdkeys"]
 
 [startup.sshd.args]
