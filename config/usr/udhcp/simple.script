@@ -8,13 +8,13 @@ RESOLV_CONF="${ROOT}/etc/resolv.conf"
 case "$1" in
     deconfig)
         echo "Setting IP address 0.0.0.0 on $interface"
-        ip addr flush dev $interface
+        ip -4 addr flush dev $interface
         ip link set $interface up
         ;;
 
     renew|bound)
         echo "Setting IP address $ip on $interface"
-        ip addr flush dev $interface
+        ip -4 addr flush dev $interface
         ip addr add ${ip}/${mask} dev $interface
 
         [ -n "$router" ] && ip route add default via ${router%% *} dev $interface
