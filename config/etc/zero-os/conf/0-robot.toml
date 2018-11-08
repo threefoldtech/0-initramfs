@@ -19,7 +19,7 @@ protected = true
 after = ["zrobot-vol"]
 
 [startup.zrobot.args]
-root = "https://hub.gig.tech/gig-official-apps/zero-os-0-robot-autostart-latest.flist"
+root = "https://hub.grid.tf/tf-official-apps/threefoldtech-0-robot-autostart-latest.flist"
 name = "zrobot"
 privileged = false
 host_network = false
@@ -44,6 +44,6 @@ type = "default"
 "/var/cache/zrobot/ssh" = "/root/.ssh"
 "/var/cache/zrobot/data" = "/opt/var/data/zrobot/zrobot_data"
 "/var/cache/zrobot/config" = "/opt/code/local/stdorg/config"
-"/var/cache/zrobot/jsconfig" = "/root/js9host/cfg"
+"/var/cache/zrobot/jsconfig" = "/root/jumpscale/cfg"
 "/var/run/redis.sock" = "/tmp/redis.sock"
 

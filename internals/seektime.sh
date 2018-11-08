@@ -1,4 +1,4 @@
-SEEKTIME_REPOSITORY="https://github.com/zero-os/seektime"
+SEEKTIME_REPOSITORY="https://github.com/threefoldtech/seektime"
 SEEKTIME_BRANCH="master"
 
 download_seektime() {

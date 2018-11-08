@@ -17,4 +17,4 @@ size = 10000 # how many log lines to keep
 enabled = true
 
 [globals]
-storage = "ardb://hub.gig.tech:16379"
+storage = "zdb://hub.grid.tf:9900"

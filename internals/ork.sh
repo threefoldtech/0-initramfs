@@ -1,5 +1,5 @@
 ORK_VERSION="master"
-ORK_LINK="github.com/zero-os/0-ork"
+ORK_LINK="github.com/threefoldtech/0-ork"
 
 prepare_ork() {
     echo "[+] loading source code: 0-ork"
@@ -32,7 +32,7 @@ install_ork() {
 build_ork() {
     # We need to prepare first (download code)
     prepare_ork
-    pushd $GOPATH/src/github.com/zero-os/0-ork
+    pushd $GOPATH/src/github.com/threefoldtech/0-ork
 
     compile_ork
     install_ork
