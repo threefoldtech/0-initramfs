@@ -637,6 +637,7 @@ main() {
         build_curl
         build_zflist
         build_haveged
+        build_wireguard
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
