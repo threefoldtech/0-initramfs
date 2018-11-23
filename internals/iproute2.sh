@@ -1,5 +1,5 @@
-IPROUTE2_VERSION="4.8.0"
-IPROUTE2_CHECKSUM="54c6411863cb16a4375aa5f788dca767"
+IPROUTE2_VERSION="4.19.0"
+IPROUTE2_CHECKSUM="67eeebacaac4515cab73dfd2fc796af3"
 IPROUTE2_LINK="https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-${IPROUTE2_VERSION}.tar.xz"
 
 download_iproute2() {
@@ -18,7 +18,8 @@ prepare_iproute2() {
     ./configure
 
     # disable selinux, not needed
-    sed -i /SELINUX/d Config
+    sed -i /SELINUX/d config.mk
+    sed -i /selinux/d config.mk
 }
 
 compile_iproute2() {
