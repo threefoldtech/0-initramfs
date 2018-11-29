@@ -1,5 +1,5 @@
-BTRFS_VERSION="4.8"
-BTRFS_CHECKSUM="51f907a15c60fd43a7e97a03b24928a1"
+BTRFS_VERSION="4.19"
+BTRFS_CHECKSUM="b8e43ed6aa34d4b48974f297c79d391b"
 BTRFS_LINK="https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${BTRFS_VERSION}.tar.xz"
 
 download_btrfs() {
@@ -23,7 +23,9 @@ prepare_btrfs() {
 
     ./configure --prefix /usr \
         --disable-documentation \
-        --disable-convert
+        --disable-convert \
+        --disable-zstd \
+        --disable-python
 }
 
 compile_btrfs() {
