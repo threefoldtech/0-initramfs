@@ -407,6 +407,7 @@ clean_staging() {
     rm -rf "${TMPDIR}"/*
     mv -f "${WORKDIR}"/linux-* "${TMPDIR}"/
     mv -f "${WORKDIR}"/vmlinuz* "${TMPDIR}"/
+    mv -f "${WORKDIR}"/Wire* "${TMPDIR}"/
 
     # cleaning staging files
     rm -rf "${WORKDIR}"/*
@@ -634,8 +635,10 @@ main() {
         build_ethtool
         build_rtinfo
         build_seektime
+        build_curl
         build_zflist
         build_haveged
+        build_wireguard
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then

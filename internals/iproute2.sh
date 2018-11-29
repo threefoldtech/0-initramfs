@@ -1,5 +1,5 @@
-IPROUTE2_VERSION="4.8.0"
-IPROUTE2_CHECKSUM="54c6411863cb16a4375aa5f788dca767"
+IPROUTE2_VERSION="4.19.0"
+IPROUTE2_CHECKSUM="67eeebacaac4515cab73dfd2fc796af3"
 IPROUTE2_LINK="https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-${IPROUTE2_VERSION}.tar.xz"
 
 download_iproute2() {
@@ -16,6 +16,10 @@ extract_iproute2() {
 prepare_iproute2() {
     echo "[+] preparing iproute2"
     ./configure
+
+    # disable selinux, not needed
+    sed -i /SELINUX/d config.mk
+    sed -i /selinux/d config.mk
 }
 
 compile_iproute2() {
@@ -26,10 +30,11 @@ compile_iproute2() {
 install_iproute2() {
     echo "[+] installing iproute2"
 
-    # Replace busybox symlink with the real binary
+    # replace busybox symlink with the real binary
     rm -f "${ROOTDIR}"/sbin/ip
-    cp -a ip/ip "${ROOTDIR}"/sbin/ip
     mkdir -p "${ROOTDIR}"/var/run/netns
+
+    make DESTDIR=${ROOTDIR} install
 }
 
 build_iproute2() {
