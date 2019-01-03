@@ -54,6 +54,8 @@ install_cores() {
     pushd 0-core
     cp -a bin/* "${ROOTDIR}/sbin/"
     cp -a tools/* "${ROOTDIR}/usr/bin/"
+    mkdir -p "${ROOTDIR}/usr/modules/"
+    cp -a apps/plugins/modules/* "${ROOTDIR}/usr/modules/"
 
     echo "[+] installing configuration"
     mkdir -p "${ROOTDIR}/etc/zero-os/conf"
