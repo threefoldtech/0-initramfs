@@ -55,6 +55,7 @@ install_cores() {
     cp -a bin/* "${ROOTDIR}/sbin/"
     cp -a tools/* "${ROOTDIR}/usr/bin/"
     mkdir -p "${ROOTDIR}/usr/modules/"
+    rm -rf "${ROOTDIR}/usr/modules/*" # make sure we delete files in base image if exists
     cp -a apps/plugins/modules/* "${ROOTDIR}/usr/modules/" || true # in case no modules to copy
 
     echo "[+] installing configuration"
