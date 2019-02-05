@@ -5,7 +5,7 @@ This repository contains all that is needed to build the Zero-OS-kernel and init
 - [master](https://github.com/threefoldtech/0-core/tree/master): production code
 - [development](https://github.com/threefoldtech/0-core/tree/development): staging code but should not be broken
 - `development-xxx`: staging feature, with risk of broken stuff
-- [release-threefold-edge.nodes-0001](https://github.com/threefoldtech/0-core/tree/release-threefold-edge.nodes-0001): threefold grid kernel release
+- [release-threefold-edge.nodes-0001](https://github.com/threefoldtech/0-core/tree/release-threefold-edge.nodes-0001): threefold nodes (blockchain) kernel release
 
 # Dependencies
 In order to compile all the initramfs without issues, you'll need to install build-time dependencies.
@@ -21,26 +21,31 @@ Some parts need to `chown/setuid/chmod/mknod` files as root.
  - First, download and check checksum of all archives needed
  - Extract the archives
  - Compiles third-party software:
-    - Busybox
-    - Fuse (library and userland tools)
-    - OpenSSL and SSL Certificates (ca-certificates)
+    - busybox (for full base system)
+    - fuse (library and userland tools)
+    - openssl and ssl certificates (ca-certificates)
     - util-linux (for `lsblk`, ...)
-    - Redis (only the server is used)
-    - BTRFS (btrfs-progs)
-    - libvirt and QEMU
-    - ZeroTier One
+    - e2fs-progs (for recent mkfs, etc.)
+    - redis (only the server is used)
+    - btrfs (btrfs-progs)
+    - libvirt and qemu
+    - zerotier-one
     - parted (partition management)
     - dnsmasq (used for dhcp on containers)
     - nftables (used for firewalling and routing)
     - iproute2 (used for network namespace support)
     - unionfs-fuse (used for internal fuse layers)
-    - RocksDB (shared library)
-    - GoRocksDB (used for flist)
     - eudev and kmod (used for hardware and modules management)
     - smartmontools (used for S.M.A.R.T monitoring)
     - dmidecode (optional dependency for libvirt and management)
-    - OpenSSH (client and server)
+    - openssh (client and server)
     - netcat6 (needed by libvirt migration)
+    - curl (needed for libcurl by zflist)
+    - zflist (0-flist for flist on-the-fly creation)
+    - restic (for container backup and upload)
+    - rtinfo (for realtime monitoring out-of-box)
+    - seektime (small tool to detect disk type)
+    - wireguard
  - Integrate core stuff:
     - Compile `core0` and `coreX`
     - Compile `0-fs` and `ztid`
@@ -224,3 +229,7 @@ Here is what we changed:
 - All `Data acquision support (comedi)` disabled
 - Filesystems `ext4`, `Raiserfs`, `JFS`, `XFS`, `GFS2`, `OCFS2`, `NILFS2`, `F2FS`, `NTFS` disabled
 - Modules are not compressed
+
+# Repository Owner
+- [Maxime Daniel](https://github.com/maxux), Telegram: [@maxux](http://t.me/maxux)
+
