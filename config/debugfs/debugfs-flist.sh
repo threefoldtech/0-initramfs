@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOTBUNTU="/tmp/ubuntu-xenial"
+ROOTBUNTU="/tmp/ubuntu-bionic"
 TARGET="/tmp/ubuntu-debugfs.tar.gz"
 
 # preparing target
@@ -17,8 +17,10 @@ echo "Bootstrapping the base image..."
 debootstrap \
   --arch=amd64 \
   --components=main,restricted,universe,multiverse \
-  --include curl,ca-certificates,tcpdump,ethtool,pciutils,strace,lsof,htop,binutils \
-  xenial ${ROOTBUNTU} \
+  --include curl,ca-certificates,tcpdump,ethtool,pciutils,strace,lsof,htop,\
+binutils,bzip2,coreutils,cpio,curl,e2fsprogs,file,findutils,htop,iproute2,\
+net-tools,netcat-openbsd,procps,strace,tcpdump,vim,lsscsi,btrfs-tools,xfsutils \
+  bionic ${ROOTBUNTU} \
   http://archive.ubuntu.com/ubuntu/
 
 echo "Debugfs base system installed"

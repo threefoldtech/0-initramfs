@@ -17,7 +17,7 @@ PATCHESDIR="${PWD}/patches/"
 # Download mirror repository
 MIRRORSRC="https://download.gig.tech/initramfs-mirror/"
 
-# By default, we compiles with (number of cpu threads + 1)
+# By default, we compile with (number of cpu threads + 1)
 # you can changes this to reduce computer load
 JOBS=$(($(grep -c 'bogomips' /proc/cpuinfo) + 1))
 MAKEOPTS="-j ${JOBS}"
@@ -207,7 +207,7 @@ prepare() {
 
 #
 # Download a file and check the hash
-# First argument need to be the url, second is the md5 hash
+# First argument needs to be the url, second is the md5 hash
 #
 download_file() {
     # set extra filename output or default output
@@ -222,7 +222,7 @@ download_file() {
 
     # if we use a mirror we rewrite the url
     if [ $USE_MIRROR == 1 ]; then
-        # if we use a custom filename, this
+        # if we use a custom filename, that
         # filename will be used on the mirror site
         if [ ! -z $3 ]; then
             fileurl=$3
@@ -438,10 +438,10 @@ clean_busybox_outdated() {
 
     pushd "${ROOTDIR}"/usr
     for file in sbin/*; do
-        # our script install mostly everything under /usr
-        # /sbin/ contains mainly busybox symlink
+        # our script installs mostly everything under /usr
+        # /sbin/ contains mainly busybox symlinks
         # we can safely remove /sbin stuff if we already have it on /usr/sbin
-        # this improve the system stability by providing more advanced feature
+        # this improves the system stability by providing more advanced features
         # (eg: util-linux blkid and not busybox one)
         if [ -e ../$file ]; then
             rm -f ../$file
