@@ -7,7 +7,7 @@ echo "============================================"
 echo "[+] creating ram filesystem"
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
-mount -t tmpfs tmpfs /mnt/root -o size=640M
+mount -t tmpfs tmpfs /mnt/root -o size=512M
 mount -t devtmpfs devtmpfs /dev
 
 echo "[+] building ram filesystem"
