@@ -42,4 +42,9 @@ mount -o bind /dev/pts ${debugroot}/image/dev/pts
 echo "[+] entering debug environment"
 chroot ${debugroot}/image /bin/bash
 
-umount /mnt/debugfs/image/dev/pts /mnt/debugfs/image/dev /mnt/debugfs/image/sys /mnt/debugfs/image/proc /mnt/debugfs/image /mnt/debugfs/backend/ro
+umount ${debugroot}/image/dev/pts
+umount ${debugroot}/image/dev
+umount ${debugroot}/image/sys
+umount ${debugroot}/image/proc
+umount ${debugroot}/image
+umount ${debugroot}/backend/ro
