@@ -1,4 +1,4 @@
-CORES_VERSION="development"
+CORES_VERSION="master"
 G8UFS_VERSION="development"
 
 github_force() {
@@ -18,8 +18,8 @@ github_force() {
 }
 
 prepare_cores() {
-    echo "[+] loading source code: 0-core"
-    github_force threefoldtech/0-core $CORES_VERSION 0-core
+    echo "[+] loading source code: zinit"
+    github_force threefoldtech/zinit $CORES_VERSION zinit
 
     echo "[+] loading source code: 0-fs"
     github_force threefoldtech/0-fs $G8UFS_VERSION 0-fs
@@ -33,9 +33,9 @@ prepare_cores() {
 }
 
 compile_cores() {
-    echo "[+] compiling coreX and core0"
-    pushd 0-core
-    make
+    echo "[+] compiling zinit"
+    pushd zinit
+    make release
     popd
 
     echo "[+] compiling 0-fs"
@@ -51,14 +51,14 @@ compile_cores() {
 
 install_cores() {
     echo "[+] copying binaries"
-    pushd 0-core
-    cp -a bin/* "${ROOTDIR}/sbin/"
-    cp -a tools/* "${ROOTDIR}/usr/bin/"
+    pushd zinit
+    cp -a target/release/zinit "${ROOTDIR}/sbin/"
+    # cp -a tools/* "${ROOTDIR}/usr/bin/"
 
-    echo "[+] installing configuration"
-    mkdir -p "${ROOTDIR}/etc/zero-os/conf"
-    cp -a apps/core0/conf/* "${ROOTDIR}"/etc/zero-os/conf/
-    rm -f "${ROOTDIR}"/etc/zero-os/conf/README.md
+    # echo "[+] installing configuration"
+    # mkdir -p "${ROOTDIR}/etc/zero-os/conf"
+    # cp -a apps/core0/conf/* "${ROOTDIR}"/etc/zero-os/conf/
+    # rm -f "${ROOTDIR}"/etc/zero-os/conf/README.md
     popd
 
     pushd 0-fs
@@ -70,8 +70,8 @@ install_cores() {
     popd
 
     pushd "${ROOTDIR}/sbin"
-    ln -sf corectl reboot
-    ln -sf corectl poweroff
+    # ln -sf corectl reboot
+    # ln -sf corectl poweroff
     popd
 }
 
