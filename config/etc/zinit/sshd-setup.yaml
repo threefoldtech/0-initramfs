@@ -1,1 +1,1 @@
-exec: /etc/zinit/init/sshd-setup.sh
+exec: ash /etc/zinit/init/sshd-setup.sh
