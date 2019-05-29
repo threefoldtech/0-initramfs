@@ -204,7 +204,7 @@ mkdir /tmp/zero-os-debug/
 touch /tmp/zero-os-debug/.zero-os-debug
 echo World > /tmp/zero-os-debug/hello
 
-qemu-system-x86_64 -drive file=fat:/tmp/zero-os-debug,format=raw $QEMU_CMD_LINE
+qemu-system-x86_64 -drive file=fat:rw:/tmp/zero-os-debug,format=raw $QEMU_CMD_LINE
 ```
 This will add `/hello` to your running Zero-OS.
 
