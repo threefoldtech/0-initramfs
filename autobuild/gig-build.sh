@@ -23,6 +23,10 @@ export PATH=$PATH:/usr/local/go/bin
 mkdir -p /gopath
 export GOPATH=/gopath
 
+# install rust
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+source $HOME/.cargo/env
+
 # adding extensions (fallback to master if branch not found)
 cd "/$2/extensions"
 git clone -b "$1" https://github.com/zero-os/initramfs-gig || git clone https://github.com/zero-os/initramfs-gig
