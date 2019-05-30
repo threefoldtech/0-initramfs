@@ -1,1 +1,2 @@
 exec: ash /etc/zinit/init/sshd-setup.sh
+oneshot: true
