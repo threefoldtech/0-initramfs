@@ -1,4 +1,4 @@
-exec: udevadm trigger --action=add; udevadm settle
+exec: /etc/zinit/init/udev.sh
 oneshot: true
 after:
   - udevd
