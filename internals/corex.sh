@@ -54,7 +54,17 @@ compile_corex() {
 }
 
 install_corex() {
+    echo "[+] installing corex"
     cp -avL build/corex "${ROOTDIR}/usr/bin/"
+
+    echo "[+] building sandbox for corex"
+    rm -rf "${ROOTDIR}/lib/corex"
+
+    mkdir "${ROOTDIR}/lib/corex"
+    mkdir "${ROOTDIR}/lib/corex/bin"
+
+    cp -avL build/corex "${ROOTDIR}/lib/corex/bin/"
+    ${TOOLSDIR}/lddcopy.sh "${ROOTDIR}/lib/corex/bin/corex" "${ROOTDIR}/lib/corex/"
 }
 
 build_corex() {
