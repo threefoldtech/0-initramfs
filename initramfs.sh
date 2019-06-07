@@ -639,6 +639,7 @@ main() {
         build_zflist
         build_haveged
         build_wireguard
+        build_corex
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
