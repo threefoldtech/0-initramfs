@@ -13,8 +13,43 @@ rm -rf /target/*
 # install dependencies for building
 apt-get update
 apt-get install -y asciidoc xmlto --no-install-recommends
-apt-get install -y xz-utils pkg-config lbzip2 make curl libtool gettext m4 autoconf uuid-dev libncurses5-dev libreadline-dev bc e2fslibs-dev uuid-dev libattr1-dev zlib1g-dev libacl1-dev e2fslibs-dev libblkid-dev liblzo2-dev git libbison-dev flex libmnl-dev xtables-addons-source libglib2.0-dev libfuse-dev libxml2-dev libdevmapper-dev libpciaccess-dev libnl-3-dev libnl-route-3-dev libyajl-dev dnsmasq liblz4-dev libsnappy-dev libbz2-dev libssl-dev gperf libelf-dev libkmod-dev liblzma-dev git kmod libvirt-dev libcap-dev autopoint comerr-dev
-apt-get install -y libhiredis-dev libpixman-1-dev libb2-dev libsqlite3-dev libtar-dev libjansson-dev
+
+# toolchain dependencies
+deps=(pkg-config make m4 autoconf)
+
+# system tools and libs
+deps+=(libssl-dev dnsmasq git curl bc)
+
+# fuse
+deps+=(libfuse-dev)
+
+# storage and filesystem
+deps+=(e2fslibs-dev libblkid-dev uuid-dev libattr1-dev)
+
+# virtualization
+deps+=(libvirt-dev libdevmapper-dev)
+
+# dirty list, needs to be documented
+deps+=(xz-utils lbzip2 libtool gettext uuid-dev)
+deps+=(libncurses5-dev libreadline-dev zlib1g-dev libacl1-dev)
+deps+=(liblzo2-dev libbison-dev flex)
+deps+=(libglib2.0-dev libfuse-dev libxml2-dev libpciaccess-dev)
+deps+=(libyajl-dev liblz4-dev libbz2-dev)
+deps+=(libcap-dev autopoint comerr-dev)
+
+# udev and modules
+deps+=(gperf libelf-dev libkmod-dev liblzma-dev kmod)
+
+# nftables
+deps+=(libnl-3-dev libnl-route-3-dev libmnl-dev xtables-addons-source)
+
+# zflist
+deps+=(libhiredis-dev libpixman-1-dev libb2-dev libsqlite3-dev libtar-dev libjansson-dev libsnappy-dev)
+
+# corex
+deps+=(cmake libjson-c-dev vim-runtime)
+
+apt-get install -y ${deps[@]}
 
 # install go
 curl https://storage.googleapis.com/golang/go1.10.3.linux-amd64.tar.gz > /tmp/go1.10.3.linux-amd64.tar.gz
