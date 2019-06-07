@@ -10,9 +10,10 @@ WORKDIR="${PWD}/staging"
 CONFDIR="${PWD}/config"
 ROOTDIR="${PWD}/root"
 TMPDIR="${PWD}/tmp"
-INTERNAL="${PWD}/internals/"
-EXTENDIR="${PWD}/extensions/"
-PATCHESDIR="${PWD}/patches/"
+INTERNAL="${PWD}/internals"
+EXTENDIR="${PWD}/extensions"
+PATCHESDIR="${PWD}/patches"
+TOOLSDIR="${PWD}/tools"
 
 # Download mirror repository
 MIRRORSRC="https://download.gig.tech/initramfs-mirror/"
