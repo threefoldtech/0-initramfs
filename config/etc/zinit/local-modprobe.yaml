@@ -1,1 +1,2 @@
 exec: sh /etc/zinit/init/modprobe.sh
+oneshot: true
