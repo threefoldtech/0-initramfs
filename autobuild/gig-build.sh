@@ -50,7 +50,7 @@ deps+=(libhiredis-dev libpixman-1-dev libb2-dev libsqlite3-dev libtar-dev libjan
 deps+=(cmake libjson-c-dev vim-runtime)
 
 # containerd
-deps+=(libbtrfs-dev  libseccomp-dev)
+deps+=(libseccomp-dev)
 
 apt-get install -y ${deps[@]}
 
