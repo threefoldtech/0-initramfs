@@ -641,6 +641,7 @@ main() {
         build_haveged
         build_wireguard
         build_corex
+        build_dhcpcd
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
