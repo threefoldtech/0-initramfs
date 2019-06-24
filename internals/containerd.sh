@@ -24,7 +24,7 @@ prepare_containerd() {
 compile_containerd() {
     echo "[+] compiling coreX and core0"
     pushd containerd
-    CGO_CFLAGS=-I${ROOTDIR}/usr/include make
+    make CGO_CFLAGS=-I${ROOTDIR}/usr/include
     popd
 }
 
