@@ -1,5 +1,5 @@
-BUSYBOX_VERSION="1.28.3"
-BUSYBOX_CHECKSUM="82e5ad09ae4a07c266fc179492b51757"
+BUSYBOX_VERSION="1.31.0"
+BUSYBOX_CHECKSUM="cdba5d4458f944ceec5cdcf7c4914b69"
 BUSYBOX_LINK="https://www.busybox.net/downloads/busybox-${BUSYBOX_VERSION}.tar.bz2"
 
 download_busybox() {
