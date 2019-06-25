@@ -1,51 +1,34 @@
-NETCAT_VERSION="1.0"
-NETCAT_CHECKSUM="5074bc51989420a1f68716f93322030f"
-NETCAT_LINK="http://gentoo.mirrors.ovh.net/gentoo-distfiles/distfiles/nc6-${NETCAT_VERSION}.tar.bz2"
+NETCAT_MAJOR="110"
+NETCAT_VERSION="20180111"
+NETCAT_CHECKSUM="691e734b398bbbe2225feffdd21f63b7"
+NETCAT_LINK="http://gentoo.mirrors.ovh.net/gentoo-distfiles/distfiles/nc${NETCAT_MAJOR}.${NETCAT_VERSION}.tar.xz"
 
 download_netcat() {
     download_file $NETCAT_LINK $NETCAT_CHECKSUM
 }
 
 extract_netcat() {
-    if [ ! -d "nc6-${NETCAT_VERSION}" ]; then
-        echo "[+] extracting: netcat6-${NETCAT_VERSION}"
-        tar -xf ${DISTFILES}/nc6-${NETCAT_VERSION}.tar.bz2 -C .
+    if [ ! -d "nc${NETCAT_MAJOR}" ]; then
+        echo "[+] extracting: netcat-${NETCAT_MAJOR}"
+        tar -xf ${DISTFILES}/nc${NETCAT_MAJOR}.${NETCAT_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_netcat() {
-    if [ ! -f .patched_netcat6-1.0-unix-sockets.patch ]; then
-        echo "[+] patching netcat"
-        patch -p1 < ${PATCHESDIR}/netcat6-1.0-unix-sockets.patch
-        patch -p1 < ${PATCHESDIR}/netcat6-1.0-automake-1.14.patch
-        touch .patched_netcat6-1.0-unix-sockets.patch
-    fi
-
-    echo "[+] autoreconf netcat"
-    autopoint --force
-    aclocal -I config
-    autoconf --force
-    autoheader
-    automake --add-missing --copy --force-missing --force-missing
-
-    echo "[+] configuring netcat"
-    ./configure --disable-bluez
+    sed -i -e '/#define HAVE_BIND/s:#define:#undef:' netcat.c
+    sed -i -e '/#define FD_SETSIZE 16/s:16:1024: #34250' netcat.c
 }
 
 compile_netcat() {
-    make ${MAKEOPTS}
+    make nc
 }
 
 install_netcat() {
-    cp -avL src/nc6 "${ROOTDIR}/usr/bin/"
-
-    pushd "${ROOTDIR}/usr/bin/"
-    ln -fs nc6 nc
-    popd
+    cp -avL nc "${ROOTDIR}/usr/bin/"
 }
 
 build_netcat() {
-    pushd "${WORKDIR}/nc6-${NETCAT_VERSION}"
+    pushd "${WORKDIR}/nc${NETCAT_MAJOR}"
 
     prepare_netcat
     compile_netcat
