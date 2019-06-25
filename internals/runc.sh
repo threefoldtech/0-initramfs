@@ -25,7 +25,7 @@ compile_runc() {
 install_runc() {
     echo "[+] copying binaries"
     pushd runc
-    cp -a bin/* "${ROOTDIR}/bin/"
+    cp runc "${ROOTDIR}/bin/"
 }
 
 build_runc() {
