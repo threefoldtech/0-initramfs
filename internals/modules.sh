@@ -2,11 +2,11 @@ MODULES_REPOSITORY="https://github.com/threefoldtech/zosv2"
 MODULES_BRANCH="master"
 MODULES_TAG=""
 
-MODULES_SRC=$GOPATH/src/github.com/threefoldtech
+TFT_SRC=$GOPATH/src/github.com/threefoldtech
 
 download_modules() {
-    mkdir -p $MODULES_SRC
-    pushd $MODULES_SRC
+    mkdir -p $TFT_SRC
+    pushd $TFT_SRC
     download_git $MODULES_REPOSITORY $MODULES_BRANCH $MODULES_TAG
     popd
 }
@@ -17,8 +17,8 @@ prepare_modules() {
 
 compile_modules() {
     echo "[+] compiling modules"
-    pushd modules/cmds
-    make
+    pushd cmds
+    make GO111MODULE=on
     popd
 }
 
@@ -31,7 +31,7 @@ install_modules() {
 }
 
 build_modules() {
-    pushd $MODULES_SRC
+    pushd $TFT_SRC/zosv2
 
     prepare_modules
     compile_modules
