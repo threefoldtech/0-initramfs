@@ -1,5 +1,5 @@
-OPENSSL_VERSION="1.0.2o"
-OPENSSL_CHECKSUM="44279b8557c3247cbe324e2322ecd114"
+OPENSSL_VERSION="1.0.2s"
+OPENSSL_CHECKSUM="98ec4e085962689b91d25e1dcdfc14a2"
 OPENSSL_LINK="https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz"
 
 download_openssl() {
