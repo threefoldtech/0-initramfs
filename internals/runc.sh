@@ -1,24 +1,18 @@
-RUNC_VERSION="v1.0.0-rc8"
+RUNC_REPOSITORY="https://github.com/opencontainers/runc"
+RUNC_BRANCH="master"
 
-github_force() {
-    if [ -d $3 ]; then
-        pushd $3
-        git fetch
-        git checkout $2
-        git pull origin $2
-        popd
+RUNC_TAG="v1.0.0-rc8"
 
-    else
-        git clone https://github.com/$1 $3
-        pushd $3
-        git checkout $2
-        popd
-    fi
+download_runc() {
+    DIR=$GOPATH/src/github.com/opencontainers
+    mkdir -p DIR
+    pushd $DIR
+    download_git $RUNC_REPOSITORY $RUNC_BRANCH $RUNC_TAG
+    popd
 }
 
 prepare_runc() {
-    echo "[+] loading source code: runc"
-    github_force opencontainers/runc $RUNC_VERSION runc
+
 }
 
 compile_runc() {
@@ -31,7 +25,7 @@ compile_runc() {
 install_runc() {
     echo "[+] copying binaries"
     pushd runc
-    cp runc "${ROOTDIR}/bin/"
+    cp -a bin/* "${ROOTDIR}/bin/"
 }
 
 build_runc() {
@@ -44,3 +38,10 @@ build_runc() {
 
     popd
 }
+
+
+registrar_runc() {
+    DOWNLOADERS+=(download_runc)
+}
+
+registrar_runc

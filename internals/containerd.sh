@@ -1,24 +1,18 @@
-CONTAINERD_VERSION="v1.2.7"
+CONTAINERD_REPOSITORY="https://github.com/containerd/containerd"
+CONTAINERD_BRANCH="master"
 
-github_force() {
-    if [ -d $3 ]; then
-        pushd $3
-        git fetch
-        git checkout $2
-        git pull origin $2
-        popd
+CONTAINERD_TAG="v1.2.7"
 
-    else
-        git clone https://github.com/$1 $3
-        pushd $3
-        git checkout $2
-        popd
-    fi
+download_containerd() {
+    DIR=$GOPATH/src/github.com/containerd
+    mkdir -p DIR
+    pushd $DIR
+    download_git $CONTAINERD_REPOSITORY $CONTAINERD_BRANCH $CONTAINERD_TAG
+    popd
 }
 
 prepare_containerd() {
-    echo "[+] loading source code: containerd"
-    github_force containerd/containerd $CONTAINERD_VERSION containerd
+
 }
 
 compile_containerd() {
@@ -44,3 +38,10 @@ build_containerd() {
 
     popd
 }
+
+
+registrar_containerd() {
+    DOWNLOADERS+=(download_containerd)
+}
+
+registrar_containerd
