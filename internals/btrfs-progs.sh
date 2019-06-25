@@ -1,5 +1,5 @@
-BTRFS_VERSION="4.19"
-BTRFS_CHECKSUM="b8e43ed6aa34d4b48974f297c79d391b"
+BTRFS_VERSION="4.20.2"
+BTRFS_CHECKSUM="f5487352c734a73c7b1ccded3b126715"
 BTRFS_LINK="https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${BTRFS_VERSION}.tar.xz"
 
 download_btrfs() {
