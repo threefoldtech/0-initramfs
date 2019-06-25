@@ -26,6 +26,7 @@ install_containerd() {
     echo "[+] copying binaries"
     pushd containerd
     cp -a bin/* "${ROOTDIR}/bin/"
+    popd
 }
 
 build_containerd() {

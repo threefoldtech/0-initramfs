@@ -26,6 +26,7 @@ install_runc() {
     echo "[+] copying binaries"
     pushd runc
     cp runc "${ROOTDIR}/bin/"
+    popd
 }
 
 build_runc() {
