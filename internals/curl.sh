@@ -1,5 +1,5 @@
-CURL_VERSION="7_62_0"
-CURL_CHECKSUM="29fc7874b46ca1676c117e5f1477452e"
+CURL_VERSION="7_65_1"
+CURL_CHECKSUM="651706b87c501317030ec317dd84f3ef"
 CURL_LINK="https://github.com/curl/curl/archive/curl-${CURL_VERSION}.tar.gz"
 
 download_curl() {
