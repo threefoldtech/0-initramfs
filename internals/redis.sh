@@ -1,5 +1,5 @@
-REDIS_VERSION="4.0.8"
-REDIS_CHECKSUM="c75b11e4177e153e4dc1d8dd3a6174e4"
+REDIS_VERSION="5.0.5"
+REDIS_CHECKSUM="2d2c8142baf72e6543174fc7beccaaa1"
 REDIS_LINK="http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz"
 
 download_redis() {
