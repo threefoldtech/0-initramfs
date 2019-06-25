@@ -1,4 +1,4 @@
-CORES_VERSION="master"
+ZINIT_VERSION="master"
 G8UFS_VERSION="development"
 
 github_force() {
@@ -17,9 +17,9 @@ github_force() {
     fi
 }
 
-prepare_cores() {
+prepare_zinit() {
     echo "[+] loading source code: zinit"
-    github_force threefoldtech/zinit $CORES_VERSION zinit
+    github_force threefoldtech/zinit $ZINIT_VERSION zinit
 
     echo "[+] loading source code: 0-fs"
     github_force threefoldtech/0-fs $G8UFS_VERSION 0-fs
@@ -32,7 +32,7 @@ prepare_cores() {
     popd
 }
 
-compile_cores() {
+compile_zinit() {
     echo "[+] compiling zinit"
     pushd zinit
     make release
@@ -49,7 +49,7 @@ compile_cores() {
     popd
 }
 
-install_cores() {
+install_zinit() {
     echo "[+] copying binaries"
     pushd zinit
     cp -a target/release/zinit "${ROOTDIR}/sbin/"
@@ -75,13 +75,13 @@ install_cores() {
     popd
 }
 
-build_cores() {
+build_zinit() {
     mkdir -p $GOPATH/src/github.com/threefoldtech
     pushd $GOPATH/src/github.com/threefoldtech
 
-    prepare_cores
-    compile_cores
-    install_cores
+    prepare_zinit
+    compile_zinit
+    install_zinit
 
     popd
 }
