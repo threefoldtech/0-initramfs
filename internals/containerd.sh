@@ -12,7 +12,7 @@ download_containerd() {
 }
 
 prepare_containerd() {
-
+    echo "[+] prepare containerd"
 }
 
 compile_containerd() {

@@ -12,7 +12,7 @@ download_runc() {
 }
 
 prepare_runc() {
-
+    echo "[+] prepare runc"
 }
 
 compile_runc() {
