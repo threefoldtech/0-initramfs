@@ -1,9 +1,9 @@
-NFTABLES_VERSION="0.9.0"
-NFTABLES_CHECKSUM="d4dcb61df80aa544b2e142e91d937635"
+NFTABLES_VERSION="0.9.1"
+NFTABLES_CHECKSUM="e2facbcad6c5d9bd87a0bf5081a31522"
 NFTABLES_LINK="https://www.netfilter.org/projects/nftables/files/nftables-${NFTABLES_VERSION}.tar.bz2"
 
-LIBNFTNL_VERSION="1.1.1"
-LIBNFTNL_CHECKSUM="c2d35f59cef2d142d5fa19e456b4afdc"
+LIBNFTNL_VERSION="1.1.3"
+LIBNFTNL_CHECKSUM="e2a7af0a85c283b2cc837c09635b6bca"
 LIBNFTNL_LINK="http://www.iptables.org/projects/libnftnl/files/libnftnl-${LIBNFTNL_VERSION}.tar.bz2"
 
 LIBMNL_VERSION="1.0.4"
