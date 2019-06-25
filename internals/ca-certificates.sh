@@ -1,5 +1,5 @@
-CERTS_VERSION="20180409"
-CERTS_CHECKSUM="1658e8d73dbc97ec83ee2cac18acbc45"
+CERTS_VERSION="20190110"
+CERTS_CHECKSUM="e19d56b1ec337f0841c8af944b509537"
 CERTS_LINK="http://ftp.fr.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_${CERTS_VERSION}_all.deb"
 
 download_certs() {
@@ -30,6 +30,7 @@ prepare_certs() {
     if [ ! -f .patched_ca-certificates-20150426-root.patch ]; then
         echo "[+] applying patch"
         patch -p1 < ${PATCHESDIR}/ca-certificates-20150426-root.patch
+        sed -i s/'openssl rehash'/c_rehash/g usr/sbin/update-ca-certificates
         touch .patched_ca-certificates-20150426-root.patch
     fi
 }
