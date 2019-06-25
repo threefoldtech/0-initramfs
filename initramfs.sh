@@ -642,6 +642,7 @@ main() {
         build_wireguard
         build_corex
         build_dhcpcd
+        build_bcache
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
