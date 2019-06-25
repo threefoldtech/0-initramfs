@@ -643,6 +643,8 @@ main() {
         build_corex
         build_dhcpcd
         build_bcache
+        build_containerd
+        build_runc
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
