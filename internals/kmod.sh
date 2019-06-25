@@ -1,5 +1,5 @@
-KMOD_VERSION="24"
-KMOD_CHECKSUM="08297dfb6f2b3f625f928ca3278528af"
+KMOD_VERSION="26"
+KMOD_CHECKSUM="1129c243199bdd7db01b55a61aa19601"
 KMOD_LINK="https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-${KMOD_VERSION}.tar.xz"
 
 download_kmod() {
