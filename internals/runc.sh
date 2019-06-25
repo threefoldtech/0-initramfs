@@ -5,7 +5,7 @@ RUNC_TAG="v1.0.0-rc8"
 
 download_runc() {
     DIR=$GOPATH/src/github.com/opencontainers
-    mkdir -p DIR
+    mkdir -p $DIR
     pushd $DIR
     download_git $RUNC_REPOSITORY $RUNC_BRANCH $RUNC_TAG
     popd

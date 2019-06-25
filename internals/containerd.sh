@@ -5,7 +5,7 @@ CONTAINERD_TAG="v1.2.7"
 
 download_containerd() {
     DIR=$GOPATH/src/github.com/containerd
-    mkdir -p DIR
+    mkdir -p $DIR
     pushd $DIR
     download_git $CONTAINERD_REPOSITORY $CONTAINERD_BRANCH $CONTAINERD_TAG
     popd
