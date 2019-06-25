@@ -1,5 +1,5 @@
-DNSMASQ_VERSION="2.76"
-DNSMASQ_CHECKSUM="00f5ee66b4e4b7f14538bf62ae3c9461"
+DNSMASQ_VERSION="2.80"
+DNSMASQ_CHECKSUM="e040e72e6f377a784493c36f9e788502"
 DNSMASQ_LINK="http://www.thekelleys.org.uk/dnsmasq/dnsmasq-${DNSMASQ_VERSION}.tar.xz"
 
 download_dnsmasq() {
@@ -28,7 +28,7 @@ install_dnsmasq() {
 
     # symlink dnsmasq to sbin to ensure hardcoded location
     pushd "${ROOTDIR}/usr/sbin/"
-    ln -fs ../bin/dnsmasq dnsmasq
+    ln -vfs ../bin/dnsmasq dnsmasq
     popd
 }
 
