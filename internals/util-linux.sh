@@ -1,6 +1,6 @@
-LINUXUTILS_VERSION="2.29"
-LINUXUTILS_CHECKSUM="07b6845f48a421ad5844aa9d58edb837"
-LINUXUTILS_LINK="https://www.kernel.org/pub/linux/utils/util-linux/v2.29/util-linux-${LINUXUTILS_VERSION}.tar.xz"
+LINUXUTILS_VERSION="2.34"
+LINUXUTILS_CHECKSUM="a78cbeaed9c39094b96a48ba8f891d50"
+LINUXUTILS_LINK="https://www.kernel.org/pub/linux/utils/util-linux/v${LINUXUTILS_VERSION}/util-linux-${LINUXUTILS_VERSION}.tar.xz"
 
 download_linuxutil() {
     download_file $LINUXUTILS_LINK $LINUXUTILS_CHECKSUM
