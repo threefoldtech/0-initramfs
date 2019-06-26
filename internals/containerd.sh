@@ -3,7 +3,9 @@ CONTAINERD_BRANCH="v1.2.7"
 CONTAINERD_HOME="${GOPATH}/src/github.com/containerd"
 
 download_containerd() {
+    pushd $CONTAINERD_HOME
     download_git ${CONTAINERD_REPOSITORY} ${CONTAINERD_BRANCH}
+    popd
 }
 
 extract_containerd() {
