@@ -8,6 +8,7 @@ download_runc() {
 
 extract_runc() {
     event "refreshing" "runc-${RUNC_BRANCH}"
+    mkdir -p ${RUNC_HOME}
     rm -rf ${RUNC_HOME}/runc
     cp -a ${DISTFILES}/runc ${RUNC_HOME}/
 
