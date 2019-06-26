@@ -612,7 +612,6 @@ main() {
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
-        build_modules
         build_fuse
         build_openssl
         build_certs
@@ -654,6 +653,7 @@ main() {
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
+        build_modules
         build_zinit
     fi
 
