@@ -1,14 +1,16 @@
 RUNC_REPOSITORY="https://github.com/opencontainers/runc"
-RUNC_BRANCH="master"
-
-RUNC_TAG="v1.0.0-rc8"
+RUNC_BRANCH="v1.0.0-rc8"
+RUNC_HOME="${GOPATH}/src/github.com/opencontainers"
 
 download_runc() {
-    DIR=$GOPATH/src/github.com/opencontainers
-    mkdir -p $DIR
-    pushd $DIR
-    download_git $RUNC_REPOSITORY $RUNC_BRANCH $RUNC_TAG
-    popd
+    download_git ${RUNC_REPOSITORY} ${RUNC_BRANCH}
+}
+
+extract_runc() {
+    event "refreshing" "runc-${RUNC_BRANCH}"
+    rm -rf ${RUNC_HOME}/runc
+    cp -a ${DISTFILES}/runc ${RUNC_HOME}/
+
 }
 
 prepare_runc() {
@@ -17,21 +19,16 @@ prepare_runc() {
 
 compile_runc() {
     echo "[+] compiling runc"
-    pushd runc
     make BUILDTAGS='seccomp'
-    popd
 }
 
 install_runc() {
     echo "[+] copying binaries"
-    pushd runc
-    cp runc "${ROOTDIR}/bin/"
-    popd
+    cp -av runc "${ROOTDIR}/usr/bin/"
 }
 
 build_runc() {
-    mkdir -p $GOPATH/src/github.com/opencontainers
-    pushd $GOPATH/src/github.com/opencontainers
+    pushd ${RUNC_HOME}/runc
 
     prepare_runc
     compile_runc
@@ -43,6 +40,7 @@ build_runc() {
 
 registrar_runc() {
     DOWNLOADERS+=(download_runc)
+    EXTRACTORS+=(extract_runc)
 }
 
 registrar_runc
