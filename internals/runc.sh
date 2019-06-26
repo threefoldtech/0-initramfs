@@ -3,9 +3,7 @@ RUNC_BRANCH="v1.0.0-rc8"
 RUNC_HOME="${GOPATH}/src/github.com/opencontainers"
 
 download_runc() {
-    pushd $RUNC_HOME
     download_git ${RUNC_REPOSITORY} ${RUNC_BRANCH}
-    popd
 }
 
 extract_runc() {
