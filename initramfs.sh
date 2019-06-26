@@ -266,7 +266,7 @@ download_git() {
         # Ensure branch is up-to-date
         pushd "${target}"
 
-        git fetch -u origin "${branch}:${branch}"
+        git fetch
 
         git checkout "${branch}" >> "${logfile}" 2>&1
         git pull origin "${branch}" >> "${logfile}" 2>&1
