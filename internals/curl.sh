@@ -7,7 +7,8 @@ download_curl() {
 }
 
 extract_curl() {
-    if [ ! -d "curl-${CURL_VERSION}" ]; then
+    # curl-curl is not a script mistake
+    if [ ! -d "curl-curl-${CURL_VERSION}" ]; then
         echo "[+] extracting: curl-${CURL_VERSION}"
         tar -xf ${DISTFILES}/curl-${CURL_VERSION}.tar.gz -C .
     fi

@@ -1,14 +1,16 @@
 CONTAINERD_REPOSITORY="https://github.com/containerd/containerd"
-CONTAINERD_BRANCH="master"
-
-CONTAINERD_TAG="v1.2.7"
+CONTAINERD_BRANCH="v1.2.7"
+CONTAINERD_HOME="${GOPATH}/src/github.com/containerd"
 
 download_containerd() {
-    DIR=$GOPATH/src/github.com/containerd
-    mkdir -p $DIR
-    pushd $DIR
-    download_git $CONTAINERD_REPOSITORY $CONTAINERD_BRANCH $CONTAINERD_TAG
-    popd
+    download_git ${CONTAINERD_REPOSITORY} ${CONTAINERD_BRANCH}
+}
+
+extract_containerd() {
+    event "refreshing" "containerd-${CONTAINERD_BRANCH}"
+    mkdir -p ${CONTAINERD_HOME}
+    rm -rf ${CONTAINERD_HOME}/containerd
+    cp -av ${DISTFILES}/containerd ${CONTAINERD_HOME}/
 }
 
 prepare_containerd() {
@@ -17,20 +19,16 @@ prepare_containerd() {
 
 compile_containerd() {
     echo "[+] compiling containerd"
-    pushd containerd
     make CGO_CFLAGS=-I${ROOTDIR}/usr/include
-    popd
 }
 
 install_containerd() {
     echo "[+] copying binaries"
-    pushd containerd
-    cp -a bin/* "${ROOTDIR}/bin/"
+    cp -av bin/* "${ROOTDIR}/usr/bin/"
 }
 
 build_containerd() {
-    mkdir -p $GOPATH/src/github.com/containerd
-    pushd $GOPATH/src/github.com/containerd
+    pushd ${CONTAINERD_HOME}/containerd
 
     prepare_containerd
     compile_containerd
@@ -42,6 +40,8 @@ build_containerd() {
 
 registrar_containerd() {
     DOWNLOADERS+=(download_containerd)
+    EXTRACTORS+=(extract_containerd)
 }
 
 registrar_containerd
+

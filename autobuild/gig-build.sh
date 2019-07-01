@@ -55,8 +55,8 @@ deps+=(libseccomp-dev)
 apt-get install -y ${deps[@]}
 
 # install go
-curl https://storage.googleapis.com/golang/go1.10.3.linux-amd64.tar.gz > /tmp/go1.10.3.linux-amd64.tar.gz
-tar -C /usr/local -xzf /tmp/go1.10.3.linux-amd64.tar.gz
+curl -L https://dl.google.com/go/go1.12.6.linux-amd64.tar.gz > /tmp/go1.12.6.linux-amd64.tar.gz
+tar -C /usr/local -xzf /tmp/go1.12.6.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 mkdir -p /gopath
 export GOPATH=/gopath
