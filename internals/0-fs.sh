@@ -1,14 +1,14 @@
 TF_HOME="${GOPATH}/src/github.com/threefoldtech"
 
-G8UFS_REPOSITORY="https://github.com/threefoldtech/0-fs"
-G8UFS_VERSION="development"
+ZFS_REPOSITORY="https://github.com/threefoldtech/0-fs"
+ZFS_VERSION="development"
 
 download_zfs() {
-    download_git ${G8UFS_REPOSITORY} ${G8UFS_VERSION}
+    download_git ${ZFS_REPOSITORY} ${ZFS_VERSION}
 }
 
 extract_zfs() {
-    event "refreshing G8UFS-${G8UFS_VERSION}"
+    event "refreshing ZFS-${ZFS_VERSION}"
     mkdir -p ${TF_HOME}
     rm -rf ${TF_HOME}/0-fs
     cp -a ${DISTFILES}/0-fs ${TF_HOME}/
@@ -28,6 +28,7 @@ compile_zfs() {
 install_zfs() {
     echo "[+] copying binaries"
     pushd 0-fs
+    # the binary name is still called g8ufs
     cp -a g8ufs "${ROOTDIR}/sbin/"
     popd
 }

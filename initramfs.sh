@@ -195,7 +195,8 @@ prepare() {
     mkdir -p "${ROOTDIR}"
     mkdir -p "${EXTENDIR}"
 
-    mkdir -p "${ROOTDIR}"/usr/lib "${ROOTDIR}"/sbin
+    mkdir -p "${ROOTDIR}"/usr/lib
+    mkdir -p "${ROOTDIR}"/sbin
 
     if [ ! -e "${ROOTDIR}"/lib ]; then
         ln -s usr/lib "${ROOTDIR}"/lib
