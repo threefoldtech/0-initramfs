@@ -18,16 +18,16 @@ prepare_modules() {
 compile_modules() {
     echo "[+] compiling modules"
     pushd cmds
-    make GO111MODULE=on
+    make GO111MODULE=on _base
     popd
 }
 
 install_modules() {
     echo "[+] copying binaries"
-    pushd modules
+    mkdir -p "${ROOTDIR}/bin/" "${ROOTDIR}/etc/zinit/"
+    
     cp -a bin/* "${ROOTDIR}/bin/"
     cp -a zinit/* "${ROOTDIR}/etc/zinit/"
-    popd
 }
 
 build_modules() {

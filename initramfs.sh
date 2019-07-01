@@ -195,7 +195,7 @@ prepare() {
     mkdir -p "${ROOTDIR}"
     mkdir -p "${EXTENDIR}"
 
-    mkdir -p "${ROOTDIR}"/usr/lib
+    mkdir -p "${ROOTDIR}"/usr/lib "${ROOTDIR}"/sbin
 
     if [ ! -e "${ROOTDIR}"/lib ]; then
         ln -s usr/lib "${ROOTDIR}"/lib
@@ -645,6 +645,7 @@ main() {
         build_bcache
         build_containerd
         build_runc
+        build_ztid
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
@@ -653,8 +654,9 @@ main() {
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
-        build_modules
         build_zinit
+        build_zfs
+        build_modules
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_EXTENSIONS == 1 ]]; then
