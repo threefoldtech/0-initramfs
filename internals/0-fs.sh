@@ -29,7 +29,7 @@ install_zfs() {
     echo "[+] copying binaries"
     pushd 0-fs
     # the binary name is still called g8ufs
-    cp -a g8ufs "${ROOTDIR}/sbin/"
+    cp -av g8ufs "${ROOTDIR}/sbin/"
     popd
 }
 
