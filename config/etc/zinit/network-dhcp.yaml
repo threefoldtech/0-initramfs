@@ -1,1 +1,0 @@
-exec: udhcpc -f -s /usr/share/udhcp/simple.script
