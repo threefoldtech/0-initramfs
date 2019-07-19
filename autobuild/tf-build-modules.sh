@@ -11,6 +11,7 @@ rm -rf /target/*
 
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=/gopath
+source $HOME/.cargo/env
 
 sed -i "/MODULES_BRANCH=/c\MODULES_BRANCH=\"$1\"" "/$2/internals/modules.sh"
 
