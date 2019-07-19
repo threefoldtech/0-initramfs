@@ -12,20 +12,12 @@ rm -rf /target/*
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=/gopath
 
-# update extensions
-cd "/$2/extensions/initramfs-gig/"
-branch=$(git rev-parse --abbrev-ref HEAD)
-if [ "$branch" != "$1" ]; then
-    git fetch origin "$1:$1"
-    git checkout "$1"
-fi
-
-git pull origin "$1"
+sed -i "/MODULES_BRANCH=/c\MODULES_BRANCH=\"$1\"" "/$2/internals/modules.sh"
 
 # checkings arguments
-arguments="--extensions --kernel"
+arguments="--cores --kernel"
 if [ "${1:0:7}" = "release" ]; then
-    arguments="--extensions --kernel --release"
+    arguments="--cores --kernel --release"
 fi
 
 # start the build
