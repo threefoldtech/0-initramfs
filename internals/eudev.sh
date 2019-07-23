@@ -22,6 +22,9 @@ prepare_eudev() {
 compile_eudev() {
     echo "[+] compiling eudev"
     make ${MAKEOPTS}
+
+    # patching network rules for @delandtj
+    sed -i /NET_NAME_ONBOARD/d rules/80-net-name-slot.rules
 }
 
 install_eudev() {
