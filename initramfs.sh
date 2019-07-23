@@ -658,6 +658,13 @@ main() {
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
         build_zinit
         build_zfs
+
+        # force re-download if we specify --cores
+        if [[ $DO_CORES == 1 ]]; then
+            download_modules
+            prepare_modules
+        fi
+
         build_modules
     fi
 
