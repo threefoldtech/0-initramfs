@@ -8,7 +8,7 @@ download_ztid() {
 }
 
 extract_ztid() {
-    event "refreshing ZTID-${ZTID_VERSION}"
+    event "refreshing" "ztid-${ZTID_VERSION}"
     mkdir -p ${TF_HOME}
     rm -rf ${TF_HOME}/ztid
     cp -a ${DISTFILES}/ztid ${TF_HOME}/
