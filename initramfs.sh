@@ -16,7 +16,7 @@ PATCHESDIR="${PWD}/patches"
 TOOLSDIR="${PWD}/tools"
 
 # Download mirror repository
-MIRRORSRC="https://download.gig.tech/initramfs-mirror/"
+MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
 
 # By default, we compile with (number of cpu threads + 1)
 # you can changes this to reduce computer load
