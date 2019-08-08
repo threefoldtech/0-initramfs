@@ -648,6 +648,7 @@ main() {
         build_containerd
         build_runc
         build_ztid
+        build_tcpdump
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
