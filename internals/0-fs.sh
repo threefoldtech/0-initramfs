@@ -8,7 +8,7 @@ download_zfs() {
 }
 
 extract_zfs() {
-    event "refreshing ZFS-${ZFS_VERSION}"
+    event "refreshing" "0-fs-${ZFS_VERSION}"
     mkdir -p ${TF_HOME}
     rm -rf ${TF_HOME}/0-fs
     cp -a ${DISTFILES}/0-fs ${TF_HOME}/

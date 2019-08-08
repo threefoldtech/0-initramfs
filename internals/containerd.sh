@@ -10,7 +10,7 @@ extract_containerd() {
     event "refreshing" "containerd-${CONTAINERD_BRANCH}"
     mkdir -p ${CONTAINERD_HOME}
     rm -rf ${CONTAINERD_HOME}/containerd
-    cp -av ${DISTFILES}/containerd ${CONTAINERD_HOME}/
+    cp -a ${DISTFILES}/containerd ${CONTAINERD_HOME}/
 }
 
 prepare_containerd() {
