@@ -19,7 +19,7 @@ compile_coreutils() {
     echo "[+] compiling coreutils"
     # we only compile libstdbuf because that's all what
     # we need from library.
-    pushd coreutils/src/stdbuf/libstdbuf
+    pushd src/stdbuf/libstdbuf
     
     cargo --build release
 
