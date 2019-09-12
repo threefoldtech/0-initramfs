@@ -21,7 +21,7 @@ compile_coreutils() {
     # we need from library.
     pushd src/stdbuf/libstdbuf
     
-    cargo --build release
+    cargo build --release
 
     popd
 }
