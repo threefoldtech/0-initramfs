@@ -15,31 +15,21 @@ prepare_modules() {
     echo "[+] prepare modules"
 }
 
-compile_modules() {
-    echo "[+] compiling modules"
-    pushd cmds
-    make GO111MODULE=on _base
-    popd
-}
-
 install_modules() {
     echo "[+] copying binaries"
-    mkdir -p "${ROOTDIR}/bin/" "${ROOTDIR}/etc/zinit/"
-    
-    cp -a bin/* "${ROOTDIR}/bin/"
-    cp -a zinit/* "${ROOTDIR}/etc/zinit/"
+    pushd bootstrap
+    make install GO111MODULE=on ROOT=${ROOTDIR}
+    popd
 }
 
 build_modules() {
     pushd $TFT_SRC/zosv2
 
     prepare_modules
-    compile_modules
     install_modules
 
     popd
 }
-
 
 registrar_modules() {
     DOWNLOADERS+=(download_modules)
