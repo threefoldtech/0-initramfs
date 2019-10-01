@@ -8,7 +8,7 @@ download_rscoreutils() {
 extract_rscoreutils() {
     event "refreshing" "coreutils-${RSCOREUTILS_VERSION}"
     rm -rf ./coreutils-${RSCOREUTILS_VERSION}
-    cp -va ${DISTFILES}/coreutils ./coreutils-${RSCOREUTILS_VERSION}
+    cp -a ${DISTFILES}/coreutils ./coreutils-${RSCOREUTILS_VERSION}
 }
 
 prepare_rscoreutils() {
@@ -28,7 +28,7 @@ compile_rscoreutils() {
 
 install_rscoreutils() {
     echo "[+] copying binaries"
-    cp -a target/release/liblibstdbuf.so "${ROOTDIR}/lib/libstdbuf.so"
+    cp -va target/release/liblibstdbuf.so "${ROOTDIR}/lib/libstdbuf.so"
 }
 
 build_rscoreutils() {
