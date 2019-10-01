@@ -45,8 +45,8 @@ deps+=(libseccomp-dev)
 apt-get install -y ${deps[@]}
 
 # install go
-curl -L https://dl.google.com/go/go1.13.linux-amd64.tar.gz > /tmp/go1.13.linux-amd64.tar.gz
-tar -C /usr/local -xzf /tmp/go1.13.linux-amd64.tar.gz
+curl -L https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz > /tmp/go1.13.1.linux-amd64.tar.gz
+tar -C /usr/local -xzf /tmp/go1.13.1.linux-amd64.tar.gz
 mkdir -p /gopath
 
 # install rust
