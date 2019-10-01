@@ -649,7 +649,7 @@ main() {
         build_runc
         build_ztid
         build_tcpdump
-	    build_coreutils
+        build_coreutils
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then

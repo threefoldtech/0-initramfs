@@ -8,7 +8,7 @@ download_coreutils() {
 extract_coreutils() {
     event "refreshing" "coreutils-${COREUTILS_VERSION}"
     rm -rf ./coreutils-${COREUTILS_VERSION}
-    cp -a ${DISTFILES}/coreutils ./coreutils-${COREUTILS_VERSION}
+    cp -va ${DISTFILES}/coreutils ./coreutils-${COREUTILS_VERSION}
 }
 
 prepare_coreutils() {
@@ -20,7 +20,7 @@ compile_coreutils() {
     # we only compile libstdbuf because that's all what
     # we need from library.
     pushd src/stdbuf/libstdbuf
-    
+
     cargo build --release
 
     popd
@@ -47,4 +47,3 @@ registrar_coreutils() {
 }
 
 registrar_coreutils
-
