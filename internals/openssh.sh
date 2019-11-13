@@ -15,6 +15,8 @@ extract_openssh() {
 
 prepare_openssh() {
     echo "[+] preparing openssh"
+    export CFLAGS="-I${ROOTDIR}/include"
+    export LDFLAGS="-L${ROOTDIR}/lib"
     ./configure --prefix=/usr \
         --sysconfdir=/etc/ssh \
         --without-kerberos5 \
@@ -23,8 +25,6 @@ prepare_openssh() {
         --without-libedit \
         --without-pam \
         --without-selinux \
-        --without-skey \
-        --without-ssh1 \
         --without-shadow \
         --disable-strip \
         --with-privsep-user=root \

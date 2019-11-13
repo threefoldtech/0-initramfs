@@ -27,7 +27,14 @@ build_libwebsockets() {
 
     pushd build
 
-    cmake .. -DLWS_UNIX_SOCK=ON -DLWS_WITHOUT_TESTAPPS=ON -DLWS_WITH_STATIC=OFF -DLWS_IPV6=ON
+    cmake .. \
+      -DLWS_UNIX_SOCK=ON \
+      -DLWS_WITHOUT_TESTAPPS=ON \
+      -DLWS_WITH_STATIC=OFF \
+      -DLWS_IPV6=ON \
+      -DLWS_OPENSSL_LIBRARIES=${ROOTDIR}/lib \
+      -DLWS_OPENSSL_INCLUDE_DIRS=${ROOTDIR}/include
+
     make -j ${MAKEOPTS}
     make install
 
