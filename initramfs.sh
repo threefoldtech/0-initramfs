@@ -597,9 +597,9 @@ main() {
     #
     # Display some informations
     #
-    info "=============================="
-    info "=  Zero-OS Initramfs Builder ="
-    info "=============================="
+    info "==============================="
+    info "=  Zero-OS Initramfs Builder  ="
+    info "==============================="
     echo ""
 
     #
