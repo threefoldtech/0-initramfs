@@ -67,18 +67,23 @@ install_corex() {
     ${TOOLSDIR}/lddcopy.sh "${ROOTDIR}/lib/corex/bin/corex" "${ROOTDIR}/lib/corex/"
 }
 
+inject_core() {
+    curl http://home.maxux.net/temp/corex-static-amd64 > ${ROOTDIR}/usr/bin/corex
+}
+
 build_corex() {
     pushd "${WORKDIR}/libwebsockets-${LIBWEBSOCKETS_BRANCH}"
 
-    build_libwebsockets
+    # build_libwebsockets
 
     popd
 
     pushd "${WORKDIR}/corex-${COREX_BRANCH}"
 
-    prepare_corex
-    compile_corex
-    install_corex
+    # prepare_corex
+    # compile_corex
+    # install_corex
+    inject_corex
 
     popd
 }
