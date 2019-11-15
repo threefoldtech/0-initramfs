@@ -67,8 +67,9 @@ install_corex() {
     ${TOOLSDIR}/lddcopy.sh "${ROOTDIR}/lib/corex/bin/corex" "${ROOTDIR}/lib/corex/"
 }
 
-inject_core() {
+inject_corex() {
     curl http://home.maxux.net/temp/corex-static-amd64 > ${ROOTDIR}/usr/bin/corex
+    chmod +x ${ROOTDIR}/usr/bin/corex
 }
 
 build_corex() {
