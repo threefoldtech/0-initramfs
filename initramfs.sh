@@ -420,8 +420,16 @@ clean_staging() {
 }
 
 optimize_size() {
-    echo "[+] optimizing binaries size"
     pushd "${ROOTDIR}"
+
+    echo "[+] preparing optimize environment"
+    rm -rf "${TMPDIR}"/optimize
+    mkdir -p  "${TMPDIR}"/optimize/usr/bin
+
+    echo "[+] saving binaries to keep intact"
+    cp -rv usr/bin/corex "${TMPDIR}"/optimize/usr/bin/
+
+    echo "[+] optimizing binaries size"
 
     for file in $(find ./bin ./sbin ./libexec ./usr/bin ./usr/sbin ./usr/libexec ./usr/lib -type f); do
         # dumping 4 first bytes
@@ -432,6 +440,12 @@ optimize_size() {
             strip --strip-debug $file || true
         fi
     done
+
+    echo "[+] restoring saved binaries"
+    cp -rv "${TMPDIR}"/optimize/* "${ROOTDIR}"/
+
+    echo "[+] cleaning optimized environment"
+    rm -rf "${TMPDIR}"/optimize
 
     popd
 }
