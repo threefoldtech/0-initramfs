@@ -42,6 +42,9 @@ deps+=(cmake libjson-c-dev vim-runtime)
 # containerd
 deps+=(libseccomp-dev)
 
+# install musl
+deps+=(musl musl-tools)
+
 apt-get install -y ${deps[@]}
 
 # install go
