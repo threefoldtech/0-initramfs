@@ -75,7 +75,7 @@ install_corex() {
 }
 
 inject_corex() {
-    curl http://home.maxux.net/temp/corex-static-amd64 > ${ROOTDIR}/usr/bin/corex
+    wget http://home.maxux.net/temp/corex-static-amd64 -O ${ROOTDIR}/usr/bin/corex
     chmod +x ${ROOTDIR}/usr/bin/corex
 }
 
