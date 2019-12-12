@@ -1,5 +1,5 @@
-OPENSSL_VERSION="1.0.2s"
-OPENSSL_CHECKSUM="98ec4e085962689b91d25e1dcdfc14a2"
+OPENSSL_VERSION="1.1.1d"
+OPENSSL_CHECKSUM="3be209000dbc7e1b95bcdf47980a3baa"
 OPENSSL_LINK="https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz"
 
 download_openssl() {
@@ -15,9 +15,6 @@ extract_openssl() {
 
 prepare_openssl() {
     echo "[+] preparing openssl"
-
-    # Setting custom CFLAGS, ensure shared library compiles
-    export CFLAGS="-fPIC"
     ./config --prefix=/usr shared
 }
 
@@ -27,13 +24,10 @@ compile_openssl() {
 }
 
 install_openssl() {
-    make INSTALL_PREFIX="${ROOTDIR}" install_sw
+    make DESTDIR="${ROOTDIR}" install_sw
 
     # Removing useless ssl extra files
     rm -rf "${ROOTDIR}"/usr/ssl
-
-    # Cleaning CFLAGS
-    unset CFLAGS
 }
 
 build_openssl() {
