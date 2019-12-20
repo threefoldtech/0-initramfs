@@ -11,6 +11,13 @@ This repository contains all that is needed to build the Zero-OS-kernel and init
 In order to compile all the initramfs without issues, you'll need to install build-time dependencies.
 
 Please check the build process and use the dependencies listed there (see `autobuild` directory).
+If you want to install dependencies required inside an ubuntu 16.04 docker, you can use theses helpers:
+```
+bash autobuild/tf-build-deps.sh
+. autobuild/tf-build-setting.sh
+```
+
+The first script will install dependencies, the second one will source and export needed variables.
 
 ## Privileges
 You need to have root privilege to be able to execute all the scripts.
@@ -106,8 +113,8 @@ docker run -ti --name zero-os-builder ubuntu:16.04 /bin/bash
 ```
 
 - You need to use `ubuntu:16.04`, this is the only image we supports
-- Ensure to have the repository available on `/0-initramfs`.
-- Run `autobuild/gig-build.sh` script. This script take care
+- Ensure to have the repository available on `/0-initramfs`
+- Run `autobuild/tf-build.sh` script. This script will install dependencies and build everything
 - The result of the build will be located in `staging/vmlinuz.efi`
 
 **Warning:** if you don't use Ubuntu 16.04 (at least for now), some build _and_ runtime issue can occures.

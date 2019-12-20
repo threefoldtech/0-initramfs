@@ -1,1 +1,0 @@
-exec: telnetd -l /bin/ash -F

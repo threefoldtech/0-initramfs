@@ -16,7 +16,7 @@ PATCHESDIR="${PWD}/patches"
 TOOLSDIR="${PWD}/tools"
 
 # Download mirror repository
-MIRRORSRC="https://download.gig.tech/initramfs-mirror/"
+MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
 
 # By default, we compile with (number of cpu threads + 1)
 # you can changes this to reduce computer load
@@ -648,6 +648,8 @@ main() {
         build_containerd
         build_runc
         build_ztid
+        build_tcpdump
+        build_rscoreutils
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then

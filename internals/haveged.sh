@@ -1,9 +1,9 @@
-HAVEGED_VERSION="1.9.2"
-HAVEGED_CHECKSUM="fb1d8b3dcbb9d06b30eccd8aa500fd31"
-HAVEGED_LINK="http://www.issihosts.com/haveged/haveged-${HAVEGED_VERSION}.tar.gz"
+HAVEGED_VERSION="1.9.4"
+HAVEGED_CHECKSUM="95867032bb3f2abd36179f92e328e651"
+HAVEGED_LINK="https://github.com/jirka-h/haveged/archive/${HAVEGED_VERSION}.tar.gz"
 
 download_haveged() {
-    download_file $HAVEGED_LINK $HAVEGED_CHECKSUM
+    download_file $HAVEGED_LINK $HAVEGED_CHECKSUM haveged-${HAVEGED_VERSION}.tar.gz
 }
 
 extract_haveged() {
@@ -14,7 +14,7 @@ extract_haveged() {
 }
 
 prepare_haveged() {
-    echo "[+] configuring netcat"
+    echo "[+] configuring haveged"
     ./configure
 }
 

@@ -1,6 +1,6 @@
-SMARTMON_VERSION="6.5"
-SMARTMON_CHECKSUM="093aeec3f8f39fa9a37593c4012d3156"
-SMARTMON_LINK="https://netcologne.dl.sourceforge.net/project/smartmontools/smartmontools/6.5/smartmontools-${SMARTMON_VERSION}.tar.gz"
+SMARTMON_VERSION="7.0"
+SMARTMON_CHECKSUM="b2a80e4789af23d67dfe1e88a997abbf"
+SMARTMON_LINK="https://netcologne.dl.sourceforge.net/project/smartmontools/smartmontools/${SMARTMON_VERSION}/smartmontools-${SMARTMON_VERSION}.tar.gz"
 
 download_smartmon() {
     download_file $SMARTMON_LINK $SMARTMON_CHECKSUM

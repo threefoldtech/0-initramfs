@@ -27,7 +27,7 @@ build_libwebsockets() {
 
     pushd build
 
-    cmake .. -DLWS_UNIX_SOCK=ON -DLWS_WITHOUT_TESTAPPS=ON -DLWS_WITH_STATIC=OFF
+    cmake .. -DLWS_UNIX_SOCK=ON -DLWS_WITHOUT_TESTAPPS=ON -DLWS_WITH_STATIC=OFF -DLWS_IPV6=ON
     make -j ${MAKEOPTS}
     make install
 

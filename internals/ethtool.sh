@@ -1,5 +1,5 @@
-ETHTOOL_VERSION="4.15"
-ETHTOOL_CHECKSUM="1d9a82de6c9131d1caa626f77c6cdb57"
+ETHTOOL_VERSION="5.1"
+ETHTOOL_CHECKSUM="fe774357084027e3739f17ad76cbab4d"
 ETHTOOL_LINK="https://mirrors.edge.kernel.org/pub/software/network/ethtool/ethtool-${ETHTOOL_VERSION}.tar.xz"
 
 download_ethtool() {

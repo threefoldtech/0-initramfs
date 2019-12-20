@@ -9,8 +9,8 @@ fi
 mkdir -p /target
 rm -rf /target/*
 
-export PATH=$PATH:/usr/local/go/bin
-export GOPATH=/gopath
+# loading settings
+. $(dirname $0)/tf-build-settings.sh
 
 sed -i "/CORES_VERSION=/c\CORES_VERSION=\"$1\"" "/$2/internals/cores.sh"
 

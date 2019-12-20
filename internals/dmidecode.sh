@@ -1,5 +1,5 @@
-DMIDECODE_VERSION="3.1"
-DMIDECODE_CHECKSUM="679c2c015c515aa6ca5f229aee49c102"
+DMIDECODE_VERSION="3.2"
+DMIDECODE_CHECKSUM="9cc2e27e74ade740a25b1aaf0412461b"
 DMIDECODE_LINK="http://ftp.igh.cnrs.fr/pub/nongnu/dmidecode/dmidecode-${DMIDECODE_VERSION}.tar.xz"
 
 download_dmidecode() {

@@ -1,5 +1,5 @@
-OPENSSH_VERSION="7.5p1"
-OPENSSH_CHECKSUM="652fdc7d8392f112bef11cacf7e69e23"
+OPENSSH_VERSION="8.0p1"
+OPENSSH_CHECKSUM="bf050f002fe510e1daecd39044e1122d"
 OPENSSH_LINK="https://ftp.fr.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${OPENSSH_VERSION}.tar.gz"
 
 download_openssh() {
@@ -39,7 +39,7 @@ compile_openssh() {
 
 install_openssh() {
     echo "[+] installing openssh"
-    make DESTDIR="${ROOTDIR}" install
+    make DESTDIR="${ROOTDIR}" install-nokeys
 
     mkdir -p -m 700 "${ROOTDIR}"/root/.ssh
 
