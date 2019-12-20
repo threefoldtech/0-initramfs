@@ -8,7 +8,7 @@ apt-get install -y asciidoc xmlto --no-install-recommends
 deps=(pkg-config make m4 autoconf)
 
 # system tools and libs
-deps+=(libssl-dev dnsmasq git curl bc)
+deps+=(libssl-dev dnsmasq git curl bc wget)
 
 # fuse
 deps+=(libfuse-dev)
@@ -41,6 +41,9 @@ deps+=(cmake libjson-c-dev vim-runtime)
 
 # containerd
 deps+=(libseccomp-dev)
+
+# install musl
+deps+=(musl musl-tools)
 
 apt-get install -y ${deps[@]}
 

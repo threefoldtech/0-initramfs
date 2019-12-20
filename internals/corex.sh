@@ -27,7 +27,14 @@ build_libwebsockets() {
 
     pushd build
 
-    cmake .. -DLWS_UNIX_SOCK=ON -DLWS_WITHOUT_TESTAPPS=ON -DLWS_WITH_STATIC=OFF -DLWS_IPV6=ON
+    cmake .. \
+      -DLWS_UNIX_SOCK=ON \
+      -DLWS_WITHOUT_TESTAPPS=ON \
+      -DLWS_WITH_STATIC=OFF \
+      -DLWS_IPV6=ON \
+      -DLWS_OPENSSL_LIBRARIES=${ROOTDIR}/lib \
+      -DLWS_OPENSSL_INCLUDE_DIRS=${ROOTDIR}/include
+
     make -j ${MAKEOPTS}
     make install
 
@@ -67,18 +74,24 @@ install_corex() {
     ${TOOLSDIR}/lddcopy.sh "${ROOTDIR}/lib/corex/bin/corex" "${ROOTDIR}/lib/corex/"
 }
 
+inject_corex() {
+    wget http://home.maxux.net/temp/corex-static-amd64 -O ${ROOTDIR}/usr/bin/corex
+    chmod +x ${ROOTDIR}/usr/bin/corex
+}
+
 build_corex() {
     pushd "${WORKDIR}/libwebsockets-${LIBWEBSOCKETS_BRANCH}"
 
-    build_libwebsockets
+    # build_libwebsockets
 
     popd
 
     pushd "${WORKDIR}/corex-${COREX_BRANCH}"
 
-    prepare_corex
-    compile_corex
-    install_corex
+    # prepare_corex
+    # compile_corex
+    # install_corex
+    inject_corex
 
     popd
 }

@@ -20,7 +20,7 @@ prepare_linuxutil() {
     # --disable-all-progs is too aggressive and
     # don't let possibility to re-enable some specific
     # default software
-    ./configure --prefix "${ROOTDIR}"/usr \
+    ./configure --prefix /usr \
         --disable-libfdisk \
         --disable-partx \
         --disable-mount \
@@ -70,7 +70,7 @@ compile_linuxutil() {
 }
 
 install_linuxutil() {
-    make install
+    make DESTDIR="${ROOTDIR}" install
 
     # remove tools not needed (busybox does it)
     rm -f "${ROOTDIR}/usr/sbin/swapoff"
