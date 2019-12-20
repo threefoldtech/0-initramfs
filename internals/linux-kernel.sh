@@ -1,6 +1,6 @@
-KERNEL_VERSION="4.19.60"
-KERNEL_CHECKSUM="3f8dfed50f9d9ff7247b3d6da4fd35a3"
-KERNEL_LINK="https://www.kernel.org/pub/linux/kernel/v4.x/linux-${KERNEL_VERSION}.tar.xz"
+KERNEL_VERSION="5.4.5"
+KERNEL_CHECKSUM="70fc3cf9156ce10f550796c569e0641c"
+KERNEL_LINK="https://www.kernel.org/pub/linux/kernel/v5.x/linux-${KERNEL_VERSION}.tar.xz"
 
 download_kernel() {
     download_file $KERNEL_LINK $KERNEL_CHECKSUM
