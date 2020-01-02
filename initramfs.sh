@@ -664,6 +664,7 @@ main() {
         build_ztid
         build_tcpdump
         build_rscoreutils
+        build_firmware
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
