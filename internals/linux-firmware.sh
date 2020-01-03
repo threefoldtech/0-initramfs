@@ -20,7 +20,7 @@ prepare_firmware() {
     echo "[+] building custom linux-firmware files list"
 
     # exclude rtiwifi driver
-    exclude="rtiwifi"
+    exclude="rtlwifi"
 
     # include some network and scsi driver
     include="bnx2|brcm|cxgb|myri|mellanox|netronome|qat|qed|ql2|qlogic|rt|RTL|ti"
