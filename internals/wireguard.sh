@@ -1,45 +1,51 @@
-WIREGUARD_VERSION="0.0.20190601"
-WIREGUARD_CHECKSUM="eeeabbbd5592987b5308d1cc495f756f"
-WIREGUARD_LINK="https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${WIREGUARD_VERSION}.tar.xz"
+WIREGUARD_TOOLS_VERSION="1.0.20200102"
+WIREGUARD_TOOLS_CHECKSUM="611eb05e295550f8267092bbf2731fd1"
+WIREGUARD_TOOLS_LINK="https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${WIREGUARD_TOOLS_VERSION}.tar.xz"
+WIREGUARD_MODULES_VERSION="0.0.20200105"
+WIREGUARD_MODULES_CHECKSUM="c2f2d5803623a71a086eab41c29d9b15"
+WIREGUARD_MODULES_LINK="https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-${WIREGUARD_MODULES_VERSION}.tar.xz"
 
 download_wireguard() {
-    download_file $WIREGUARD_LINK $WIREGUARD_CHECKSUM
+    download_file $WIREGUARD_TOOLS_LINK $WIREGUARD_TOOLS_CHECKSUM
+    download_file $WIREGUARD_MODULES_LINK $WIREGUARD_MODULES_CHECKSUM
 }
 
 extract_wireguard() {
-    if [ ! -d "WireGuard-${WIREGUARD_VERSION}" ]; then
-        echo "[+] extracting: WireGuard-${WIREGUARD_VERSION}"
-        tar -xf ${DISTFILES}/WireGuard-${WIREGUARD_VERSION}.tar.xz -C .
+    if [ ! -d "wireguard-tools-${WIREGUARD_TOOLS_VERSION}" ]; then
+        echo "[+] extracting: wireguard-tools-${WIREGUARD_TOOLS_VERSION}"
+        tar -xf ${DISTFILES}/wireguard-tools-${WIREGUARD_TOOLS_VERSION}.tar.xz -C .
+    fi
+
+    if [ ! -d "wireguard-linux-compat-${WIREGUARD_MODULES_VERSION}" ]; then
+        echo "[+] extracting: wireguard-linux-compat-${WIREGUARD_MODULES_VERSION}"
+        tar -xf ${DISTFILES}/wireguard-linux-compat-${WIREGUARD_MODULES_VERSION}.tar.xz -C .
     fi
 }
 
-prepare_wireguard() {
-    echo "[+] preparing wireguard"
+prepare_wireguard_modules() {
+    echo "[+] preparing wireguard (kernel module)"
     # link wireguard directory into kernel tree
-    ./contrib/kernel-tree/jury-rig.sh ${WORKDIR}/linux-${KERNEL_VERSION}
+    ./kernel-tree-scripts/jury-rig.sh ${WORKDIR}/linux-${KERNEL_VERSION}
 }
 
-compile_wireguard() {
+compile_wireguard_tools() {
     echo "[+] compiling wireguard (tools)"
-    pushd src/tools
     make ${MAKEOPTS}
-    popd
 }
 
-install_wireguard() {
+install_wireguard_tools() {
     echo "[+] installing wireguard (tools)"
-    pushd src/tools
     make DESTDIR=${ROOTDIR} install
-    popd
 }
 
 build_wireguard() {
-    pushd "${WORKDIR}/WireGuard-${WIREGUARD_VERSION}"
+    pushd "${WORKDIR}/wireguard-linux-compat-${WIREGUARD_MODULES_VERSION}"
+    prepare_wireguard_modules
+    popd
 
-    prepare_wireguard
-    compile_wireguard
-    install_wireguard
-
+    pushd "${WORKDIR}/wireguard-tools-${WIREGUARD_TOOLS_VERSION}/src"
+    compile_wireguard_tools
+    install_wireguard_tools
     popd
 }
 
