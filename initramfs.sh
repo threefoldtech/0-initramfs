@@ -628,6 +628,7 @@ main() {
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
+        # active build
         build_fuse
         build_openssl
         build_certs
@@ -638,7 +639,6 @@ main() {
         build_dnsmasq
         build_nftables
         build_iproute2
-        build_qemu
         build_dmidecode
         build_unionfs
         build_eudev
@@ -662,6 +662,9 @@ main() {
         build_tcpdump
         build_rscoreutils
         build_firmware
+
+        ## disabled build
+        # build_qemu
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
