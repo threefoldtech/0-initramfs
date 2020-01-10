@@ -409,7 +409,7 @@ clean_staging() {
     rm -rf "${TMPDIR}"/*
     mv -f "${WORKDIR}"/linux-* "${TMPDIR}"/
     mv -f "${WORKDIR}"/vmlinuz* "${TMPDIR}"/
-    mv -f "${WORKDIR}"/Wire* "${TMPDIR}"/
+    mv -f "${WORKDIR}"/wireguard-* "${TMPDIR}"/
     mv -f "${WORKDIR}"/zinit* "${TMPDIR}"/
 
     # cleaning staging files
