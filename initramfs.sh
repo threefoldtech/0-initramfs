@@ -662,6 +662,7 @@ main() {
         build_tcpdump
         build_rscoreutils
         build_firmware
+        build_xfsprogs
 
         ## disabled build
         # build_qemu
