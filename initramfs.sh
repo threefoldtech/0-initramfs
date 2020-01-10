@@ -640,7 +640,6 @@ main() {
         build_nftables
         build_iproute2
         build_qemu
-        build_libvirt
         build_dmidecode
         build_unionfs
         build_eudev
