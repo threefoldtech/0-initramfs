@@ -635,7 +635,6 @@ main() {
         build_parted
         build_e2fsprogs
         build_btrfs
-        build_zerotier
         build_dnsmasq
         build_nftables
         build_iproute2
@@ -660,7 +659,6 @@ main() {
         build_bcache
         build_containerd
         build_runc
-        build_ztid
         build_tcpdump
         build_rscoreutils
         build_firmware
