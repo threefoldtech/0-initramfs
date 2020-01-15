@@ -1,18 +1,20 @@
-RSCOREUTILS_REPOSITORY="https://github.com/uutils/coreutils.git"
-RSCOREUTILS_VERSION="master"
+RSCOREUTILS_VERSION="91899b34b96da40797846f343f399ca420777c6a"
+RSCOREUTILS_CHECKSUM="b85c3e1328d6469b2a3b02baed7d2a05"
+RSCOREUTILS_LINK="https://github.com/uutils/coreutils/archive/${RSCOREUTILS_VERSION}.tar.gz"
 
 download_rscoreutils() {
-    download_git ${RSCOREUTILS_REPOSITORY} ${RSCOREUTILS_VERSION}
+    download_file ${RSCOREUTILS_LINK} ${RSCOREUTILS_CHECKSUM} rscoreutils-${RSCOREUTILS_VERSION}.tar.gz
 }
 
 extract_rscoreutils() {
-    event "refreshing" "coreutils-${RSCOREUTILS_VERSION}"
-    rm -rf ./coreutils-${RSCOREUTILS_VERSION}
-    cp -a ${DISTFILES}/coreutils ./coreutils-${RSCOREUTILS_VERSION}
+    if [ ! -d "coreutils-${RSCOREUTILS_VERSION}" ]; then
+        echo "[+] extracting: coreutils-${RSCOREUTILS_VERSION} (rscoreutils)"
+        tar -xf ${DISTFILES}/rscoreutils-${RSCOREUTILS_VERSION}.tar.gz -C .
+    fi
 }
 
 prepare_rscoreutils() {
-    echo "[+] loading source code: coreutils"
+    echo "[+] prepare coreutils (rscoreutils)"
 }
 
 compile_rscoreutils() {
