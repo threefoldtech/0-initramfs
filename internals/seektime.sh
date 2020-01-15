@@ -1,14 +1,16 @@
-SEEKTIME_REPOSITORY="https://github.com/threefoldtech/seektime"
-SEEKTIME_BRANCH="master"
+SEEKTIME_VERSION="0.1"
+SEEKTIME_CHECKSUM="f16c0d67e9539219261a406bcd395729"
+SEEKTIME_LINK="https://github.com/threefoldtech/seektime/archive/v${SEEKTIME_VERSION}.tar.gz"
 
 download_seektime() {
-    download_git $SEEKTIME_REPOSITORY $SEEKTIME_BRANCH
+    download_file $SEEKTIME_LINK $SEEKTIME_CHECKSUM seektime-v${SEEKTIME_VERSION}.tar.gz
 }
 
 extract_seektime() {
-    event "refreshing" "seektime-${SEEKTIME_BRANCH}"
-    rm -rf ./seektime-${SEEKTIME_BRANCH}
-    cp -a ${DISTFILES}/seektime ./seektime-${SEEKTIME_BRANCH}
+    if [ ! -d "seektime-${SEEKTIME_VERSION}" ]; then
+        echo "[+] extracting: seektime-v${SEEKTIME_VERSION}"
+        tar -xf ${DISTFILES}/seektime-v${SEEKTIME_VERSION}.tar.gz -C .
+    fi
 }
 
 prepare_seektime() {
@@ -25,7 +27,7 @@ install_seektime() {
 }
 
 build_seektime() {
-    pushd "${WORKDIR}/seektime-${SEEKTIME_BRANCH}"
+    pushd "${WORKDIR}/seektime-${SEEKTIME_VERSION}"
 
     prepare_seektime
     compile_seektime
