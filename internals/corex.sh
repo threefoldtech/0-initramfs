@@ -1,12 +1,13 @@
 COREX_REPOSITORY="https://github.com/threefoldtech/corex"
 COREX_BRANCH="staging"
 
-LIBWEBSOCKETS_REPOSITORY="https://github.com/warmcat/libwebsockets"
-LIBWEBSOCKETS_BRANCH="v2.4.2"
+LIBWEBSOCKETS_VERSION="2.4.2"
+LIBWEBSOCKETS_CHECKSUM="b64300541128baa18828620187453efb"
+LIBWEBSOCKETS_LINK="https://github.com/warmcat/libwebsockets/archive/v${LIBWEBSOCKETS_VERSION}.tar.gz"
 
 download_corex() {
     download_git $COREX_REPOSITORY $COREX_BRANCH
-    download_git $LIBWEBSOCKETS_REPOSITORY $LIBWEBSOCKETS_BRANCH
+    download_file $LIBWEBSOCKETS_LINK $LIBWEBSOCKETS_CHECKSUM libwebsockets-${LIBWEBSOCKETS_VERSION}.tar.gz
 }
 
 extract_corex() {
@@ -14,9 +15,10 @@ extract_corex() {
     rm -rf ./corex-${COREX_BRANCH}
     cp -a ${DISTFILES}/corex ./corex-${COREX_BRANCH}
 
-    event "refreshing" "libwebsockets-${LIBWEBSOCKETS_BRANCH}"
-    rm -rf ./libwebsockets-${LIBWEBSOCKETS_BRANCH}
-    cp -a ${DISTFILES}/libwebsockets ./libwebsockets-${LIBWEBSOCKETS_BRANCH}
+    if [ ! -d "libwebsockets-${LIBWEBSOCKETS_VERSION}" ]; then
+        echo "[+] extracting: libwebsockets-${LIBWEBSOCKETS_VERSION}"
+        tar -xf ${DISTFILES}/libwebsockets-${LIBWEBSOCKETS_VERSION}.tar.gz -C .
+    fi
 }
 
 build_libwebsockets() {
@@ -80,7 +82,7 @@ inject_corex() {
 }
 
 build_corex() {
-    pushd "${WORKDIR}/libwebsockets-${LIBWEBSOCKETS_BRANCH}"
+    pushd "${WORKDIR}/libwebsockets-${LIBWEBSOCKETS_VERSION}"
 
     # build_libwebsockets
 
