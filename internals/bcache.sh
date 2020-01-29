@@ -1,14 +1,16 @@
-BCACHE_REPOSITORY="https://github.com/koverstreet/bcache-tools"
-BCACHE_BRANCH="master"
+BCACHE_VERSION="494f8d187c74f557dfebbb5dc3591453436b507b"
+BCACHE_CHECKSUM="a698ee9ecd6f481070adfd5acfc881b5"
+BCACHE_LINK="https://github.com/koverstreet/bcache-tools/archive/${BCACHE_VERSION}.tar.gz"
 
 download_bcache() {
-    download_git $BCACHE_REPOSITORY $BCACHE_BRANCH
+    download_file $BCACHE_LINK $BCACHE_CHECKSUM bcache-tools-${BCACHE_VERSION}.tar.gz
 }
 
 extract_bcache() {
-    event "refreshing" "bcache-tools-${BCACHE_BRANCH}"
-    rm -rf ./bcache-tools-${BCACHE_BRANCH}
-    cp -a ${DISTFILES}/bcache-tools ./bcache-tools-${BCACHE_BRANCH}
+    if [ ! -d "bcache-tools-${BCACHE_VERSION}" ]; then
+        echo "[+] extracting: bcache-tools-${BCACHE_VERSION}"
+        tar -xf ${DISTFILES}/bcache-tools-${BCACHE_VERSION}.tar.gz -C .
+    fi
 }
 
 prepare_bcache() {
@@ -30,7 +32,7 @@ install_bcache() {
 }
 
 build_bcache() {
-    pushd "${WORKDIR}/bcache-tools-${BCACHE_BRANCH}"
+    pushd "${WORKDIR}/bcache-tools-${BCACHE_VERSION}"
 
     prepare_bcache
     compile_bcache

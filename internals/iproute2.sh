@@ -1,5 +1,5 @@
-IPROUTE2_VERSION="5.1.0"
-IPROUTE2_CHECKSUM="a2b8349abf4ae00e92155fda22de4d5e"
+IPROUTE2_VERSION="5.4.0"
+IPROUTE2_CHECKSUM="54d86cadb4cd1d19fd7114b4e53adf51"
 IPROUTE2_LINK="https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-${IPROUTE2_VERSION}.tar.xz"
 
 download_iproute2() {

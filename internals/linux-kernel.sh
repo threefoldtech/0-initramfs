@@ -1,5 +1,5 @@
-KERNEL_VERSION="5.4.5"
-KERNEL_CHECKSUM="70fc3cf9156ce10f550796c569e0641c"
+KERNEL_VERSION="5.4.10"
+KERNEL_CHECKSUM="2b1fd3696fdef9960a1b03a6d84e36c9"
 KERNEL_LINK="https://www.kernel.org/pub/linux/kernel/v5.x/linux-${KERNEL_VERSION}.tar.xz"
 
 download_kernel() {
@@ -38,6 +38,9 @@ prepare_kernel() {
 }
 
 compile_kernel() {
+    # fix linux-5.4.5 make modules_install issue
+    touch modules.builtin.modinfo
+
     if [[ $DO_ALL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
         echo "[+] compiling the kernel (modules)"
         make ${MAKEOPTS} modules

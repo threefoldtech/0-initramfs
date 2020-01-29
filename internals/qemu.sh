@@ -2,6 +2,9 @@ QEMU_REPOSITORY="https://github.com/gigforks/qemu"
 QEMU_BRANCH="zerodb"
 
 download_qemu() {
+    # disable qemu downloader
+    return
+
     download_git $QEMU_REPOSITORY $QEMU_BRANCH
 
     pushd ${DISTFILES}/qemu
@@ -12,6 +15,9 @@ download_qemu() {
 }
 
 extract_qemu() {
+    # disable qemu extractor
+    return
+
     event "refreshing" "qemu-${QEMU_BRANCH}"
     rm -rf ./qemu-${QEMU_BRANCH}
     cp -a ${DISTFILES}/qemu ./qemu-${QEMU_BRANCH}

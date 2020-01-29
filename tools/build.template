@@ -1,0 +1,47 @@
+##upname##_VERSION="FIXME"
+##upname##_CHECKSUM="##checksum##"
+##upname##_LINK="##link##"
+
+# FIXME: link
+
+download_##lowname##() {
+    download_file $##upname##_LINK $##upname##_CHECKSUM
+}
+
+extract_##lowname##() {
+    if [ ! -d "##lowname##-${##upname##_VERSION}" ]; then
+        echo "[+] extracting: ##lowname##-${##upname##_VERSION}"
+        tar -xf ${DISTFILES}/##lowname##-${##upname##_VERSION}.FIXME -C .
+        # FIXME: fix url
+    fi
+}
+
+prepare_##lowname##() {
+    echo "[+] configuring ##lowname##"
+    ./configure --prefix "${ROOTDIR}"/usr
+}
+
+compile_##lowname##() {
+    make ${MAKEOPTS}
+}
+
+install_##lowname##() {
+    make DESTDIR="${ROOTDIR}" install
+}
+
+build_##lowname##() {
+    pushd "${WORKDIR}/##lowname##-${##upname##_VERSION}"
+
+    prepare_##lowname##
+    compile_##lowname##
+    install_##lowname##
+
+    popd
+}
+
+registrar_##lowname##() {
+    DOWNLOADERS+=(download_##lowname##)
+    EXTRACTORS+=(extract_##lowname##)
+}
+
+registrar_##lowname##

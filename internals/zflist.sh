@@ -1,16 +1,13 @@
 ZFLIST_REPOSITORY="https://github.com/threefoldtech/0-flist"
 ZFLIST_BRANCH="development"
 
-CAPNPC_REPOSITORY="https://github.com/opensourcerouting/c-capnproto"
-CAPNPC_BRANCH="master"
+CAPNPC_VERSION="0.3"
+CAPNPC_CHECKSUM="c1836601d210c14a4a88ed55e0b7c6de"
+CAPNPC_LINK="https://github.com/opensourcerouting/c-capnproto/releases/download/c-capnproto-${CAPNPC_VERSION}/c-capnproto-${CAPNPC_VERSION}.tar.xz"
 
 download_zflist() {
     download_git $ZFLIST_REPOSITORY $ZFLIST_BRANCH
-    download_git $CAPNPC_REPOSITORY $CAPNPC_BRANCH
-
-    pushd ${DISTFILES}/c-capnproto
-    git submodule update --init --recursive
-    popd
+    download_file $CAPNPC_LINK $CAPNPC_CHECKSUM
 }
 
 extract_zflist() {
@@ -18,8 +15,10 @@ extract_zflist() {
     rm -rf ./zflist-${ZFLIST_BRANCH}
     cp -a ${DISTFILES}/0-flist ./zflist-${ZFLIST_BRANCH}
 
-    rm -rf ./c-capnproto-${CAPNPC_BRANCH}
-    cp -a ${DISTFILES}/c-capnproto ./c-capnproto-${CAPNPC_BRANCH}
+    if [ ! -d "c-capnproto-${CAPNPC_VERSION}" ]; then
+        echo "[+] extracting: c-capnproto-${CAPNPC_VERSION}"
+        tar -xf ${DISTFILES}/c-capnproto-${CAPNPC_VERSION}.tar.xz -C .
+    fi
 }
 
 build_capnpc() {
@@ -51,7 +50,7 @@ install_zflist() {
 }
 
 build_zflist() {
-    pushd "${WORKDIR}/c-capnproto-${CAPNPC_BRANCH}"
+    pushd "${WORKDIR}/c-capnproto-${CAPNPC_VERSION}"
 
     build_capnpc
 
