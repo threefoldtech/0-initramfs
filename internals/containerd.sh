@@ -1,16 +1,26 @@
-CONTAINERD_REPOSITORY="https://github.com/containerd/containerd"
-CONTAINERD_BRANCH="v1.2.7"
+CONTAINERD_VERSION="1.3.2"
+CONTAINERD_CHECKSUM="d28ec96dd7586f7a1763c54c5448921e"
+CONTAINERD_LINK="https://github.com/containerd/containerd/archive/v${CONTAINERD_VERSION}.tar.gz"
 CONTAINERD_HOME="${GOPATH}/src/github.com/containerd"
 
 download_containerd() {
-    download_git ${CONTAINERD_REPOSITORY} ${CONTAINERD_BRANCH}
+    download_file ${CONTAINERD_LINK} ${CONTAINERD_CHECKSUM} containerd-v${CONTAINERD_VERSION}.tar.gz
 }
 
 extract_containerd() {
-    event "refreshing" "containerd-${CONTAINERD_BRANCH}"
+    # event "refreshing" "containerd-${CONTAINERD_BRANCH}"
     mkdir -p ${CONTAINERD_HOME}
     rm -rf ${CONTAINERD_HOME}/containerd
-    cp -a ${DISTFILES}/containerd ${CONTAINERD_HOME}/
+    # cp -a ${DISTFILES}/containerd ${CONTAINERD_HOME}/
+
+    pushd ${CONTAINERD_HOME}
+
+    echo "[+] extracting: containerd-${CONTAINERD_VERSION}"
+    tar -xf ${DISTFILES}/containerd-v${CONTAINERD_VERSION}.tar.gz -C .
+    mv containerd-${CONTAINERD_VERSION} containerd
+
+    popd
+
 }
 
 prepare_containerd() {

@@ -409,7 +409,7 @@ clean_staging() {
     rm -rf "${TMPDIR}"/*
     mv -f "${WORKDIR}"/linux-* "${TMPDIR}"/
     mv -f "${WORKDIR}"/vmlinuz* "${TMPDIR}"/
-    mv -f "${WORKDIR}"/Wire* "${TMPDIR}"/
+    mv -f "${WORKDIR}"/wireguard-* "${TMPDIR}"/
     mv -f "${WORKDIR}"/zinit* "${TMPDIR}"/
 
     # cleaning staging files
@@ -628,6 +628,7 @@ main() {
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
+        # active build
         build_fuse
         build_openssl
         build_certs
@@ -635,12 +636,9 @@ main() {
         build_parted
         build_e2fsprogs
         build_btrfs
-        build_zerotier
         build_dnsmasq
         build_nftables
         build_iproute2
-        build_qemu
-        build_libvirt
         build_dmidecode
         build_unionfs
         build_eudev
@@ -661,10 +659,13 @@ main() {
         build_bcache
         build_containerd
         build_runc
-        build_ztid
         build_tcpdump
         build_rscoreutils
         build_firmware
+        build_xfsprogs
+
+        ## disabled build
+        # build_qemu
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
