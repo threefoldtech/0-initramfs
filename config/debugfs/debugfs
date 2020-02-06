@@ -5,7 +5,7 @@ debugroot="/mnt/debugfs"
 echo "[+] preparing debug environment"
 
 if [ ! -e /tmp/ubuntu-debugfs.flist ]; then
-    wget https://hub.grid.tf/tf-official-apps/ubuntu-debugfs.flist -O /tmp/ubuntu-debugfs.flist
+    wget https://hub.grid.tf/maxux/ubuntu-v2-debugfs.flist -O /tmp/ubuntu-debugfs.flist
 fi
 
 mkdir -p ${debugroot}/backend
@@ -15,7 +15,8 @@ echo "[+] ensure debug environment sanity"
 umount -r ${debugroot}/image 2> /dev/null
 umount -r ${debugroot}/backend/ro 2> /dev/null
 
-backendaddr=$(grep '^storage = ' /etc/zero-os/zero-os.toml | cut -d'"' -f2)
+# backendaddr=$(grep '^storage = ' /etc/zero-os/zero-os.toml | cut -d'"' -f2)
+backendaddr="zdb://hub.grid.tf:9900"
 
 # killing previous debugfs instance
 if ps aux | grep g8ufs | grep -q debugfs; then
@@ -47,4 +48,3 @@ umount ${debugroot}/image/dev
 umount ${debugroot}/image/sys
 umount ${debugroot}/image/proc
 umount ${debugroot}/image
-umount ${debugroot}/backend/ro
