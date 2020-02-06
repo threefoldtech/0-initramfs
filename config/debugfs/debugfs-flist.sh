@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 ROOTBUNTU="/tmp/ubuntu-bionic"
 TARGET="/tmp/ubuntu-debugfs.tar.gz"
@@ -19,7 +20,7 @@ debootstrap \
   --components=main,restricted,universe,multiverse \
   --include curl,ca-certificates,tcpdump,ethtool,pciutils,strace,lsof,htop,\
 binutils,bzip2,coreutils,cpio,curl,e2fsprogs,file,findutils,htop,iproute2,\
-net-tools,netcat-openbsd,procps,strace,tcpdump,vim,lsscsi,btrfs-tools,xfsutils \
+net-tools,netcat-openbsd,procps,strace,tcpdump,vim,lsscsi,btrfs-tools,bmon \
   bionic ${ROOTBUNTU} \
   http://archive.ubuntu.com/ubuntu/
 
