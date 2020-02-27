@@ -16,7 +16,12 @@ extract_eudev() {
 prepare_eudev() {
     echo "[+] preparing eudev"
     ./autogen.sh
-    ./configure --prefix=/ --enable-kmod --enable-blkid
+    ./configure --prefix=/ \
+        --enable-blkid \
+        --enable-kmod \
+        --disable-selinux \
+        --disable-static \
+        --disable-rule-generator
 }
 
 compile_eudev() {
@@ -30,6 +35,9 @@ compile_eudev() {
 install_eudev() {
     echo "[+] installing eudev"
     make DESTDIR="${ROOTDIR}" install
+
+    echo "[+] compiling original hwdb"
+    ${ROOTDIR}/bin/udevadm hwdb --update --root=${ROOTDIR}
 }
 
 build_eudev() {
