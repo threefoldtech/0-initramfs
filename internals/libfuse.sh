@@ -16,8 +16,6 @@ extract_fuse() {
 prepare_fuse() {
     echo "[+] preparing fuse"
 
-    crashhere
-
     ./makeconf.sh
     ./configure --prefix /usr
 }
