@@ -23,7 +23,7 @@ install_modules() {
 }
 
 build_modules() {
-    pushd $TFT_SRC/zosv2
+    pushd $TFT_SRC/zos
 
     prepare_modules
     install_modules
