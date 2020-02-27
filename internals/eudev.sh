@@ -1,5 +1,5 @@
-EUDEV_VERSION="3.2.8"
-EUDEV_CHECKSUM="3b856ff7171474c9866ad34b3ea4daac"
+EUDEV_VERSION="3.2.9"
+EUDEV_CHECKSUM="e575ef39f66be11a6a5b6c8a169d3c7e"
 EUDEV_LINK="https://github.com/gentoo/eudev/archive/v${EUDEV_VERSION}.tar.gz"
 
 download_eudev() {
