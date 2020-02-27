@@ -1,5 +1,5 @@
 MODULES_REPOSITORY="https://github.com/threefoldtech/zos"
-MODULES_BRANCH="master"
+MODULES_BRANCH="development-zos-v2-udhcpc"
 MODULES_TAG=""
 
 TFT_SRC=$GOPATH/src/github.com/threefoldtech
