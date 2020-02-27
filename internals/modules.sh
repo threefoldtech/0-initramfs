@@ -1,4 +1,4 @@
-MODULES_REPOSITORY="https://github.com/threefoldtech/zosv2"
+MODULES_REPOSITORY="https://github.com/threefoldtech/zos"
 MODULES_BRANCH="master"
 MODULES_TAG=""
 
