@@ -22,7 +22,7 @@ compile_zinit() {
 
 install_zinit() {
     echo "[+] copying binaries"
-    cp -a target/release/zinit "${ROOTDIR}/sbin/"
+    cp -a target/x86_64-unknown-linux-musl/release/zinit "${ROOTDIR}/sbin/"
 }
 
 build_zinit() {
