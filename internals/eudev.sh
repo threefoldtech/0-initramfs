@@ -17,11 +17,16 @@ prepare_eudev() {
     echo "[+] preparing eudev"
     ./autogen.sh
     ./configure --prefix=/ \
+        --build=x86_64-pc-linux-gnu \
+        --host=x86_64-pc-linux-gnu \
         --enable-blkid \
         --enable-kmod \
         --disable-selinux \
         --disable-static \
-        --disable-rule-generator
+        --disable-rule-generator \
+        --exec-prefix= \
+        --with-rootprefix= \
+        --bindir=/bin
 }
 
 compile_eudev() {
