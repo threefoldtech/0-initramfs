@@ -1,4 +1,4 @@
-MODULES_REPOSITORY="https://github.com/threefoldtech/zosv2"
+MODULES_REPOSITORY="https://github.com/threefoldtech/zos"
 MODULES_BRANCH="master"
 MODULES_TAG=""
 
@@ -23,7 +23,7 @@ install_modules() {
 }
 
 build_modules() {
-    pushd $TFT_SRC/zosv2
+    pushd $TFT_SRC/zos
 
     prepare_modules
     install_modules

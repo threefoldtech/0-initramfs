@@ -15,6 +15,7 @@ extract_fuse() {
 
 prepare_fuse() {
     echo "[+] preparing fuse"
+
     ./makeconf.sh
     ./configure --prefix /usr
 }
