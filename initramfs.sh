@@ -10,7 +10,7 @@ WORKDIR="${PWD}/staging"
 CONFDIR="${PWD}/config"
 ROOTDIR="${PWD}/root"
 TMPDIR="${PWD}/tmp"
-INTERNAL="${PWD}/internals"
+PKGDIR="${PWD}/packages"
 EXTENDIR="${PWD}/extensions"
 PATCHESDIR="${PWD}/patches"
 TOOLSDIR="${PWD}/tools"
@@ -101,7 +101,7 @@ modules=0
 DOWNLOADERS=()
 EXTRACTORS=()
 
-for module in "${INTERNAL}"/*.sh; do
+for module in "${PKGDIR}"/*.sh; do
     # loading submodule
     . "${module}"
 

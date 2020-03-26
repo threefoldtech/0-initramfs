@@ -12,11 +12,11 @@ rm -rf /target/*
 # loading settings
 . $(dirname $0)/tf-build-settings.sh
 
-sed -i "/G8UFS_VERSION=/c\G8UFS_VERSION=\"$1\"" "/$2/internals/cores.sh"
+sed -i "/G8UFS_VERSION=/c\G8UFS_VERSION=\"$1\"" "/$2/packages/cores.sh"
 
 # force follow 'development'
 if [ "$1" == "development" ]; then
-    sed -i "/CORES_VERSION=/c\CORES_VERSION=\"$1\"" "/$2/internals/cores.sh"
+    sed -i "/CORES_VERSION=/c\CORES_VERSION=\"$1\"" "/$2/packages/cores.sh"
 fi
 
 # updating dependencies
