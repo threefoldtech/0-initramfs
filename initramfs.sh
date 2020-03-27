@@ -691,7 +691,6 @@ main() {
         build_zflist
         build_haveged
         build_wireguard
-        build_corex
         build_dhcpcd
         build_bcache
         build_containerd
@@ -700,6 +699,14 @@ main() {
         build_rscoreutils
         build_firmware
         build_xfsprogs
+
+        # active musl packages
+        build_zlib_musl
+        build_libcap_musl
+        build_jsonc_musl
+        build_openssl_musl
+        build_libwebsockets_musl
+        build_corex_musl
 
         ## disabled build
         # build_qemu
