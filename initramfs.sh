@@ -15,6 +15,10 @@ EXTENDIR="${PWD}/extensions"
 PATCHESDIR="${PWD}/patches"
 TOOLSDIR="${PWD}/tools"
 
+# musl subsystem
+MUSLWORKDIR="${PWD}/staging/musl"
+MUSLROOTDIR="${PWD}/staging/musl/root"
+
 # Download mirror repository
 MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
 
@@ -174,6 +178,7 @@ prepare() {
         exit 1
     fi
 
+    echo "[+] setting up local system"
     echo "[+] building mode: ${BUILDMODE}"
     echo "[+] ${modules} submodules loaded"
 
@@ -205,7 +210,35 @@ prepare() {
     if [ ! -e "${ROOTDIR}"/lib64 ]; then
         ln -s usr/lib "${ROOTDIR}"/lib64
     fi
+
+    # prepare musl target
+    prepare_musl
 }
+
+# Extra musl Subsystem
+prepare_musl() {
+    echo "[+] setting up musl base system"
+
+    mkdir -p ${MUSLWORKDIR}
+    mkdir -p ${MUSLROOTDIR}
+
+    # linking linux source kernel to musl path
+    ln -fs /usr/include/linux /usr/include/x86_64-linux-musl/
+
+    # linking some specific headers
+    ln -fs /usr/include/asm-generic /usr/include/x86_64-linux-musl/
+    ln -fs /usr/include/x86_64-linux-gnu/asm /usr/include/x86_64-linux-musl/
+
+    # linking sys/queue not shipped by musl
+    ln -fs /usr/include/x86_64-linux-gnu/sys/queue.h /usr/include/x86_64-linux-musl/sys/
+
+    # linking lib64 to lib
+    pushd ${MUSLROOTDIR}
+    mkdir -p lib
+    ln -fs lib lib64
+    popd
+}
+
 
 #
 # Download a file and check the hash
@@ -300,13 +333,16 @@ download_all() {
 # Extract all archives
 #
 extract_all() {
-    pushd "$WORKDIR"
-
     for extractor in ${EXTRACTORS[@]}; do
-        $extractor
-    done
+        if [[ "$extractor" == *_musl ]]; then
+            pushd "${MUSLWORKDIR}"
+        else
+            pushd "${WORKDIR}"
+        fi
 
-    popd
+        $extractor
+        popd
+    done
 }
 
 
