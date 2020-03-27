@@ -629,6 +629,7 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
         # active build
+        build_zlib
         build_fuse
         build_openssl
         build_certs
