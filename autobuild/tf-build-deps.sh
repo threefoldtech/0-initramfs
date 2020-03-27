@@ -36,8 +36,8 @@ deps+=(libnl-3-dev libnl-route-3-dev libmnl-dev xtables-addons-source)
 # zflist
 deps+=(libhiredis-dev libpixman-1-dev libb2-dev libsqlite3-dev libtar-dev libjansson-dev libsnappy-dev)
 
-# corex
-deps+=(cmake libjson-c-dev vim-runtime)
+# libwebsockets
+deps+=(cmake xxd)
 
 # containerd
 deps+=(libseccomp-dev)
