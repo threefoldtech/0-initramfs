@@ -48,8 +48,9 @@ deps+=(musl musl-tools)
 apt-get install -y ${deps[@]}
 
 # install go
-curl -L https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz > /tmp/go1.13.1.linux-amd64.tar.gz
-tar -C /usr/local -xzf /tmp/go1.13.1.linux-amd64.tar.gz
+GOVER="1.14.1"
+curl -L https://dl.google.com/go/go${GOVER}.linux-amd64.tar.gz > /tmp/go${GOVER}.linux-amd64.tar.gz
+tar -C /usr/local -xzf /tmp/go${GOVER}.linux-amd64.tar.gz
 mkdir -p /gopath
 
 # install rust
