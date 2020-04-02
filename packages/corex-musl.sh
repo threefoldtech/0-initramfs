@@ -1,15 +1,17 @@
 COREX_MUSL_PKGNAME="corex"
-COREX_MUSL_REPOSITORY="https://github.com/threefoldtech/corex"
-COREX_MUSL_BRANCH="staging"
+COREX_MUSL_VERSION="2.1.0"
+COREX_MUSL_CHECKSUM="2062aaca7609a6f50a67d4ef7d6221a7"
+COREX_MUSL_LINK="https://github.com/threefoldtech/corex/archive/${COREX_MUSL_VERSION}.tar.gz"
 
 download_corex_musl() {
-    download_git $COREX_MUSL_REPOSITORY $COREX_MUSL_BRANCH
+    download_file ${COREX_MUSL_LINK} ${COREX_MUSL_CHECKSUM} corex-${COREX_MUSL_VERSION}.tar.gz
 }
 
 extract_corex_musl() {
-    event "refreshing" "corex-${COREX_MUSL_BRANCH}"
-    rm -rf ./${COREX_MUSL_PKGNAME}-${COREX_MUSL_BRANCH}
-    cp -a ${DISTFILES}/corex ./${COREX_MUSL_PKGNAME}-${COREX_MUSL_BRANCH}
+    if [ ! -d "${COREX_MUSL_PKGNAME}-${COREX_MUSL_VERSION}" ]; then
+        echo "[+] extracting: ${COREX_MUSL_PKGNAME}-${COREX_MUSL_VERSION}"
+        tar -xf ${DISTFILES}/${COREX_MUSL_PKGNAME}-${COREX_MUSL_VERSION}.tar.gz -C .
+    fi
 }
 
 prepare_corex_musl() {
@@ -37,7 +39,7 @@ install_corex_musl() {
 }
 
 build_corex_musl() {
-    pushd "${MUSLWORKDIR}/${COREX_MUSL_PKGNAME}-${COREX_MUSL_BRANCH}"
+    pushd "${MUSLWORKDIR}/${COREX_MUSL_PKGNAME}-${COREX_MUSL_VERSION}"
 
     prepare_corex_musl
     compile_corex_musl
