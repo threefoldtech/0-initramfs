@@ -11,9 +11,9 @@ This repository contains all that is needed to build the Zero-OS-kernel and init
 In order to compile all the initramfs without issues, you'll need to install build-time dependencies.
 
 Please check the build process and use the dependencies listed there (see `autobuild` directory).
-If you want to install dependencies required inside an ubuntu 16.04 docker, you can use theses helpers:
+If you want to install dependencies required inside an ubuntu 18.04 docker, you can use theses helpers:
 ```
-bash autobuild/tf-build-deps.sh
+. autobuild/tf-build-deps.sh
 . autobuild/tf-build-setting.sh
 ```
 
@@ -36,7 +36,6 @@ Some parts need to `chown/setuid/chmod/mknod` files as root.
     - redis (only the server is used)
     - btrfs (btrfs-progs)
     - libvirt and qemu
-    - zerotier-one
     - parted (partition management)
     - dnsmasq (used for dhcp on containers)
     - nftables (used for firewalling and routing)
@@ -45,17 +44,18 @@ Some parts need to `chown/setuid/chmod/mknod` files as root.
     - eudev and kmod (used for hardware and modules management)
     - smartmontools (used for S.M.A.R.T monitoring)
     - dmidecode (optional dependency for libvirt and management)
-    - openssh (client and server)
+    - openssh (client and server, for debug purpose)
     - netcat6 (needed by libvirt migration)
     - curl (needed for libcurl by zflist)
     - zflist (0-flist for flist on-the-fly creation)
     - restic (for container backup and upload)
     - rtinfo (for realtime monitoring out-of-box)
     - seektime (small tool to detect disk type)
-    - wireguard
+    - wireguard (netgen vpn, modules and userland tools)
+    - zlib (compression library)
  - Integrate core stuff:
-    - Compile `core0` and `coreX`
-    - Compile `0-fs` and `ztid`
+    - Compile `0-fs`
+    - Compile `corex` (container remote control)
  - Clean, remove useless files, optimize (strip) files
  - Copy system's configuration and init script
  - Compile the kernel (and bundles initramfs in the kernel)
@@ -84,7 +84,6 @@ The `initramfs.sh` script accepts multiple options:
 
 The option `--kernel` is useful if you changes something on the root directory and want to rebuild the kernel (with the initramfs).
 
-If you are modifying core0/coreX, you can simply use `--cores --kernel` options and the cores will be rebuilt and the initramfs rebuilt after.
 This will produce a new image with the latest changes.
 
 ## Build mode
@@ -109,15 +108,15 @@ You just need to expose the `archives` directory to a via a http server to provi
 
 Create a docker container
 ```shell
-docker run -ti --name zero-os-builder ubuntu:16.04 /bin/bash
+docker run -ti --name zero-os-builder ubuntu:18.04 /bin/bash
 ```
 
-- You need to use `ubuntu:16.04`, this is the only image we supports
+- You need to use `ubuntu:18.04`, this is the only image we supports
 - Ensure to have the repository available on `/0-initramfs`
 - Run `autobuild/tf-build.sh` script. This script will install dependencies and build everything
 - The result of the build will be located in `staging/vmlinuz.efi`
 
-**Warning:** if you don't use Ubuntu 16.04 (at least for now), some build _and_ runtime issue can occures.
+**Warning:** if you don't use Ubuntu 18.04 (at least for now), some build _and_ runtime issue can occures.
 
 # I have the kernel, what can I do with it ?
 Just boot it. The kernel image is EFI bootable.
@@ -214,6 +213,16 @@ echo World > /tmp/zero-os-debug/hello
 qemu-system-x86_64 -drive file=fat:rw:/tmp/zero-os-debug,format=raw $QEMU_CMD_LINE
 ```
 This will add `/hello` to your running Zero-OS.
+
+## Static build
+To simplify some binaries update and compatibility for some container, some binaries (like `corex`) needs
+to be compiled as fully static. The best way to get a well-working static binary is using, eg, musl as
+libc to staticly compile the binary. We now support this.
+
+There are some special packages compiled using musl, theses packages ends with `-musl` name and a special
+root directory (defined by `MUSLROOTDIR`) create a root directory where a musl subsystem can be used.
+
+You can take a look at `corex-musl` or `zlib-musl` to understand how this works.
 
 ## Kernel Configuration
 Kernel configuration is based on Arch Linux default kernel config file.

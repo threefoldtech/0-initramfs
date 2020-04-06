@@ -10,10 +10,14 @@ WORKDIR="${PWD}/staging"
 CONFDIR="${PWD}/config"
 ROOTDIR="${PWD}/root"
 TMPDIR="${PWD}/tmp"
-INTERNAL="${PWD}/internals"
+PKGDIR="${PWD}/packages"
 EXTENDIR="${PWD}/extensions"
 PATCHESDIR="${PWD}/patches"
 TOOLSDIR="${PWD}/tools"
+
+# musl subsystem
+MUSLWORKDIR="${PWD}/staging/musl"
+MUSLROOTDIR="${PWD}/staging/musl/root"
 
 # Download mirror repository
 MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
@@ -101,7 +105,7 @@ modules=0
 DOWNLOADERS=()
 EXTRACTORS=()
 
-for module in "${INTERNAL}"/*.sh; do
+for module in "${PKGDIR}"/*.sh; do
     # loading submodule
     . "${module}"
 
@@ -174,6 +178,7 @@ prepare() {
         exit 1
     fi
 
+    echo "[+] setting up local system"
     echo "[+] building mode: ${BUILDMODE}"
     echo "[+] ${modules} submodules loaded"
 
@@ -205,7 +210,35 @@ prepare() {
     if [ ! -e "${ROOTDIR}"/lib64 ]; then
         ln -s usr/lib "${ROOTDIR}"/lib64
     fi
+
+    # prepare musl target
+    prepare_musl
 }
+
+# Extra musl Subsystem
+prepare_musl() {
+    echo "[+] setting up musl base system"
+
+    mkdir -p ${MUSLWORKDIR}
+    mkdir -p ${MUSLROOTDIR}
+
+    # linking linux source kernel to musl path
+    ln -fs /usr/include/linux /usr/include/x86_64-linux-musl/
+
+    # linking some specific headers
+    ln -fs /usr/include/asm-generic /usr/include/x86_64-linux-musl/
+    ln -fs /usr/include/x86_64-linux-gnu/asm /usr/include/x86_64-linux-musl/
+
+    # linking sys/queue not shipped by musl
+    ln -fs /usr/include/x86_64-linux-gnu/sys/queue.h /usr/include/x86_64-linux-musl/sys/
+
+    # linking lib64 to lib
+    pushd ${MUSLROOTDIR}
+    mkdir -p lib
+    ln -fs lib lib64
+    popd
+}
+
 
 #
 # Download a file and check the hash
@@ -300,13 +333,16 @@ download_all() {
 # Extract all archives
 #
 extract_all() {
-    pushd "$WORKDIR"
-
     for extractor in ${EXTRACTORS[@]}; do
-        $extractor
-    done
+        if [[ "$extractor" == *_musl ]]; then
+            pushd "${MUSLWORKDIR}"
+        else
+            pushd "${WORKDIR}"
+        fi
 
-    popd
+        $extractor
+        popd
+    done
 }
 
 
@@ -629,6 +665,7 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
         # active build
+        build_zlib
         build_fuse
         build_openssl
         build_certs
@@ -654,7 +691,6 @@ main() {
         build_zflist
         build_haveged
         build_wireguard
-        build_corex
         build_dhcpcd
         build_bcache
         build_containerd
@@ -663,6 +699,14 @@ main() {
         build_rscoreutils
         build_firmware
         build_xfsprogs
+
+        # active musl packages
+        build_zlib_musl
+        build_libcap_musl
+        build_jsonc_musl
+        build_openssl_musl
+        build_libwebsockets_musl
+        build_corex_musl
 
         ## disabled build
         # build_qemu

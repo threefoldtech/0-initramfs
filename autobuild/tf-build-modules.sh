@@ -12,7 +12,7 @@ rm -rf /target/*
 # loading settings
 . $(dirname $0)/tf-build-settings.sh
 
-sed -i "/MODULES_BRANCH=/c\MODULES_BRANCH=\"$1\"" "/$2/internals/modules.sh"
+sed -i "/MODULES_BRANCH=/c\MODULES_BRANCH=\"$1\"" "/$2/packages/modules.sh"
 
 # checkings arguments
 arguments="--cores --kernel"
