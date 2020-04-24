@@ -20,7 +20,8 @@ debootstrap \
   --components=main,restricted,universe,multiverse \
   --include curl,ca-certificates,tcpdump,ethtool,pciutils,strace,lsof,htop,\
 binutils,bzip2,coreutils,cpio,curl,e2fsprogs,file,findutils,htop,iproute2,\
-net-tools,netcat-openbsd,procps,strace,tcpdump,vim,lsscsi,btrfs-tools,bmon \
+net-tools,netcat-openbsd,procps,strace,tcpdump,vim,lsscsi,btrfs-tools,bmon, \
+unzip,alien,libncurses5 \
   bionic ${ROOTBUNTU} \
   http://archive.ubuntu.com/ubuntu/
 
