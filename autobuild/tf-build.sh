@@ -20,7 +20,8 @@ git clone -b "$1" https://github.com/zero-os/initramfs-gig || git clone https://
 
 # checkings arguments
 arguments="--all --compact "
-if [ "${1:0:7}" = "release" ]; then
+if [ "$3" = "release" ]; then
+    echo "[+] setting release flag"
     arguments="--release"
 fi
 
