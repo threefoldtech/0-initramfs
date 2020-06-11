@@ -693,7 +693,6 @@ main() {
         build_wireguard
         build_dhcpcd
         build_bcache
-        build_containerd
         build_runc
         build_tcpdump
         build_rscoreutils
