@@ -248,4 +248,3 @@ Here is what we changed:
 
 # Repository Owner
 - [Maxime Daniel](https://github.com/maxux), Telegram: [@maxux](http://t.me/maxux)
-
