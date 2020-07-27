@@ -21,7 +21,7 @@ prepare_zfs() {
 compile_zfs() {
     echo "[+] compiling 0-fs"
     pushd 0-fs
-    make
+    GO111MODULE=on make
     popd
 }
 
@@ -50,4 +50,3 @@ registrar_zfs() {
 }
 
 registrar_zfs
-
