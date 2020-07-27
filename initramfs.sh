@@ -463,7 +463,7 @@ optimize_size() {
     mkdir -p  "${TMPDIR}"/optimize/usr/bin
 
     echo "[+] saving binaries to keep intact"
-    cp -rv usr/bin/corex "${TMPDIR}"/optimize/usr/bin/
+    # cp -rv usr/bin/corex "${TMPDIR}"/optimize/usr/bin/
 
     echo "[+] optimizing binaries size"
 
