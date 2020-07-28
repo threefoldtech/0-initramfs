@@ -463,7 +463,7 @@ optimize_size() {
     mkdir -p  "${TMPDIR}"/optimize/usr/bin
 
     echo "[+] saving binaries to keep intact"
-    cp -rv usr/bin/corex "${TMPDIR}"/optimize/usr/bin/
+    # cp -rv usr/bin/corex "${TMPDIR}"/optimize/usr/bin/
 
     echo "[+] optimizing binaries size"
 
@@ -699,13 +699,13 @@ main() {
         build_firmware
         build_xfsprogs
 
-        # active musl packages
-        build_zlib_musl
-        build_libcap_musl
-        build_jsonc_musl
-        build_openssl_musl
-        build_libwebsockets_musl
-        build_corex_musl
+        ## active musl packages
+        # build_zlib_musl
+        # build_libcap_musl
+        # build_jsonc_musl
+        # build_openssl_musl
+        # build_libwebsockets_musl
+        # build_corex_musl
 
         ## disabled build
         # build_qemu
