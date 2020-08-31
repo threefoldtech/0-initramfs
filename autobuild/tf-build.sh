@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-if [ "$1" == "" ] || [ "$2" == "" ]; then
-    echo "[-] missing remote version or repository name"
-    exit 1
-fi
+#if [ "$1" == "" ] || [ "$2" == "" ]; then
+#    echo "[-] missing remote version or repository name"
+#    exit 1
+#fi
 
 # preparing environment
 mkdir -p /target
@@ -15,8 +15,8 @@ rm -rf /target/*
 . $(dirname $0)/tf-build-settings.sh
 
 # adding extensions (fallback to master if branch not found)
-cd "/$2/extensions"
-git clone -b "$1" https://github.com/zero-os/initramfs-gig || git clone https://github.com/zero-os/initramfs-gig
+#cd "/$2/extensions"
+#git clone -b "$1" https://github.com/zero-os/initramfs-gig || git clone https://github.com/zero-os/initramfs-gig
 
 # checkings arguments
 arguments="--all --compact "
@@ -29,9 +29,10 @@ fi
 export INTERACTIVE="false"
 
 # start the build
-cd "/$2"
+# cd "/$2"
+cd $(dirname $0)
 bash initramfs.sh ${arguments}
 
 # installing kernel to remote directory
 echo "[+] moving kernel to /target"
-cp -v "/$2/staging/vmlinuz.efi" /target/
+# cp -v "/$2/staging/vmlinuz.efi" /target/
