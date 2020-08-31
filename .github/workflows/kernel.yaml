@@ -1,0 +1,20 @@
+name: Kernel
+on: 
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - v*
+
+jobs:
+  kernel:
+    name: 'Building Kernel'
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+
+    - name: Initial build
+      run: |
+        sudo ./autobuild/tf-build.sh
+
