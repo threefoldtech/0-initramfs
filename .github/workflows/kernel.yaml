@@ -16,7 +16,5 @@ jobs:
 
     - name: Initial build
       run: |
-        ls
-        pwd
-        sudo ./autobuild/tf-build.sh
+        sudo bash ./autobuild/tf-build.sh
 

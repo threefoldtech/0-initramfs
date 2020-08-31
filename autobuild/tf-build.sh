@@ -30,7 +30,7 @@ export INTERACTIVE="false"
 
 # start the build
 # cd "/$2"
-cd $(dirname $0)
+cd $(dirname $0)/..
 bash initramfs.sh ${arguments}
 
 # installing kernel to remote directory
