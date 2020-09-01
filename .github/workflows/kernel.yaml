@@ -8,13 +8,47 @@ on:
 
 jobs:
   kernel:
-    name: 'Building Kernel'
+    name: 'Zero-OS Kernel Image'
     runs-on: ubuntu-18.04
     steps:
     - name: Checkout code
       uses: actions/checkout@v1
 
-    - name: Initial build
+    - name: Install: go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.14
+      id: go
+
+    - name: Install: rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        target: x86_64-unknown-linux-musl
+        default: true
+
+    - name: Install: requirements
       run: |
-        sudo bash ./autobuild/tf-build.sh
+        sudo bash ./autobuild/tf-build-deps-clean.sh
+
+    - name: Fetch: sources
+      run: |
+        sudo bash initramfs.sh --download
+
+    - name: Build: busybox
+      run: |
+        sudo bash initramfs.sh --busybox
+
+    - name: Build: userland
+      run: |
+        sudo bash initramfs.sh --tools
+
+    - name: Build: cores
+      run: |
+        sudo bash initramfs.sh --cores
+
+    - name: Build: kernel
+      run: |
+        sudo bash initramfs.sh --kernel
+
 
