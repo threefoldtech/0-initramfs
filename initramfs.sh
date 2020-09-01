@@ -182,6 +182,12 @@ prepare() {
         fi
     fi
 
+    gover=$(go version)
+    echo "[+] go version: ${gover}"
+
+    cargover=$(cargo version)
+    echo "[+] cargo version: ${cargover}"
+
     echo "[+] setting up local system"
     echo "[+] building mode: ${BUILDMODE}"
     echo "[+] ${modules} submodules loaded"
