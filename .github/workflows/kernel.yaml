@@ -33,21 +33,21 @@ jobs:
 
     - name: 'Fetch: sources'
       run: |
-        sudo bash initramfs.sh --download
+        sudo -E bash initramfs.sh --download
 
     - name: 'Build: busybox'
       run: |
-        sudo bash initramfs.sh --busybox
+        sudo -E bash initramfs.sh --busybox
 
     - name: 'Build: userland'
       run: |
-        sudo bash initramfs.sh --tools
+        sudo -E bash initramfs.sh --tools
 
     - name: 'Build: cores'
       run: |
-        sudo bash initramfs.sh --cores
+        sudo -E bash initramfs.sh --cores
 
     - name: 'Build: kernel'
       run: |
-        sudo bash initramfs.sh --kernel
+        sudo -E bash initramfs.sh --kernel
 
