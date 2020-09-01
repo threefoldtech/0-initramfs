@@ -34,7 +34,7 @@ jobs:
     - name: 'Fetch: sources'
       run: |
         cargo version
-        sudo -E bash initramfs.sh --download
+        sudo --preserve-env=PATH bash initramfs.sh --download
 
     - name: 'Build: busybox'
       run: |
