@@ -38,17 +38,17 @@ jobs:
 
     - name: 'Build: busybox'
       run: |
-        sudo -E bash initramfs.sh --busybox
+        sudo --preserve-env=PATH bash initramfs.sh --busybox
 
     - name: 'Build: userland'
       run: |
-        sudo -E bash initramfs.sh --tools
+        sudo --preserve-env=PATH bash initramfs.sh --tools
 
     - name: 'Build: cores'
       run: |
-        sudo -E bash initramfs.sh --cores
+        sudo --preserve-env=PATH bash initramfs.sh --cores
 
     - name: 'Build: kernel'
       run: |
-        sudo -E bash initramfs.sh --kernel
+        sudo --preserve-env=PATH bash initramfs.sh --kernel
 
