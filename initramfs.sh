@@ -174,8 +174,12 @@ prepare() {
     fi
 
     if [ -z $GOPATH ]; then
-        echo "[-] gopath not defined"
-        exit 1
+        if command -v go > /dev/null; then
+            export GOPATH=$(go env GOPATH)
+        else
+            echo "[-] variable GOPATH not defined"
+            exit 1
+        fi
     fi
 
     echo "[+] setting up local system"
