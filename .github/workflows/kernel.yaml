@@ -31,7 +31,7 @@ jobs:
       env:
         BOOTSTRAP_TOKEN: "demo"
       run: |
-        sudo bash ./autobuild/tf-build-deps-clean.sh
+        sudo --preserve-env=BOOTSTRAP_TOKEN bash ./autobuild/tf-build-deps-clean.sh
 
     - name: 'Fetch: sources'
       run: |
