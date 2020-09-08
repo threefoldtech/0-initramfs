@@ -2,6 +2,14 @@
 
 # install dependencies for building
 apt-get update
+
+apt-get install -y curl
+
+echo "TEST: $BOOTSTRAP_TOKEN"
+echo "OK DEBUG"
+
+exit 1
+
 apt-get install -y asciidoc xmlto --no-install-recommends
 
 # toolchain dependencies

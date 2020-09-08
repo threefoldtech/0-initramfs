@@ -28,6 +28,8 @@ jobs:
         default: true
 
     - name: 'Install: requirements'
+      env:
+        BOOTSTRAP_TOKEN: "demo"
       run: |
         sudo bash ./autobuild/tf-build-deps-clean.sh
 
