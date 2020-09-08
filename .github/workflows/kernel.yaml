@@ -32,14 +32,21 @@ jobs:
         target: x86_64-unknown-linux-musl
         default: true
 
-    - name: 'Install: requirements'
+    - name: debug
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+
+    - name: 'Upload: kernel'
       env:
         BOOTSTRAP_TOKEN: ${{ secrets.BOOTSTRAP_TOKEN }}
         IMAGE_BRANCH: ${{ steps.runbranch.outputs.branch }}
       run: |
-        sudo --preserve-env=BOOTSTRAP_TOKEN \
-             --preserve-env=IMAGE_BRANCH \
-             bash ./autobuild/tf-build-deps-clean.sh
+        bash ./autobuild/tf-build-upload.sh
+
+    - name: 'Install: requirements'
+      run: |
+        sudo bash ./autobuild/tf-build-deps-clean.sh
 
     - name: 'Fetch: sources'
       run: |
