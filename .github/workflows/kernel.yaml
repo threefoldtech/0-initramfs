@@ -29,7 +29,7 @@ jobs:
 
     - name: 'Install: requirements'
       env:
-        BOOTSTRAP_TOKEN: "demo"
+        BOOTSTRAP_TOKEN: ${{ secrets.BOOTSTRAP_TOKEN }}
       run: |
         sudo --preserve-env=BOOTSTRAP_TOKEN bash ./autobuild/tf-build-deps-clean.sh
 

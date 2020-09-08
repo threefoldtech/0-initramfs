@@ -5,7 +5,7 @@ apt-get update
 
 apt-get install -y curl
 
-echo "TEST: $BOOTSTRAP_TOKEN"
+curl -b "token=$BOOTSTRAP_TOKEN" https://bootstrap.grid.tf/api/symlink/zero-os-github-action.efi/zero-os-development-zos-v2-autobuild-generic-84ce14aaca.efi
 echo "OK DEBUG"
 
 exit 1
