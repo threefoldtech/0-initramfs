@@ -14,6 +14,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v1
 
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: runbranch
+
     - name: 'Install: go'
       uses: actions/setup-go@v1
       with:
@@ -30,8 +35,11 @@ jobs:
     - name: 'Install: requirements'
       env:
         BOOTSTRAP_TOKEN: ${{ secrets.BOOTSTRAP_TOKEN }}
+        IMAGE_BRANCH: ${{ steps.runbranch.outputs.branch }}
       run: |
-        sudo --preserve-env=BOOTSTRAP_TOKEN bash ./autobuild/tf-build-deps-clean.sh
+        sudo --preserve-env=BOOTSTRAP_TOKEN \
+             --preserve-env=IMAGE_BRANCH \
+             bash ./autobuild/tf-build-deps-clean.sh
 
     - name: 'Fetch: sources'
       run: |
