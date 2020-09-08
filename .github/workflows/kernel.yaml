@@ -32,18 +32,6 @@ jobs:
         target: x86_64-unknown-linux-musl
         default: true
 
-    - name: debug
-      run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
-
-    - name: 'Upload: kernel'
-      env:
-        BOOTSTRAP_TOKEN: ${{ secrets.BOOTSTRAP_TOKEN }}
-        IMAGE_BRANCH: ${{ steps.runbranch.outputs.branch }}
-      run: |
-        bash ./autobuild/tf-build-upload.sh
-
     - name: 'Install: requirements'
       run: |
         sudo bash ./autobuild/tf-build-deps-clean.sh
@@ -68,4 +56,11 @@ jobs:
     - name: 'Build: kernel'
       run: |
         sudo --preserve-env=PATH bash initramfs.sh --kernel
+
+    - name: 'Upload: kernel'
+      env:
+        BOOTSTRAP_TOKEN: ${{ secrets.BOOTSTRAP_TOKEN }}
+        IMAGE_BRANCH: ${{ steps.runbranch.outputs.branch }}
+      run: |
+        bash ./autobuild/tf-build-upload.sh
 

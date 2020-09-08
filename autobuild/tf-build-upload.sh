@@ -1,19 +1,15 @@
 #!/bin/bash
+set -e
 
 cd staging
-pwd
-
-echo "hello world" > vmlinuz.efi
 
 kernel=zero-os-${IMAGE_BRANCH}-generic-${GITHUB_SHA:0:10}.efi
 linkname=zero-os-${IMAGE_BRANCH}-generic.efi
 
-echo "Kernel: $kernel"
-echo "Branch: $linkname"
+echo "[+] kernel: ${kernel}"
+echo "[+] branch: ${linkname}"
 
-cp vmlinuz.efi $kernel
+cp vmlinuz.efi "${kernel}"
 
-curl -b "token=$BOOTSTRAP_TOKEN" -X POST -F "kernel=@${kernel}" "https://bootstrap.grid.tf/api/kernel"
-curl -b "token=$BOOTSTRAP_TOKEN" "https://bootstrap.grid.tf/api/symlink/${linkname}/${kernel}"
-
-exit 1
+curl -b "token=${BOOTSTRAP_TOKEN}" -X POST -F "kernel=@${kernel}" "https://bootstrap.grid.tf/api/kernel"
+curl -b "token=${BOOTSTRAP_TOKEN}" "https://bootstrap.grid.tf/api/symlink/${linkname}/${kernel}"
