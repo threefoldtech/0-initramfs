@@ -55,7 +55,7 @@ jobs:
 
     - name: 'Build: kernel'
       run: |
-        sudo --preserve-env=PATH bash initramfs.sh --kernel
+        sudo --preserve-env=PATH bash initramfs.sh --kernel --modules
 
     - name: 'Upload: kernel'
       env:
