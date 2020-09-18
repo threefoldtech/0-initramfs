@@ -1,7 +1,7 @@
 TF_HOME="${GOPATH}/src/github.com/threefoldtech"
 
 ZFS_REPOSITORY="https://github.com/threefoldtech/0-fs"
-ZFS_VERSION="development"
+ZFS_VERSION="master"
 
 download_zfs() {
     download_git ${ZFS_REPOSITORY} ${ZFS_VERSION}
