@@ -41,6 +41,11 @@ jobs:
         export INTERACTIVE="false"
         sudo --preserve-env=PATH bash initramfs.sh --download
 
+    - name: 'Fetch: extensions'
+      run: |
+        cd extensions
+        git clone https://github.com/zero-os/initramfs-gig
+
     - name: 'Build: busybox'
       run: |
         sudo --preserve-env=PATH bash initramfs.sh --busybox
@@ -48,6 +53,10 @@ jobs:
     - name: 'Build: userland'
       run: |
         sudo --preserve-env=PATH bash initramfs.sh --tools
+
+    - name: 'Build: extensions'
+      run: |
+        sudo --preserve-env=PATH bash initramfs.sh --extensions
 
     - name: 'Build: cores'
       run: |
