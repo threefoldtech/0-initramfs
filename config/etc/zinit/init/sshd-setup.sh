@@ -1,7 +1,8 @@
 #!/bin/ash
 if [ -f /etc/ssh/ssh_host_rsa_key ]; then
-    # nothing to do, hackish way
-    sleep 10
+    # ensure existing file permissions
+    chown root:root /etc/ssh/ssh_host_*
+    chmod 600 /etc/ssh/ssh_host_*
     exit 0
 fi
 
