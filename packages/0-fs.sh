@@ -1,41 +1,35 @@
-TF_HOME="${GOPATH}/src/github.com/threefoldtech"
-
-ZFS_REPOSITORY="https://github.com/threefoldtech/0-fs"
-ZFS_VERSION="master"
+ZFS_VERSION="2.0.6"
+ZFS_CHECKSUM="06368fd114642373c1bb024bad2d419e"
+ZFS_LINK="https://github.com/threefoldtech/0-fs/archive/v${ZFS_VERSION}.tar.gz"
 
 download_zfs() {
-    download_git ${ZFS_REPOSITORY} ${ZFS_VERSION}
+    download_file $ZFS_LINK $ZFS_CHECKSUM 0-fs-${ZFS_VERSION}.tar.gz
 }
 
 extract_zfs() {
-    event "refreshing" "0-fs-${ZFS_VERSION}"
-    mkdir -p ${TF_HOME}
-    rm -rf ${TF_HOME}/0-fs
-    cp -a ${DISTFILES}/0-fs ${TF_HOME}/
+    if [ ! -d "0-fs-${ZFS_VERSION}" ]; then
+        echo "[+] extracting: 0-fs-${ZFS_VERSION}"
+        tar -xf ${DISTFILES}/0-fs-${ZFS_VERSION}.tar.gz -C .
+    fi
 }
 
 prepare_zfs() {
-    echo "[+] loading source code: 0-fs"
+    echo "[+] preparing 0-fs"
 }
 
 compile_zfs() {
     echo "[+] compiling 0-fs"
-    pushd 0-fs
     GO111MODULE=on make
-    popd
 }
 
 install_zfs() {
     echo "[+] copying binaries"
-    pushd 0-fs
     # the binary name is still called g8ufs
     cp -av g8ufs "${ROOTDIR}/sbin/"
-    popd
 }
 
 build_zfs() {
-    mkdir -p $TF_HOME
-    pushd $TF_HOME
+    pushd "${WORKDIR}/0-fs-${ZFS_VERSION}"
 
     prepare_zfs
     compile_zfs
