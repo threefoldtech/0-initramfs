@@ -8,7 +8,7 @@ download_openssl_musl() {
 }
 
 extract_openssl_musl() {
-    if [ ! -d "${OPENSSL_MUSL_PKGNAME}l-${OPENSSL_MUSL_VERSION}" ]; then
+    if [ ! -d "${OPENSSL_MUSL_PKGNAME}-${OPENSSL_MUSL_VERSION}" ]; then
         echo "[+] extracting: ${OPENSSL_MUSL_PKGNAME}-${OPENSSL_MUSL_VERSION}"
         tar -xf ${DISTFILES}/${OPENSSL_MUSL_PKGNAME}-${OPENSSL_MUSL_VERSION}.tar.gz -C .
     fi
