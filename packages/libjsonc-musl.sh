@@ -8,7 +8,7 @@ download_jsonc_musl() {
 }
 
 extract_jsonc_musl() {
-    if [ ! -d "${JSONC_MUSL_PKGNAME}-${JSONC_MUSL_VERSION}" ]; then
+    if [ ! -d "${JSONC_MUSL_PKGNAME}-json-c-${JSONC_MUSL_VERSION}" ]; then
         echo "[+] extracting: ${JSONC_MUSL_PKGNAME}-${JSONC_MUSL_PKGNAME}-${JSONC_MUSL_VERSION}"
         tar -xf ${DISTFILES}/${JSONC_MUSL_PKGNAME}-${JSONC_MUSL_VERSION}.tar.gz -C .
     fi

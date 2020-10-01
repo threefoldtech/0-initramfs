@@ -174,9 +174,19 @@ prepare() {
     fi
 
     if [ -z $GOPATH ]; then
-        echo "[-] gopath not defined"
-        exit 1
+        if command -v go > /dev/null; then
+            export GOPATH=$(go env GOPATH)
+        else
+            echo "[-] variable GOPATH not defined"
+            exit 1
+        fi
     fi
+
+    gover=$(go version)
+    echo "[+] go version: ${gover}"
+
+    cargover=$(cargo version)
+    echo "[+] cargo version: ${cargover}"
 
     echo "[+] setting up local system"
     echo "[+] building mode: ${BUILDMODE}"
@@ -693,7 +703,6 @@ main() {
         build_wireguard
         build_dhcpcd
         build_bcache
-        build_runc
         build_tcpdump
         build_rscoreutils
         build_firmware
@@ -719,13 +728,6 @@ main() {
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
         build_zinit
         build_zfs
-
-        # force re-download if we specify --cores
-        if [[ $DO_CORES == 1 ]]; then
-            download_modules
-            prepare_modules
-        fi
-
         build_modules
     fi
 
