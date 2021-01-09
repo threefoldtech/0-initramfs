@@ -17,12 +17,14 @@ prepare_zinit() {
 
 compile_zinit() {
     echo "[+] compiling zinit"
-    make release
+    # make release
+    make arm
 }
 
 install_zinit() {
     echo "[+] copying binaries"
-    cp -a target/x86_64-unknown-linux-musl/release/zinit "${ROOTDIR}/sbin/"
+    # cp -a target/x86_64-unknown-linux-musl/release/zinit "${ROOTDIR}/sbin/"
+    cp -a target/arm-unknown-linux-gnueabi/release/zinit "${ROOTDIR}/sbin/"
 }
 
 build_zinit() {
