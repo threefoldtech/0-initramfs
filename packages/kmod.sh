@@ -15,7 +15,16 @@ extract_kmod() {
 
 prepare_kmod() {
     echo "[+] preparing kmod"
-    ./configure --prefix=/ --with-xz --with-zlib
+
+    export LDFLAGS="-L${ROOTDIR}/lib"
+
+    ./configure --prefix=/ \
+        --build ${BUILDCOMPILE} \
+        --host ${BUILDHOST} \
+        --with-xz \
+        --with-zlib
+
+    unset LDFLAGS
 }
 
 compile_kmod() {
