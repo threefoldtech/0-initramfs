@@ -19,6 +19,12 @@ TOOLSDIR="${PWD}/tools"
 MUSLWORKDIR="${PWD}/staging/musl"
 MUSLROOTDIR="${PWD}/staging/musl/root"
 
+# Cross Build
+BUILDCOMPILE="x86_64-linux-gnu"
+BUILDHOST="armv6j-hardfloat-linux-gnueabi"
+BUILDARCH="armv6j"
+BUILDARCHKW="arm"
+
 # Download mirror repository
 MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
 
@@ -413,6 +419,12 @@ ensure_libs() {
     popd
 }
 
+ensure_glibc() {
+    # patchelf --set-interpreter /lib/ld-linux.so.3 --set-rpath /lib ${ROOTDIR}/usr/lib/libc-2.32.so
+    # patchelf --set-interpreter /lib/ld-linux.so.3 ${ROOTDIR}/usr/lib/libc-2.32.so
+    echo "nop"
+}
+
 #
 # Cleaner and optimizer
 #
@@ -483,7 +495,8 @@ optimize_size() {
 
         # checking if it's a ELF file
         if [ "$header" == "7F454C46" ]; then
-            strip --strip-debug $file || true
+            # ${BUILDHOST}-strip --strip-debug $file || true
+            echo "skip"
         fi
     done
 
@@ -675,38 +688,39 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
         # active build
-        build_zlib
-        build_fuse
-        build_openssl
-        build_certs
-        build_linuxutil
-        build_parted
-        build_e2fsprogs
-        build_btrfs
-        build_dnsmasq
-        build_nftables
-        build_iproute2
-        build_dmidecode
-        build_unionfs
-        build_eudev
+        ##build_zlib
+        ##build_xz
+        #build_fuse
+        #build_openssl
+        #build_certs
+        ##build_linuxutil
+        #build_parted
+        #build_e2fsprogs
+        #build_btrfs
+        #build_dnsmasq
+        #build_nftables
+        #build_iproute2
+        #build_dmidecode
+        #build_unionfs
         build_kmod
-        build_openssh
-        build_smartmon
-        build_netcat
-        build_redis
-        build_ethtool
-        build_rtinfo
-        build_seektime
-        build_curl
-        build_zflist
-        build_haveged
-        build_wireguard
-        build_dhcpcd
-        build_bcache
-        build_tcpdump
-        build_rscoreutils
-        build_firmware
-        build_xfsprogs
+        ##build_eudev
+        #build_openssh
+        #build_smartmon
+        #build_netcat
+        #build_redis
+        #build_ethtool
+        #build_rtinfo
+        #build_seektime
+        #build_curl
+        #build_zflist
+        #build_haveged
+        #build_wireguard
+        #build_dhcpcd
+        #build_bcache
+        #build_tcpdump
+        #build_rscoreutils
+        #build_firmware
+        #build_xfsprogs
 
         ## active musl packages
         # build_zlib_musl
@@ -727,8 +741,8 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
         build_zinit
-        build_zfs
-        build_modules
+        #build_zfs
+        #build_modules
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_EXTENSIONS == 1 ]]; then
@@ -736,7 +750,8 @@ main() {
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
-        ensure_libs
+        # ensure_libs
+        ensure_glibc
         clean_root
         optimize_size
         clean_busybox_outdated
