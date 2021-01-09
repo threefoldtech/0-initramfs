@@ -17,7 +17,7 @@ extract_zlib() {
 prepare_zlib() {
     echo "[+] configuring: ${ZLIB_PKGNAME}"
 
-    ./configure --prefix /usr
+    CC=${BUILDHOST}-gcc ./configure --prefix /usr
 }
 
 compile_zlib() {
