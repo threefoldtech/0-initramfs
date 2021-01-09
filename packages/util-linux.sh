@@ -20,7 +20,11 @@ prepare_linuxutil() {
     # --disable-all-progs is too aggressive and
     # don't let possibility to re-enable some specific
     # default software
+    export LDFLAGS=-L${ROOTDIR}/lib
+
     ./configure --prefix /usr \
+        --build ${BUILDCOMPILE} \
+        --host ${BUILDHOST} \
         --disable-libfdisk \
         --disable-partx \
         --disable-mount \
@@ -62,6 +66,9 @@ prepare_linuxutil() {
         --disable-rename \
         --disable-bash-completion \
         --disable-fdformat \
+        --without-tinfo \
+        --without-ncursesw \
+        --without-ncurses \
         --without-python
 }
 
