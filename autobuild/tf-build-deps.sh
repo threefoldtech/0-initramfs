@@ -56,4 +56,5 @@ mkdir -p /gopath
 # install rust
 curl https://sh.rustup.rs -sSf | sh -s -- -y
 source $HOME/.cargo/env
+rustup default 1.46.0
 rustup target add x86_64-unknown-linux-musl
