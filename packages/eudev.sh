@@ -16,9 +16,12 @@ extract_eudev() {
 prepare_eudev() {
     echo "[+] preparing eudev"
     ./autogen.sh
+
+    export LDFLAGS="-L${ROOTDIR}/lib"
+
     ./configure --prefix=/ \
-        --build=x86_64-pc-linux-gnu \
-        --host=x86_64-pc-linux-gnu \
+        --build ${BUILDCOMPILE} \
+        --host ${BUILDHOST} \
         --enable-blkid \
         --enable-kmod \
         --disable-selinux \
@@ -26,12 +29,13 @@ prepare_eudev() {
         --disable-rule-generator \
         --exec-prefix= \
         --with-rootprefix= \
+        --with-sysroot=${ROOTDIR} \
         --bindir=/bin
 }
 
 compile_eudev() {
     echo "[+] compiling eudev"
-    make ${MAKEOPTS}
+    make V=1 ${MAKEOPTS}
 
     # patching network rules for @delandtj
     sed -i /NET_NAME_ONBOARD/d rules/80-net-name-slot.rules
@@ -43,6 +47,8 @@ install_eudev() {
 
     echo "[+] compiling original hwdb"
     ${ROOTDIR}/bin/udevadm hwdb --update --root=${ROOTDIR}
+
+    unset LDFLAGS
 }
 
 build_eudev() {
