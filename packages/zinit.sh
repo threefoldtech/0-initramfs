@@ -17,8 +17,11 @@ prepare_zinit() {
 
 compile_zinit() {
     echo "[+] compiling zinit"
-    # make release
-    make arm
+    # cargo build --release --target=x86_64-unknown-linux-musl
+
+    export CC_arm_unknown_linux_gnueabi="${BUILDHOST}-gcc"
+    cargo build --release --target=arm-unknown-linux-gnueabi
+    unset CC_arm_unknown_linux_gnueabi
 }
 
 install_zinit() {
