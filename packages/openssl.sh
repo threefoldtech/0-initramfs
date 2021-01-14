@@ -15,7 +15,8 @@ extract_openssl() {
 
 prepare_openssl() {
     echo "[+] preparing openssl"
-    ./config --prefix=/usr shared
+    # ./config --prefix=/usr shared
+    ./Configure --prefix=/usr shared linux-armv4
 }
 
 compile_openssl() {
