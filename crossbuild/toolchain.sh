@@ -14,16 +14,21 @@ pushd /opt/tmp/cross-compile
 dependencies() {
     apt-get update
     apt-get install -y curl git xz-utils lbzip2 build-essential texinfo python3 patchelf
-    apt-get install -y wget build-essential xz-utils libgmp3-dev libmpc-dev gawk bc linux-headers-generic libncurses5-dev
+    apt-get install -y wget libgmp3-dev libmpc-dev gawk bc linux-headers-generic libncurses5-dev
 }
 
 initramdeps() {
     # xsltproc: eudev
     # gperf: eudev
     # autopoint: netcat6
-    # bison:
-    # flex:
-    apt-get install -y pkg-config m4 bison flex autoconf libtool autogen autopoint xsltproc gperf
+    # bison: kernel
+    # flex: kernel
+    # docbook-xsl: eudev
+    # bsdmainutils: kernel (hexdump)
+    # libssl-dev: kernel
+    apt-get install -y pkg-config m4 bison flex autoconf libtool autogen \
+        autopoint xsltproc gperf musl-tools gettext docbook-xsl bsdmainutils \
+        libssl-dev
 }
 
 rustchain() {
