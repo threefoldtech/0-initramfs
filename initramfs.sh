@@ -25,6 +25,8 @@ BUILDHOST="armv6j-hardfloat-linux-gnueabi"
 BUILDARCH="armv6j"
 BUILDARCHKW="arm"
 
+export CC=${BUILDHOST}-gcc
+
 # Download mirror repository
 MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
 
