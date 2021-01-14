@@ -19,6 +19,7 @@ prepare_kmod() {
     export LDFLAGS="-L${ROOTDIR}/lib"
 
     ./configure --prefix=/ \
+        --with-sysroot=${ROOTDIR}/lib \
         --build ${BUILDCOMPILE} \
         --host ${BUILDHOST} \
         --with-xz \
