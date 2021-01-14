@@ -17,7 +17,9 @@ prepare_fuse() {
     echo "[+] preparing fuse"
 
     ./makeconf.sh
-    ./configure --prefix /usr
+    ./configure --prefix /usr \
+        --build ${BUILDCOMPILE} \
+        --host ${BUILDHOST}
 }
 
 compile_fuse() {
