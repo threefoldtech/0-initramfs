@@ -19,7 +19,7 @@ prepare_redis() {
 }
 
 compile_redis() {
-    make ${MAKEOPTS}
+    make MALLOC=libc LDFLAGS=-latomic ${MAKEOPTS}
 }
 
 install_redis() {
