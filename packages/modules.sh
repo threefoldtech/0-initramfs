@@ -17,17 +17,41 @@ prepare_modules() {
     echo "[+] prepare modules"
 }
 
-install_modules() {
+compile_modules() {
     echo "[+] building zos bootstrap"
-    pushd bootstrap
-    make install GO111MODULE=on ROOT=${ROOTDIR}
+
+    export GOARCH=arm
+    export GO111MODULE=on
+
+    pushd cmds
+    make internet
     popd
+
+    pushd bootstrap/bootstrap
+    cargo build --release --target=arm-unknown-linux-gnueabi --features vendored
+    popd
+
+}
+
+install_modules() {
+    echo "[+] installing zos bootstrap"
+    mkdir -p ${ROOTDIR}/etc/zinit/
+    mkdir -p ${ROOTDIR}/bin
+    mkdir -p ${ROOTDIR}/sbin
+
+    # install interent
+    cp bin/internet ${ROOTDIR}/bin
+
+    # install bootstrap
+    cp -a bootstrap/etc ${ROOTDIR}
+    cp bootstrap/bootstrap/target/arm-unknown-linux-gnueabi/release/bootstrap ${ROOTDIR}/sbin/
 }
 
 build_modules() {
     pushd ${WORKDIR}/zos-${MODULES_VERSION}
 
     prepare_modules
+    compile_modules
     install_modules
 
     popd
