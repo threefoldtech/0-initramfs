@@ -1,0 +1,2 @@
+exec: sh /etc/zinit/init/raspberry.sh
+oneshot: true
