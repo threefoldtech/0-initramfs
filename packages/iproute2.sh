@@ -15,6 +15,12 @@ extract_iproute2() {
 
 prepare_iproute2() {
     echo "[+] preparing iproute2"
+
+    make distclean
+
+    # drop libmnl libcap libelf
+
+    export CC=${BUILDHOST}-gcc
     ./configure
 
     # disable selinux, not needed
