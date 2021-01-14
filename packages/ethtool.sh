@@ -15,7 +15,7 @@ extract_ethtool() {
 
 prepare_ethtool() {
     echo "[+] preparing ethtool"
-    ./configure
+    ./configure --build ${BUILDCOMPILE} --host ${BUILDHOST}
 }
 
 compile_ethtool() {
