@@ -15,7 +15,9 @@ extract_haveged() {
 
 prepare_haveged() {
     echo "[+] configuring haveged"
-    ./configure --build ${BUILDCOMPILE} --host ${BUILDHOST}
+    ./configure --prefix=/usr \
+        --build ${BUILDCOMPILE} \
+        --host ${BUILDHOST}
 }
 
 compile_haveged() {

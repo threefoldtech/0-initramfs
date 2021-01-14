@@ -17,7 +17,7 @@ extract_zlib_musl() {
 prepare_zlib_musl() {
     echo "[+] configuring: ${ZLIB_MUSL_PKGNAME}"
 
-    CC="musl-gcc" ./configure --prefix /
+    CC="musl-gcc" ./configure --prefix=/
 }
 
 compile_zlib_musl() {

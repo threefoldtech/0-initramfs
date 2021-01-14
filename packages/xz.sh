@@ -17,8 +17,8 @@ prepare_xz() {
     echo "[+] preparing xz"
 
     ./configure --prefix=/usr \
-        --build ${BUILDCOMPILE} \
-        --host ${BUILDHOST}
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST}
 }
 
 compile_xz() {

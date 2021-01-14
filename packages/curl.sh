@@ -17,12 +17,40 @@ extract_curl() {
 prepare_curl() {
     echo "[+] configuring curl"
     autoreconf -f -i -s
-    ./configure --disable-debug --enable-optimize --disable-curldebug --disable-symbol-hiding --disable-rt \
-        --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict \
-        --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher \
-        --disable-manual --disable-libcurl-option --disable-sspi --disable-ntlm-wb --without-brotli --without-librtmp --without-winidn \
+
+
+    ./configure \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
+        --disable-debug \
+        --enable-optimize \
+        --disable-curldebug \
+        --disable-symbol-hiding \
+        --disable-rt \
+        --disable-ftp \
+        --disable-ldap \
+        --disable-ldaps \
+        --disable-rtsp \
+        --disable-proxy \
+        --disable-dict \
+        --disable-telnet \
+        --disable-tftp \
+        --disable-pop3 \
+        --disable-imap \
+        --disable-smb \
+        --disable-smtp \
+        --disable-gopher \
+        --disable-manual \
+        --disable-libcurl-option \
+        --disable-sspi \
+        --disable-ntlm-wb \
+        --without-brotli \
+        --without-librtmp \
+        --without-winidn \
         --disable-threaded-resolver \
-        --with-openssl
+        --with-openssl \
+        --with-ssl=${ROOTDIR}/usr/lib \
+        --with-ca-path=${ROOTDIR}/etc/ssl/certs
 }
 
 compile_curl() {

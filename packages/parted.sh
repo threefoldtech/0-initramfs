@@ -18,7 +18,7 @@ prepare_parted() {
     export CFLAGS="-I${ROOTDIR}/usr/include"
 
     echo "[+] configuring parted"
-    ./configure --prefix "${ROOTDIR}"/usr --disable-device-mapper
+    ./configure --prefix="${ROOTDIR}"/usr --disable-device-mapper
 
     if [ ! -f .patched_parted-3.2-devmapper.patch ]; then
         echo "[+] applying patch"

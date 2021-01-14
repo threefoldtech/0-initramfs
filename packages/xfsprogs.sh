@@ -15,7 +15,7 @@ extract_xfsprogs() {
 
 prepare_xfsprogs() {
     echo "[+] configuring xfsprogs"
-    ./configure --prefix "${ROOTDIR}"/usr
+    ./configure --prefix="${ROOTDIR}"/usr
 }
 
 compile_xfsprogs() {

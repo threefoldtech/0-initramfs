@@ -21,7 +21,9 @@ prepare_btrfs() {
     export LDFLAGS="-L${ROOTDIR}/usr/lib/"
     export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig"
 
-    ./configure --prefix /usr \
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
         --disable-documentation \
         --disable-convert \
         --disable-zstd \

@@ -22,9 +22,9 @@ prepare_linuxutil() {
     # default software
     export LDFLAGS=-L${ROOTDIR}/lib
 
-    ./configure --prefix /usr \
-        --build ${BUILDCOMPILE} \
-        --host ${BUILDHOST} \
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
         --disable-libfdisk \
         --disable-partx \
         --disable-mount \

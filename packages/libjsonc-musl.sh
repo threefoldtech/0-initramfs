@@ -17,7 +17,7 @@ extract_jsonc_musl() {
 prepare_jsonc_musl() {
     echo "[+] configuring: ${JSONC_MUSL_PKGNAME}"
 
-    CC="musl-gcc" ./configure --disable-shared --enable-static --prefix /
+    CC="musl-gcc" ./configure --disable-shared --enable-static --prefix=/
 }
 
 compile_jsonc_musl() {

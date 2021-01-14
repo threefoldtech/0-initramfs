@@ -36,7 +36,7 @@ extract_nftables() {
 build_libmnl() {
     echo "[+] building libmnl"
 
-    ./configure --prefix "${ROOTDIR}"/usr/
+    ./configure --prefix="${ROOTDIR}"/usr/
 
     make ${MAKEOPTS}
     make install
@@ -48,7 +48,7 @@ build_libnftnl() {
     export LIBMNL_CFLAGS="-I${ROOTDIR}/usr/include"
     export LIBMNL_LIBS="-L${ROOTDIR}/usr/lib -lmnl"
 
-    ./configure --prefix "${ROOTDIR}"/usr/
+    ./configure --prefix="${ROOTDIR}"/usr/
 
     make ${MAKEOPTS}
     make install
