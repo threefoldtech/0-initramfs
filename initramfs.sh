@@ -495,8 +495,7 @@ optimize_size() {
 
         # checking if it's a ELF file
         if [ "$header" == "7F454C46" ]; then
-            # ${BUILDHOST}-strip --strip-debug $file || true
-            echo "skip"
+            ${BUILDHOST}-strip --strip-debug $file || true
         fi
     done
 
