@@ -17,11 +17,9 @@ prepare_eudev() {
     echo "[+] preparing eudev"
     ./autogen.sh
 
-    export LDFLAGS="-L${ROOTDIR}/lib"
-
-    ./configure --prefix=/ \
-        --build ${BUILDCOMPILE} \
-        --host ${BUILDHOST} \
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
         --enable-blkid \
         --enable-kmod \
         --disable-selinux \

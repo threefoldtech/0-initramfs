@@ -26,6 +26,9 @@ BUILDARCH="armv6j"
 BUILDARCHKW="arm"
 
 export CC=${BUILDHOST}-gcc
+export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig"
+export CFLAGS="-I${ROOTDIR}/usr/include"
+export LDFLAGS="-L${ROOTDIR}/usr/lib"
 
 # Download mirror repository
 MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
