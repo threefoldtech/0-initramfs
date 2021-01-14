@@ -26,6 +26,18 @@ initramdeps() {
     apt-get install -y pkg-config m4 bison flex autoconf libtool autogen autopoint xsltproc gperf
 }
 
+rustchain() {
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+    source $HOME/.cargo/env
+    rustup default 1.46.0
+    rustup target add arm-unknown-linux-gnueabi
+
+    mkdir -p ~/.cargo
+    echo '[build]' > ~/.cargo/config
+    echo '[target.arm-unknown-linux-gnueabi]' >> ~/.cargo/config
+    echo 'linker = "armv6j-hardfloat-linux-gnueabi-gcc"' >> ~/.cargo/config
+}
+
 toolchain() {
     BINUTILS_VERSION="2.34"
     MPFR_VERSION="4.1.0"
@@ -256,6 +268,7 @@ usertools() {
 
 dependencies
 initramdeps
+rustchain
 toolchain
 # golang
 # golang_env
