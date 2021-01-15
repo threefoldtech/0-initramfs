@@ -22,8 +22,6 @@ prepare_kmod() {
         --host=${BUILDHOST} \
         --with-xz \
         --with-zlib
-
-    unset LDFLAGS
 }
 
 compile_kmod() {

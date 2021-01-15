@@ -45,8 +45,6 @@ install_eudev() {
 
     echo "[+] compiling original hwdb"
     # ${ROOTDIR}/bin/udevadm hwdb --update --root=${ROOTDIR}
-
-    unset LDFLAGS
 }
 
 build_eudev() {
