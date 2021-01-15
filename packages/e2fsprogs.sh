@@ -16,6 +16,8 @@ extract_e2fsprogs() {
 prepare_e2fsprogs() {
     echo "[+] configuring e2fsprogs"
     ./configure --prefix="${ROOTDIR}"/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
         --enable-subset \
         --enable-symlink-install \
         --enable-relative-symlinks \
