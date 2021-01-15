@@ -69,6 +69,7 @@ prepare_linuxutil() {
         --without-tinfo \
         --without-ncursesw \
         --without-ncurses \
+        --without-udev \
         --without-python
 }
 
