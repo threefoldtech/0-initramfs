@@ -1,5 +1,5 @@
-PARTED_VERSION="3.2"
-PARTED_CHECKSUM="0247b6a7b314f8edeb618159fa95f9cb"
+PARTED_VERSION="3.3"
+PARTED_CHECKSUM="090655d05f3c471aa8e15a27536889ec"
 PARTED_LINK="http://ftp.gnu.org/gnu/parted/parted-${PARTED_VERSION}.tar.xz"
 
 download_parted() {
@@ -14,28 +14,20 @@ extract_parted() {
 }
 
 prepare_parted() {
-    export LDFLAGS="-L${ROOTDIR}/usr/lib/"
-    export CFLAGS="-I${ROOTDIR}/usr/include"
-
     echo "[+] configuring parted"
-    ./configure --prefix="${ROOTDIR}"/usr --disable-device-mapper
-
-    if [ ! -f .patched_parted-3.2-devmapper.patch ]; then
-        echo "[+] applying patch"
-        patch -p1 < ${PATCHESDIR}/parted-3.2-devmapper.patch
-        touch .patched_parted-3.2-devmapper.patch
-    fi
+    ./configure --prefix="${ROOTDIR}"/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
+        --without-readline \
+        --disable-device-mapper
 }
 
 compile_parted() {
-    make ${MAKEOPTS}
+    make LDFLAGS="-L${ROOTDIR}/lib -lblkid -luuid" ${MAKEOPTS}
 }
 
 install_parted() {
     make install
-
-    unset LDFLAGS
-    unset CFLAGS
 }
 
 build_parted() {
