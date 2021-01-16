@@ -158,17 +158,6 @@ toolchain() {
     armv6j-hardfloat-linux-gnueabi-gcc confirm.c -o /dev/null
 }
 
-golang() {
-    curl https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz > /tmp/go1.8.linux-amd64.tar.gz
-    tar -C /usr/local -xzf /tmp/go1.8.linux-amd64.tar.gz
-    mkdir -p /gopath
-}
-
-golang_env() {
-    export PATH=$PATH:/usr/local/go/bin
-    export GOPATH=/gopath
-}
-
 usertools() {
     # git clone https://github.com/zero-os/0-initramfs /opt/0-initramfs
 
@@ -281,6 +270,7 @@ usertools() {
 dependencies
 initramdeps
 rustchain
+gochain
 toolchain
 # golang
 # golang_env
