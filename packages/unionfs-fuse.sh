@@ -18,12 +18,10 @@ prepare_unionfs() {
 }
 
 compile_unionfs() {
-    export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig"
     export CPPFLAGS="-D_FILE_OFFSET_BITS=64 -I${ROOTDIR}/usr/include"
-    export LDFLAGS="-L${ROOTDIR}/usr/lib -lfuse"
 
     echo "[+] compiling unionfs-fuse"
-    make ${MAKEOPTS}
+    make LDFLAGS="$LDFLAGS -lfuse" ${MAKEOPTS}
 }
 
 install_unionfs() {
@@ -31,10 +29,6 @@ install_unionfs() {
     cp -a mount.unionfs "${ROOTDIR}"/usr/bin/
     cp -a src/unionfs "${ROOTDIR}"/usr/bin/
     cp -a src/unionfsctl "${ROOTDIR}"/usr/bin/
-
-    unset PKG_CONFIG_PATH
-    unset CPPFLAGS
-    unset LDFLAGS
 }
 
 build_unionfs() {
