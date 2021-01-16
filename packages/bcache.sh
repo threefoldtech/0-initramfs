@@ -24,10 +24,12 @@ prepare_bcache() {
 }
 
 compile_bcache() {
-    make ${MAKEOPTS}
+    echo "[+] compiling: bcache-tools"
+    make CFLAGS="$CFLAGS -I${ROOTDIR}/usr/include/blkid" ${MAKEOPTS}
 }
 
 install_bcache() {
+    echo "[+] installing: bcache-tools"
     make DESTDIR=${ROOTDIR} install
 }
 
