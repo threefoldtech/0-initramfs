@@ -708,39 +708,43 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
         # active build
-        ##build_zlib
-        ##build_xz
-        #build_fuse
-        #build_openssl
-        #build_certs
-        ##build_linuxutil
-        #build_parted
-        #build_e2fsprogs
-        #build_btrfs
-        #build_dnsmasq
-        #build_nftables
-        #build_iproute2
-        #build_dmidecode
-        #build_unionfs
-        build_kmod
-        ##build_eudev
-        #build_openssh
-        #build_smartmon
-        #build_netcat
-        #build_redis
-        #build_ethtool
-        #build_rtinfo
-        #build_seektime
-        #build_curl
-        #build_zflist
-        #build_haveged
+        ## build_zlib
+        ## build_liblzo
+        ## build_readline
+        ## build_xz
+        ## build_linuxutil
+        ## build_kmod
+        ## build_eudev
+        ## build_fuse
+        ## build_openssl
+        ## build_certs
+        ## build_e2fsprogs
+        ## build_parted
+        ## build_btrfs
+        ## build_dnsmasq
+        ## build_jansson
+        ## build_ncurses
+        ## build_nftables
+        ## build_iproute2
+        ## build_dmidecode
+        ## build_unionfs
+        ## build_openssh
+        ## build_smartmon
+        ## build_netcat
+        ## build_redis
+        ## build_ethtool
+        ## build_rtinfo
+        ## build_seektime
+        ### build_curl
+        # build_zflist # SNAPPY SQLITE3 HIREDIS LIBTAR BLAKE2
+        ## build_haveged
         #build_wireguard
-        #build_dhcpcd
-        #build_bcache
+        ## build_dhcpcd
+        ## build_bcache
         #build_tcpdump
-        #build_rscoreutils
-        #build_firmware
-        #build_xfsprogs
+        ## build_rscoreutils
+        build_firmware
+        ## build_xfsprogs
 
         ## active musl packages
         # build_zlib_musl
@@ -762,7 +766,7 @@ main() {
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
         build_zinit
         #build_zfs
-        #build_modules
+        build_modules
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_EXTENSIONS == 1 ]]; then
@@ -772,7 +776,7 @@ main() {
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
         # ensure_libs
         ensure_glibc
-        clean_root
+        # clean_root
         optimize_size
         clean_busybox_outdated
         zero_os_root
