@@ -21,13 +21,13 @@ prepare_busybox() {
 compile_busybox() {
     echo "[+] compiling busybox"
 
-    make ARCH=${BUILDARCHKW} CROSS_COMPILE=${BUILDHOST}-
+    make ARCH=${BUILDARCH} CROSS_COMPILE=${BUILDHOST}-
     # make ${MAKEOPTS}
 }
 
 install_busybox() {
     # make install
-    make ARCH=${BUILDARCHKW} CROSS_COMPILE=${BUILDHOST}- install
+    make ARCH=${BUILDARCH} CROSS_COMPILE=${BUILDHOST}- install
     cp -av _install/* "${ROOTDIR}/"
 }
 

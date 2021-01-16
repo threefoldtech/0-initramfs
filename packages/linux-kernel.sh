@@ -43,14 +43,14 @@ compile_kernel() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
         echo "[+] compiling the kernel (modules)"
-        make ARCH=${BUILDARCHKW} CROSS_COMPILE=${BUILDHOST}- ${MAKEOPTS} modules
-        make ARCH=${BUILDARCHKW} CROSS_COMPILE=${BUILDHOST}- INSTALL_MOD_PATH="${ROOTDIR}" modules_install
+        make ARCH=${BUILDARCH} CROSS_COMPILE=${BUILDHOST}- ${MAKEOPTS} modules
+        make ARCH=${BUILDARCH} CROSS_COMPILE=${BUILDHOST}- INSTALL_MOD_PATH="${ROOTDIR}" modules_install
         # depmod -a -b "${ROOTDIR}" "${KERNEL_VERSION}-Zero-OS"
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]]; then
         echo "[+] compiling the kernel (vmlinuz)"
-        make ARCH=${BUILDARCHKW} CROSS_COMPILE=${BUILDHOST}- ${MAKEOPTS}
+        make ARCH=${BUILDARCH} CROSS_COMPILE=${BUILDHOST}- ${MAKEOPTS}
     fi
 }
 

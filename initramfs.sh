@@ -22,14 +22,14 @@ MUSLROOTDIR="${PWD}/staging/musl/root"
 # Cross Build
 BUILDCOMPILE="x86_64-linux-gnu"
 BUILDHOST="armv6j-hardfloat-linux-gnueabi"
-BUILDARCH="armv6j"
-BUILDARCHKW="arm"
+BUILDARCH="arm"
 BUILDRUST="arm-unknown-linux-gnueabi"
 
 export CC=${BUILDHOST}-gcc
 export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig"
 export CFLAGS="-I${ROOTDIR}/usr/include"
 export LDFLAGS="-L${ROOTDIR}/usr/lib"
+export GOARCH=${BUILDARCH}
 
 # Download mirror repository
 MIRRORSRC="https://download.grid.tf/initramfs-mirror/"

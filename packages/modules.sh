@@ -20,7 +20,6 @@ prepare_modules() {
 compile_modules() {
     echo "[+] building zos bootstrap"
 
-    export GOARCH=arm
     export GO111MODULE=on
 
     pushd cmds
