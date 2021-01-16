@@ -30,7 +30,7 @@ prepare_wireguard_modules() {
 
 compile_wireguard_tools() {
     echo "[+] compiling wireguard (tools)"
-    make ${MAKEOPTS}
+    make V=1 ${MAKEOPTS}
 }
 
 install_wireguard_tools() {
