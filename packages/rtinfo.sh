@@ -33,14 +33,11 @@ build_librtinfo() {
 
 prepare_rtinfo() {
     echo "[+] preparing rtinfo (client)"
-
-    export CFLAGS="-I${ROOTDIR}/usr/include"
-    export LDFLAGS="-L${ROOTDIR}/usr/lib"
 }
 
 compile_rtinfo() {
     echo "[+] compiling rtinfo (client)"
-    make ${MAKEOPTS}
+    make CC=$CC ${MAKEOPTS}
 }
 
 install_rtinfo() {
