@@ -736,13 +736,18 @@ main() {
         ## build_ethtool
         ## build_rtinfo
         ## build_seektime
-        ### build_curl
-        # build_zflist # SNAPPY SQLITE3 HIREDIS LIBTAR BLAKE2
+        ## build_curl
+        ## build_snappy
+        ## build_sqlite3
+        ## build_hiredis
+        ## build_libtar
+        ## build_blake2
+        build_zflist
         ## build_haveged
         #build_wireguard
         ## build_dhcpcd
         ## build_bcache
-        #build_tcpdump
+        ## build_tcpdump
         ## build_rscoreutils
         build_firmware
         ## build_xfsprogs
@@ -761,7 +766,8 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
         # build_ork
-        build_restic
+        # build_restic
+        echo "all"
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
