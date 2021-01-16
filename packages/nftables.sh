@@ -36,41 +36,45 @@ extract_nftables() {
 build_libmnl() {
     echo "[+] building libmnl"
 
-    ./configure --prefix="${ROOTDIR}"/usr/
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST}
 
     make ${MAKEOPTS}
-    make install
+    make DESTDIR=${ROOTDIR} install
 }
 
 build_libnftnl() {
     echo "[+] building libnftnl"
 
-    export LIBMNL_CFLAGS="-I${ROOTDIR}/usr/include"
-    export LIBMNL_LIBS="-L${ROOTDIR}/usr/lib -lmnl"
-
-    ./configure --prefix="${ROOTDIR}"/usr/
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST}
 
     make ${MAKEOPTS}
-    make install
+    make DESTDIR=${ROOTDIR} install
 }
 
 prepare_nftables() {
     echo "[+] preparing nftables"
 
-    export LIBNFTNL_CFLAGS="-I${ROOTDIR}/usr/include"
-    export LIBNFTNL_LIBS="-L${ROOTDIR}/usr/lib -lnftnl"
+    # fix readline link
+    export LIBS="-lncurses -lmnl -lnftnl"
 
-    ./configure --prefix="/usr" \
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
         --disable-debug \
         --with-cli \
         --with-json \
         --with-mini-gmp \
+        --with-sysroot=${ROOTDIR} \
         --disable-man-doc
 }
 
 compile_nftables() {
     echo "[+] compiling nftables"
-    make ${MAKEOPTS}
+    make V=1 ${MAKEOPTS}
 }
 
 install_nftables() {
