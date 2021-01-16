@@ -15,7 +15,7 @@ extract_e2fsprogs() {
 
 prepare_e2fsprogs() {
     echo "[+] configuring e2fsprogs"
-    ./configure --prefix="${ROOTDIR}"/usr \
+    ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
         --enable-subset \
@@ -33,7 +33,7 @@ compile_e2fsprogs() {
 }
 
 install_e2fsprogs() {
-    make install
+    make DESTDIR=${ROOTDIR} install
 }
 
 build_e2fsprogs() {

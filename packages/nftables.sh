@@ -38,7 +38,8 @@ build_libmnl() {
 
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
-        --host=${BUILDHOST}
+        --host=${BUILDHOST} \
+        --with-sysroot=${ROOTDIR}
 
     make ${MAKEOPTS}
     make DESTDIR=${ROOTDIR} install
@@ -49,7 +50,8 @@ build_libnftnl() {
 
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
-        --host=${BUILDHOST}
+        --host=${BUILDHOST} \
+        --with-sysroot=${ROOTDIR}
 
     make ${MAKEOPTS}
     make DESTDIR=${ROOTDIR} install
@@ -58,10 +60,9 @@ build_libnftnl() {
 prepare_nftables() {
     echo "[+] preparing nftables"
 
-    # fix readline link
-    export LIBS="-lncurses -lmnl -lnftnl"
-
-    ./configure --prefix=/usr \
+    # LIBS fixes readline link
+    LIBS="-lncurses -lmnl -lnftnl" ./configure \
+        --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
         --disable-debug \

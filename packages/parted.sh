@@ -15,7 +15,7 @@ extract_parted() {
 
 prepare_parted() {
     echo "[+] configuring parted"
-    ./configure --prefix="${ROOTDIR}"/usr \
+    ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
         --disable-device-mapper
@@ -26,7 +26,7 @@ compile_parted() {
 }
 
 install_parted() {
-    make install
+    make DESTDIR=${ROOTDIR} install
 }
 
 build_parted() {

@@ -49,7 +49,7 @@ prepare_curl() {
         --without-winidn \
         --disable-threaded-resolver \
         --with-openssl \
-        --with-ssl=${ROOTDIR}/usr/lib \
+        --with-ssl=${ROOTDIR} \
         --with-ca-path=${ROOTDIR}/etc/ssl/certs
 }
 

@@ -709,48 +709,48 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
         # active build
-        ## build_zlib
-        ## build_liblzo
-        ## build_readline
-        ## build_xz
-        ## build_linuxutil
-        ## build_kmod
-        ## build_eudev
-        ## build_fuse
-        ## build_openssl
-        ## build_certs
-        ## build_e2fsprogs
-        ## build_parted
-        ## build_btrfs
-        ## build_dnsmasq
-        ## build_jansson
-        ## build_ncurses
-        ## build_nftables
-        ## build_iproute2
-        ## build_dmidecode
-        ## build_unionfs
-        ## build_openssh
-        ## build_smartmon
-        ## build_netcat
-        ## build_redis
-        ## build_ethtool
-        ## build_rtinfo
-        ## build_seektime
-        ## build_curl
-        ## build_snappy
-        ## build_sqlite3
-        ## build_hiredis
-        ## build_libtar
-        ## build_blake2
-        ## build_zflist
-        ## build_haveged
+        build_zlib
+        build_liblzo
+        build_readline
+        build_ncurses
+        build_xz
+        build_linuxutil
+        build_kmod
+        build_eudev
+        build_fuse
+        build_openssl
+        build_certs
+        build_e2fsprogs
+        build_parted
+        build_btrfs
+        build_dnsmasq
+        build_jansson
+        build_nftables
+        build_iproute2
+        build_dmidecode
+        build_unionfs
+        build_openssh
+        build_smartmon
+        build_netcat
+        build_redis
+        build_ethtool
+        build_rtinfo
+        build_seektime
+        build_curl
+        build_snappy
+        build_sqlite3
+        build_hiredis
+        build_libtar
+        build_blake2
+        build_zflist
+        build_haveged
         build_wireguard
-        ## build_dhcpcd
-        ## build_bcache
-        ## build_tcpdump
-        ## build_rscoreutils
+        build_dhcpcd
+        build_bcache
+        build_tcpdump
+        build_rscoreutils
         build_firmware
-        ## build_xfsprogs
+        build_xfsprogs
 
         ## active musl packages
         # build_zlib_musl

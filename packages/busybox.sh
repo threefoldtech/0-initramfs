@@ -21,8 +21,7 @@ prepare_busybox() {
 compile_busybox() {
     echo "[+] compiling busybox"
 
-    make ARCH=${BUILDARCH} CROSS_COMPILE=${BUILDHOST}-
-    # make ${MAKEOPTS}
+    make ARCH=${BUILDARCH} CROSS_COMPILE=${BUILDHOST}- ${MAKEOPTS}
 }
 
 install_busybox() {
