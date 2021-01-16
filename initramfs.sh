@@ -26,6 +26,7 @@ BUILDARCH="arm"
 BUILDRUST="arm-unknown-linux-gnueabi"
 
 export CC=${BUILDHOST}-gcc
+export CXX=${BUILDHOST}-g++
 export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig"
 export CFLAGS="-I${ROOTDIR}/usr/include"
 export LDFLAGS="-L${ROOTDIR}/usr/lib"
