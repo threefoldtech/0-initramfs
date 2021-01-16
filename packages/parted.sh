@@ -18,7 +18,6 @@ prepare_parted() {
     ./configure --prefix="${ROOTDIR}"/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
-        --without-readline \
         --disable-device-mapper
 }
 
