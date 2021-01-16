@@ -53,6 +53,9 @@ install_firmware() {
 build_firmware() {
     pushd "${WORKDIR}/linux-firmware-${FIRMWARE_VERSION}"
 
+    # not needed for arm, afaik
+    return
+
     prepare_firmware
     install_firmware
 
