@@ -15,7 +15,9 @@ extract_smartmon() {
 
 prepare_smartmon() {
     echo "[+] preparing smartmontools"
-    ./configure --prefix=/usr
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST}
 }
 
 compile_smartmon() {
