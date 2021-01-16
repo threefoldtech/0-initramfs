@@ -1,7 +1,7 @@
 HIREDIS_PKGNAME="hiredis"
 HIREDIS_VERSION="1.0.0"
 HIREDIS_CHECKSUM="209ae570cdee65a5143ea6db8ac07fe3"
-HIREDIS_LINK="https://github.com/redis/hiredis/archive/v1.0.0.tar.gz"
+HIREDIS_LINK="https://github.com/redis/hiredis/archive/v${HIREDIS_VERSION}.tar.gz"
 
 download_hiredis() {
     download_file $HIREDIS_LINK $HIREDIS_CHECKSUM hiredis-${HIREDIS_VERSION}.tar.gz
