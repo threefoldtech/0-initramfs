@@ -15,9 +15,9 @@ extract_openssh() {
 
 prepare_openssh() {
     echo "[+] preparing openssh"
-    export CFLAGS="-I${ROOTDIR}/include"
-    export LDFLAGS="-L${ROOTDIR}/lib"
     ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
         --sysconfdir=/etc/ssh \
         --without-kerberos5 \
         --without-ldns \
