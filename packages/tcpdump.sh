@@ -19,7 +19,7 @@ extract_tcpdump() {
     fi
 
     if [ ! -d "libpcap-${LIBPCAP_VERSION}" ]; then
-        echo "[+] extracting: libocap-${LIBPCAP_VERSION}"
+        echo "[+] extracting: libpcap-${LIBPCAP_VERSION}"
         tar -xf ${DISTFILES}/libpcap-${LIBPCAP_VERSION}.tar.gz -C .
     fi
 
@@ -28,20 +28,31 @@ extract_tcpdump() {
 build_libpcap() {
     echo "[+] preparing libcap"
 
-    ./configure --prefix=/usr --enable-ipv6 \
-        --disable-remote --disable-usb --disable-netmap --disable-bluetooth \
-        --disable-dbus --disable-rdma --prefix=/usr
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
+        --enable-ipv6 \
+        --disable-remote \
+        --disable-usb \
+        --disable-netmap \
+        --disable-bluetooth \
+        --disable-dbus \
+        --disable-rdma
 
-    make -j ${MAKEOPTS}
+    make ${MAKEOPTS}
 
     # no need to install, tcpdump will automatically find
-    # this libpcap staging directory and static link against it
+    # this libpcap on parent directory and static link against it
     # make DESTDIR=${ROOTDIR} install-shared
 }
 
 prepare_tcpdump() {
     echo "[+] preparing tcpdump"
-    ./configure --prefix=/usr --disable-smb --without-smi
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
+        --disable-smb \
+        --without-smi
 }
 
 compile_tcpdump() {
