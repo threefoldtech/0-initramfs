@@ -19,7 +19,10 @@ prepare_zfs() {
 
 compile_zfs() {
     echo "[+] compiling 0-fs"
-    GO111MODULE=on make
+    pushd cmd
+    goldflags="-w -s"
+    GO111MODULE=on go build -ldflags "${goldflags}" -o ../g8ufs
+    popd
 }
 
 install_zfs() {

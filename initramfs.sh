@@ -765,7 +765,7 @@ main() {
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
         build_zinit
-        #build_zfs
+        build_zfs
         build_modules
     fi
 
