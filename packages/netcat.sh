@@ -20,10 +20,12 @@ prepare_netcat() {
 }
 
 compile_netcat() {
-    make nc
+    echo "[+] building: netcat"
+    make CC=$CC nc
 }
 
 install_netcat() {
+    echo "[+] installing: netcat"
     cp -avL nc "${ROOTDIR}/usr/bin/"
 }
 
