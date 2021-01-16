@@ -2,7 +2,7 @@
 set -ex
 
 # make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi-
-MAKEOPTS="-j5"
+MAKEOPTS="-j24"
 BUILD_ARCH="armv6j-hardfloat-linux-gnueabi"
 BUILD_HOST="x86_64-pc-linux-gnu"
 BUILD_PREFIX="/usr/local"
@@ -26,9 +26,10 @@ initramdeps() {
     # docbook-xsl: eudev
     # bsdmainutils: kernel (hexdump)
     # libssl-dev: kernel
+    # cmake: snappy
     apt-get install -y pkg-config m4 bison flex autoconf libtool autogen \
         autopoint xsltproc gperf musl-tools gettext docbook-xsl bsdmainutils \
-        libssl-dev
+        libssl-dev cmake
 }
 
 rustchain() {
