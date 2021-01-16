@@ -30,6 +30,9 @@ install_dmidecode() {
 build_dmidecode() {
     pushd "${WORKDIR}/dmidecode-${DMIDECODE_VERSION}"
 
+    # not supported for arm
+    return
+
     prepare_dmidecode
     compile_dmidecode
     install_dmidecode
