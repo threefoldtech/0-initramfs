@@ -15,7 +15,10 @@ extract_dhcpcd() {
 
 prepare_dhcpcd() {
     echo "[+] configuring dhcpcd"
-    ./configure --prefix=/usr --sysconfdir=/etc
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
+        --sysconfdir=/etc
 }
 
 compile_dhcpcd() {
