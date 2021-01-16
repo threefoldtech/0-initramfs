@@ -16,10 +16,10 @@ extract_curl() {
 
 prepare_curl() {
     echo "[+] configuring curl"
+
     autoreconf -f -i -s
 
-
-    ./configure \
+    ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
         --disable-debug \
@@ -58,7 +58,7 @@ compile_curl() {
 }
 
 install_curl() {
-    make install
+    make DESTDIR=${ROOTDIR} install
 }
 
 build_curl() {
