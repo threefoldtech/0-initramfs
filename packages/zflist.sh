@@ -26,15 +26,22 @@ extract_zflist() {
 build_capnpc() {
     echo "[+] preparing c-capnproto"
     autoreconf -f -i -s
-    ./configure
+
+    ./configure --prefix=/usr \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST}
+
     make ${MAKEOPTS}
-    make install
+    make DESTDIR=${ROOTDIR} install
     ldconfig
 }
 
 prepare_zflist() {
     echo "[+] preparing zflist"
     make mrproper
+
+    # fix flags override
+    sed -i s/' = '/' += '/g libflist/Makefile
 }
 
 compile_zflist() {
