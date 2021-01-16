@@ -742,9 +742,9 @@ main() {
         ## build_hiredis
         ## build_libtar
         ## build_blake2
-        build_zflist
+        ## build_zflist
         ## build_haveged
-        #build_wireguard
+        build_wireguard
         ## build_dhcpcd
         ## build_bcache
         ## build_tcpdump
