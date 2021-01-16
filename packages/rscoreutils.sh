@@ -23,14 +23,16 @@ compile_rscoreutils() {
     # we need from library.
     pushd src/stdbuf/libstdbuf
 
-    cargo build --release
+    export CXX_arm_unknown_linux_gnueabi="${BUILDHOST}-g++"
+    cargo build --release --target=${BUILDRUST}
+    unset CXX_arm_unknown_linux_gnueabi
 
     popd
 }
 
 install_rscoreutils() {
     echo "[+] copying binaries"
-    cp -va target/release/liblibstdbuf.so "${ROOTDIR}/lib/libstdbuf.so"
+    cp -va target/${BUILDRUST}/release/liblibstdbuf.so "${ROOTDIR}/lib/libstdbuf.so"
 }
 
 build_rscoreutils() {
