@@ -1,7 +1,6 @@
 #!/bin/bash
 set -ex
 
-# make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi-
 MAKEOPTS="-j24"
 BUILD_ARCH_GNU="armv6j-hardfloat-linux-gnueabi"
 BUILD_ARCH_MUSL="armv6j-hardfloat-linux-musleabi"
@@ -29,9 +28,10 @@ initramdeps() {
     # bsdmainutils: kernel (hexdump)
     # libssl-dev: kernel
     # cmake: snappy
+    # xxd: corex-musl
     apt-get install -y pkg-config m4 bison flex autoconf libtool autogen \
         autopoint xsltproc gperf gettext docbook-xsl bsdmainutils \
-        libssl-dev cmake
+        libssl-dev cmake xxd
 }
 
 rustchain() {
@@ -162,7 +162,11 @@ toolchain() {
     #cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/librt* /mnt/tmp/0-initramfs/root/lib/
 
     # validate toolchain
-    armv6j-hardfloat-linux-gnueabi-gcc confirm.c -o /dev/null
+    ${BUILD_ARCH_GNU}-gcc confirm.c -o /tmp/confirm-gnu
+    ${BUILD_ROOT_MUSL}/bin/musl-gcc confirm.c -o /tmp/confirm-musl
+
+    file /tmp/confirm-gnu
+    file /tmp/confirm-musl
 }
 
 dependencies
