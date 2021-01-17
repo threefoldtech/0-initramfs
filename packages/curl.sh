@@ -51,7 +51,7 @@ prepare_curl() {
         --disable-threaded-resolver \
         --with-openssl \
         --with-ssl=${ROOTDIR} \
-        --with-ca-path=${ROOTDIR}/etc/ssl/certs
+        --with-ca-path=/etc/ssl/certs
 }
 
 compile_curl() {
