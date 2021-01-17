@@ -162,6 +162,7 @@ warning() {
 
 event() {
     echo -e "[+] ${blue}$1: ${clean}$2 ${orange}$3${clean}"
+    title "$1: $2 $3"
 }
 
 #
@@ -676,6 +677,15 @@ remove_root() {
     echo "[+] root cleared"
 }
 
+title() {
+    echo -en "\033]0;Zero-OS: $1\a"
+}
+
+progress() {
+    echo "[+] $1"
+    title "$1"
+}
+
 #
 # Main stuff
 #
@@ -687,6 +697,7 @@ main() {
     info "=  Zero-OS Initramfs Builder  ="
     info "==============================="
     echo ""
+    progress "initializing"
 
     #
     # Let's do the job
