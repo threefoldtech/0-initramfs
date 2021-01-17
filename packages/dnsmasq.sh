@@ -1,3 +1,4 @@
+DNSMASQ_PKGNAME="dnsmasq"
 DNSMASQ_VERSION="2.80"
 DNSMASQ_CHECKSUM="e040e72e6f377a784493c36f9e788502"
 DNSMASQ_LINK="http://www.thekelleys.org.uk/dnsmasq/dnsmasq-${DNSMASQ_VERSION}.tar.xz"
@@ -7,21 +8,21 @@ download_dnsmasq() {
 }
 
 extract_dnsmasq() {
-    if [ ! -d "dnsmasq-${DNSMASQ_VERSION}" ]; then
-        echo "[+] extracting: dnsmasq-${DNSMASQ_VERSION}"
-        tar -xf ${DISTFILES}/dnsmasq-${DNSMASQ_VERSION}.tar.xz -C .
+    if [ ! -d "${DNSMASQ_PKGNAME}-${DNSMASQ_VERSION}" ]; then
+        progress "extracting: ${DNSMASQ_PKGNAME}-${DNSMASQ_VERSION}"
+        tar -xf ${DISTFILES}/${DNSMASQ_PKGNAME}-${DNSMASQ_VERSION}.tar.xz -C .
     fi
 }
 
-prepare_dnsmasq() {
-    echo "[+] configuring dnsmasq"
-}
-
 compile_dnsmasq() {
+    progress "compiling: ${DNSMASQ_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_dnsmasq() {
+    progress "installing: ${DNSMASQ_PKGNAME}"
+
     cp -avL src/dnsmasq "${ROOTDIR}/usr/bin/"
     mkdir -p "${ROOTDIR}"/var/run/dnsmasq
     mkdir -p "${ROOTDIR}"/var/lib/misc
@@ -33,9 +34,8 @@ install_dnsmasq() {
 }
 
 build_dnsmasq() {
-    pushd "${WORKDIR}/dnsmasq-${DNSMASQ_VERSION}"
+    pushd "${WORKDIR}/${DNSMASQ_PKGNAME}-${DNSMASQ_VERSION}"
 
-    prepare_dnsmasq
     compile_dnsmasq
     install_dnsmasq
 

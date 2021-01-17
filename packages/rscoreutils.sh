@@ -1,3 +1,4 @@
+RSCOREUTILS_PKGNAME="coreutils"
 RSCOREUTILS_VERSION="91899b34b96da40797846f343f399ca420777c6a"
 RSCOREUTILS_CHECKSUM="b85c3e1328d6469b2a3b02baed7d2a05"
 RSCOREUTILS_LINK="https://github.com/uutils/coreutils/archive/${RSCOREUTILS_VERSION}.tar.gz"
@@ -7,18 +8,15 @@ download_rscoreutils() {
 }
 
 extract_rscoreutils() {
-    if [ ! -d "coreutils-${RSCOREUTILS_VERSION}" ]; then
-        echo "[+] extracting: coreutils-${RSCOREUTILS_VERSION} (rscoreutils)"
+    if [ ! -d "${RSCOREUTILS_PKGNAME}-${RSCOREUTILS_VERSION}" ]; then
+        progress "extracting: coreutils-${RSCOREUTILS_VERSION} (rscoreutils)"
         tar -xf ${DISTFILES}/rscoreutils-${RSCOREUTILS_VERSION}.tar.gz -C .
     fi
 }
 
-prepare_rscoreutils() {
-    echo "[+] prepare coreutils (rscoreutils)"
-}
-
 compile_rscoreutils() {
-    echo "[+] compiling coreutils"
+    progress "compiling: rscoreutils"
+
     # we only compile libstdbuf because that's all what
     # we need from library.
     pushd src/stdbuf/libstdbuf
@@ -31,14 +29,14 @@ compile_rscoreutils() {
 }
 
 install_rscoreutils() {
-    echo "[+] copying binaries"
+    progress "installing: rscoreutils"
+
     cp -va target/${BUILDRUST}/release/liblibstdbuf.so "${ROOTDIR}/lib/libstdbuf.so"
 }
 
 build_rscoreutils() {
-    pushd "${WORKDIR}/coreutils-${RSCOREUTILS_VERSION}"
+    pushd "${WORKDIR}/${RSCOREUTILS_PKGNAME}-${RSCOREUTILS_VERSION}"
 
-    prepare_rscoreutils
     compile_rscoreutils
     install_rscoreutils
 

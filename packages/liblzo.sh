@@ -9,13 +9,13 @@ download_liblzo() {
 
 extract_liblzo() {
     if [ ! -d "${LIBLZO_PKGNAME}-${LIBLZO_VERSION}" ]; then
-        echo "[+] extracting: ${LIBLZO_PKGNAME}-${LIBLZO_VERSION}"
+        progress "extracting: ${LIBLZO_PKGNAME}-${LIBLZO_VERSION}"
         tar -xf ${DISTFILES}/${LIBLZO_PKGNAME}-${LIBLZO_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_liblzo() {
-    echo "[+] configuring: ${LIBLZO_PKGNAME}"
+    progress "configuring: ${LIBLZO_PKGNAME}"
 
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
@@ -23,13 +23,13 @@ prepare_liblzo() {
 }
 
 compile_liblzo() {
-    echo "[+] compiling: ${LIBLZO_PKGNAME}"
+    progress "compiling: ${LIBLZO_PKGNAME}"
 
     make ${MAKEOPTS}
 }
 
 install_liblzo() {
-    echo "[+] installing: ${LIBLZO_PKGNAME}"
+    progress "installing: ${LIBLZO_PKGNAME}"
 
     make DESTDIR="${ROOTDIR}" install
 }

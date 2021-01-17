@@ -1,3 +1,4 @@
+E2FSPROGS_PKGNAME="e2fsprogs"
 E2FSPROGS_VERSION="1.45.2"
 E2FSPROGS_CHECKSUM="d15898253dda2e5bce85593022e82432"
 E2FSPROGS_LINK="https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v${E2FSPROGS_VERSION}/e2fsprogs-${E2FSPROGS_VERSION}.tar.xz"
@@ -7,14 +8,15 @@ download_e2fsprogs() {
 }
 
 extract_e2fsprogs() {
-    if [ ! -d "e2fsprogs-${E2FSPROGS_VERSION}" ]; then
-        echo "[+] extracting: e2fsprogs-${E2FSPROGS_VERSION}"
-        tar -xf ${DISTFILES}/e2fsprogs-${E2FSPROGS_VERSION}.tar.xz -C .
+    if [ ! -d "${E2FSPROGS_PKGNAME}-${E2FSPROGS_VERSION}" ]; then
+        progress "extracting: ${E2FSPROGS_PKGNAME}-${E2FSPROGS_VERSION}"
+        tar -xf ${DISTFILES}/${E2FSPROGS_PKGNAME}-${E2FSPROGS_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_e2fsprogs() {
-    echo "[+] configuring e2fsprogs"
+    progress "configuring: ${E2FSPROGS_PKGNAME}"
+
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
@@ -29,15 +31,19 @@ prepare_e2fsprogs() {
 }
 
 compile_e2fsprogs() {
+    progress "compiling: ${E2FSPROGS_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_e2fsprogs() {
+    progress "installing: ${E2FSPROGS_PKGNAME}"
+
     make DESTDIR=${ROOTDIR} install
 }
 
 build_e2fsprogs() {
-    pushd "${WORKDIR}/e2fsprogs-${E2FSPROGS_VERSION}"
+    pushd "${WORKDIR}/${E2FSPROGS_PKGNAME}-${E2FSPROGS_VERSION}"
 
     prepare_e2fsprogs
     compile_e2fsprogs

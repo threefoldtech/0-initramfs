@@ -1,3 +1,4 @@
+ETHTOOL_PKGNAME="ethtool"
 ETHTOOL_VERSION="5.1"
 ETHTOOL_CHECKSUM="fe774357084027e3739f17ad76cbab4d"
 ETHTOOL_LINK="https://mirrors.edge.kernel.org/pub/software/network/ethtool/ethtool-${ETHTOOL_VERSION}.tar.xz"
@@ -7,31 +8,34 @@ download_ethtool() {
 }
 
 extract_ethtool() {
-    if [ ! -d "ethtool-${ETHTOOL_VERSION}" ]; then
-        echo "[+] extracting: ethtool-${ETHTOOL_VERSION}"
-        tar -xf ${DISTFILES}/ethtool-${ETHTOOL_VERSION}.tar.xz -C .
+    if [ ! -d "${ETHTOOL_PKGNAME}-${ETHTOOL_VERSION}" ]; then
+        progress "extracting: ${ETHTOOL_PKGNAME}-${ETHTOOL_VERSION}"
+        tar -xf ${DISTFILES}/${ETHTOOL_PKGNAME}-${ETHTOOL_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_ethtool() {
-    echo "[+] preparing ethtool"
+    progress "preparing: ${ETHTOOL_PKGNAME}"
+
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST}
 }
 
 compile_ethtool() {
-    echo "[+] compiling ethtool"
+    progress "compiling: ${ETHTOOL_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_ethtool() {
-    echo "[+] installing ethtool"
+    progress "installing: ${ETHTOOL_PKGNAME}"
+
     cp -av ethtool "${ROOTDIR}"/usr/bin/
 }
 
 build_ethtool() {
-    pushd "${WORKDIR}/ethtool-${ETHTOOL_VERSION}"
+    pushd "${WORKDIR}/${ETHTOOL_PKGNAME}-${ETHTOOL_VERSION}"
 
     prepare_ethtool
     compile_ethtool

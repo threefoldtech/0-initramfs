@@ -1,22 +1,23 @@
+EUDEV_PKGNAME="eudev"
 EUDEV_VERSION="3.2.9"
 EUDEV_CHECKSUM="e575ef39f66be11a6a5b6c8a169d3c7e"
 EUDEV_LINK="https://github.com/gentoo/eudev/archive/v${EUDEV_VERSION}.tar.gz"
 
 download_eudev() {
-    download_file $EUDEV_LINK $EUDEV_CHECKSUM eudev-${EUDEV_VERSION}.tar.gz
+    download_file $EUDEV_LINK $EUDEV_CHECKSUM ${EUDEV_PKGNAME}-${EUDEV_VERSION}.tar.gz
 }
 
 extract_eudev() {
-    if [ ! -d "eudev-${EUDEV_VERSION}" ]; then
-        echo "[+] extracting: eudev-${EUDEV_VERSION}"
-        tar -xf ${DISTFILES}/eudev-${EUDEV_VERSION}.tar.gz -C .
+    if [ ! -d "${EUDEV_PKGNAME}-${EUDEV_VERSION}" ]; then
+        progress "extracting: ${EUDEV_PKGNAME}-${EUDEV_VERSION}"
+        tar -xf ${DISTFILES}/${EUDEV_PKGNAME}-${EUDEV_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_eudev() {
-    echo "[+] preparing eudev"
-    ./autogen.sh
+    progress "preparing: ${EUDEV_PKGNAME}"
 
+    ./autogen.sh
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
@@ -32,7 +33,8 @@ prepare_eudev() {
 }
 
 compile_eudev() {
-    echo "[+] compiling eudev"
+    progress "compiling: ${EUDEV_PKGNAME}"
+
     make V=1 ${MAKEOPTS}
 
     # patching network rules for @delandtj
@@ -40,15 +42,16 @@ compile_eudev() {
 }
 
 install_eudev() {
-    echo "[+] installing eudev"
+    progress "installing: ${EUDEV_PKGNAME}"
+
     make DESTDIR="${ROOTDIR}" install
 
-    echo "[+] compiling original hwdb"
+    progress "compiling: original hwdb"
     # ${ROOTDIR}/bin/udevadm hwdb --update --root=${ROOTDIR}
 }
 
 build_eudev() {
-    pushd "${WORKDIR}/eudev-${EUDEV_VERSION}"
+    pushd "${WORKDIR}/${EUDEV_PKGNAME}-${EUDEV_VERSION}"
 
     prepare_eudev
     compile_eudev

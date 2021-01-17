@@ -24,10 +24,10 @@ extract_qemu() {
 }
 
 prepare_qemu() {
-    echo "[+] disable debug zerodb"
+    progress "disable debug zerodb"
     sed -i '/#define DEBUG/d' block/zerodb.c
 
-    echo "[+] preparing qemu"
+    progress "preparing qemu"
     ./configure --prefix="${ROOTDIR}"/usr \
         --target-list="x86_64-softmmu" \
         --enable-kvm \
@@ -37,12 +37,12 @@ prepare_qemu() {
 }
 
 compile_qemu() {
-    echo "[+] compiling qemu"
+    progress "compiling qemu"
     make ${MAKEOPTS}
 }
 
 install_qemu() {
-    echo "[+] installing qemu"
+    progress "installing qemu"
     make install
 
     # Cleaning some ROMs not used

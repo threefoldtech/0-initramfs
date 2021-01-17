@@ -9,25 +9,25 @@ download_zlib_musl() {
 
 extract_zlib_musl() {
     if [ ! -d "${ZLIB_MUSL_PKGNAME}-${ZLIB_MUSL_VERSION}" ]; then
-        echo "[+] extracting: ${ZLIB_MUSL_PKGNAME}-${ZLIB_MUSL_VERSION}"
+        progress "extracting: ${ZLIB_MUSL_PKGNAME}-${ZLIB_MUSL_VERSION}"
         tar -xf ${DISTFILES}/${ZLIB_MUSL_PKGNAME}-${ZLIB_MUSL_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_zlib_musl() {
-    echo "[+] configuring: ${ZLIB_MUSL_PKGNAME}"
+    progress "configuring: ${ZLIB_MUSL_PKGNAME}"
 
-    CC="musl-gcc" ./configure --prefix=/
+    CC="${MUSLSYSDIR}/bin/musl-gcc" ./configure --prefix=/
 }
 
 compile_zlib_musl() {
-    echo "[+] compiling: ${ZLIB_MUSL_PKGNAME}"
+    progress "compiling: ${ZLIB_MUSL_PKGNAME}"
 
     make ${MAKEOPTS}
 }
 
 install_zlib_musl() {
-    echo "[+] installing: ${ZLIB_MUSL_PKGNAME}"
+    progress "installing: ${ZLIB_MUSL_PKGNAME}"
 
     make DESTDIR="${MUSLROOTDIR}" install
 }

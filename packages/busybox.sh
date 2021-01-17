@@ -1,3 +1,4 @@
+BUSYBOX_PKGNAME="busybox"
 BUSYBOX_VERSION="1.32.1"
 BUSYBOX_CHECKSUM="6273c550ab6a32e8ff545e00e831efc5"
 BUSYBOX_LINK="https://www.busybox.net/downloads/busybox-${BUSYBOX_VERSION}.tar.bz2"
@@ -7,31 +8,34 @@ download_busybox() {
 }
 
 extract_busybox() {
-    if [ ! -d "busybox-${BUSYBOX_VERSION}" ]; then
-        echo "[+] extracting: busybox-${BUSYBOX_VERSION}"
-        tar -xf ${DISTFILES}/busybox-${BUSYBOX_VERSION}.tar.bz2 -C .
+    if [ ! -d "${BUSYBOX_PKGNAME}-${BUSYBOX_VERSION}" ]; then
+        progress "extracting: ${BUSYBOX_PKGNAME}-${BUSYBOX_VERSION}"
+        tar -xf ${DISTFILES}/${BUSYBOX_PKGNAME}-${BUSYBOX_VERSION}.tar.bz2 -C .
     fi
 }
 
 prepare_busybox() {
-    echo "[+] copying busybox configuration"
+    progress "preparing: ${BUSYBOX_PKGNAME} configuration"
+
     cp "${CONFDIR}/build/busybox-config" .config
 }
 
 compile_busybox() {
-    echo "[+] compiling busybox"
+    progress "compiling: ${BUSYBOX_PKGNAME}"
 
     make ARCH=${BUILDARCH} CROSS_COMPILE=${BUILDHOST}- ${MAKEOPTS}
 }
 
 install_busybox() {
+    progress "installing: ${BUSYBOX_PKGNAME}"
+
     # make install
     make ARCH=${BUILDARCH} CROSS_COMPILE=${BUILDHOST}- install
     cp -av _install/* "${ROOTDIR}/"
 }
 
 build_busybox() {
-    pushd "${WORKDIR}/busybox-${BUSYBOX_VERSION}"
+    pushd "${WORKDIR}/${BUSYBOX_PKGNAME}-${BUSYBOX_VERSION}"
 
     prepare_busybox
     compile_busybox

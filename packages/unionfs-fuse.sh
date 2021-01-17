@@ -1,40 +1,38 @@
+UNIONFS_PKGNAME="unionfs-fuse"
 UNIONFS_VERSION="2.0"
 UNIONFS_CHECKSUM="40411d156ea7fa0e7cd0a8ec6fe60e70"
 UNIONFS_LINK="https://github.com/rpodgorny/unionfs-fuse/archive/v${UNIONFS_VERSION}.tar.gz"
 
 download_unionfs() {
-    download_file $UNIONFS_LINK $UNIONFS_CHECKSUM unionfs-fuse-${UNIONFS_VERSION}.tar.gz
+    download_file $UNIONFS_LINK $UNIONFS_CHECKSUM ${UNIONFS_PKGNAME}-${UNIONFS_VERSION}.tar.gz
 }
 
 extract_unionfs() {
-    if [ ! -d "unionfs-fuse-${UNIONFS_VERSION}" ]; then
-        echo "[+] extracting: unionfs-fuse-${UNIONFS_VERSION}"
-        tar -xf ${DISTFILES}/unionfs-fuse-${UNIONFS_VERSION}.tar.gz -C .
+    if [ ! -d "${UNIONFS_PKGNAME}-${UNIONFS_VERSION}" ]; then
+        progress "extracting: ${UNIONFS_PKGNAME}-${UNIONFS_VERSION}"
+        tar -xf ${DISTFILES}/${UNIONFS_PKGNAME}-${UNIONFS_VERSION}.tar.gz -C .
     fi
-}
-
-prepare_unionfs() {
-    echo "[+] preparing unionfs-fuse"
 }
 
 compile_unionfs() {
     export CPPFLAGS="-D_FILE_OFFSET_BITS=64 -I${ROOTDIR}/usr/include"
 
-    echo "[+] compiling unionfs-fuse"
+    progress "compiling: ${UNIONFS_PKGNAME}"
+
     make LDFLAGS="$LDFLAGS -lfuse" ${MAKEOPTS}
 }
 
 install_unionfs() {
-    echo "[+] installing unionfs-fuse"
+    progress "installing: ${UNIONFS_PKGNAME}"
+
     cp -a mount.unionfs "${ROOTDIR}"/usr/bin/
     cp -a src/unionfs "${ROOTDIR}"/usr/bin/
     cp -a src/unionfsctl "${ROOTDIR}"/usr/bin/
 }
 
 build_unionfs() {
-    pushd "${WORKDIR}/unionfs-fuse-${UNIONFS_VERSION}"
+    pushd "${WORKDIR}/${UNIONFS_PKGNAME}-${UNIONFS_VERSION}"
 
-    prepare_unionfs
     compile_unionfs
     install_unionfs
 

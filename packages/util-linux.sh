@@ -1,3 +1,4 @@
+LINUXUTILS_PKGNAME="util-linux"
 LINUXUTILS_VERSION="2.34"
 LINUXUTILS_CHECKSUM="a78cbeaed9c39094b96a48ba8f891d50"
 LINUXUTILS_LINK="https://www.kernel.org/pub/linux/utils/util-linux/v${LINUXUTILS_VERSION}/util-linux-${LINUXUTILS_VERSION}.tar.xz"
@@ -7,21 +8,19 @@ download_linuxutil() {
 }
 
 extract_linuxutil() {
-    if [ ! -d "util-linux-${LINUXUTILS_VERSION}" ]; then
-        echo "[+] extracting: util-linux-${LINUXUTILS_VERSION}"
-        tar -xf ${DISTFILES}/util-linux-${LINUXUTILS_VERSION}.tar.xz -C .
+    if [ ! -d "${LINUXUTILS_PKGNAME}-${LINUXUTILS_VERSION}" ]; then
+        progress "extracting: ${LINUXUTILS_PKGNAME}-${LINUXUTILS_VERSION}"
+        tar -xf ${DISTFILES}/${LINUXUTILS_PKGNAME}-${LINUXUTILS_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_linuxutil() {
-    echo "[+] configuring util-linux"
+    progress "configuring: ${LINUXUTILS_PKGNAME}"
 
     # disable tool one by one
     # --disable-all-progs is too aggressive and
     # don't let possibility to re-enable some specific
     # default software
-    export LDFLAGS=-L${ROOTDIR}/lib
-
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
@@ -74,10 +73,14 @@ prepare_linuxutil() {
 }
 
 compile_linuxutil() {
+    progress "compiling: ${LINUXUTILS_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_linuxutil() {
+    progress "installing: ${LINUXUTILS_PKGNAME}"
+
     make DESTDIR="${ROOTDIR}" install
 
     # remove tools not needed (busybox does it)
@@ -102,7 +105,7 @@ install_linuxutil() {
 }
 
 build_linuxutil() {
-    pushd "${WORKDIR}/util-linux-${LINUXUTILS_VERSION}"
+    pushd "${WORKDIR}/${LINUXUTILS_PKGNAME}-${LINUXUTILS_VERSION}"
 
     prepare_linuxutil
     compile_linuxutil

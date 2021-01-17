@@ -1,3 +1,4 @@
+XZ_PKGNAME="xz"
 XZ_VERSION="5.2.5"
 XZ_CHECKSUM="0d270c997aff29708c74d53f599ef717"
 XZ_LINK="https://tukaani.org/xz/xz-${XZ_VERSION}.tar.gz"
@@ -7,14 +8,14 @@ download_xz() {
 }
 
 extract_xz() {
-    if [ ! -d "xz-${XZ_VERSION}" ]; then
-        echo "[+] extracting: xz-${XZ_VERSION}"
-        tar -xf ${DISTFILES}/xz-${XZ_VERSION}.tar.gz -C .
+    if [ ! -d "${XZ_PKGNAME}-${XZ_VERSION}" ]; then
+        progress "extracting: ${XZ_PKGNAME}-${XZ_VERSION}"
+        tar -xf ${DISTFILES}/${XZ_PKGNAME}-${XZ_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_xz() {
-    echo "[+] preparing xz"
+    progress "preparing: ${XZ_PKGNAME}"
 
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
@@ -22,17 +23,19 @@ prepare_xz() {
 }
 
 compile_xz() {
-    echo "[+] compiling xz"
+    progress "compiling: ${XZ_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_xz() {
-    echo "[+] installing xz"
+    progress "installing: ${XZ_PKGNAME}"
+
     make DESTDIR="${ROOTDIR}" install
 }
 
 build_xz() {
-    pushd "${WORKDIR}/xz-${XZ_VERSION}"
+    pushd "${WORKDIR}/${XZ_PKGNAME}-${XZ_VERSION}"
 
     prepare_xz
     compile_xz

@@ -1,24 +1,21 @@
+MODULES_PKGNAME="zos"
 MODULES_VERSION="0.4.3"
 MODULES_CHECKSUM="99fd8573891897543db73673b6f2016d"
 MODULES_LINK="https://github.com/threefoldtech/zos/archive/v${MODULES_VERSION}.tar.gz"
 
 download_modules() {
-    download_file $MODULES_LINK $MODULES_CHECKSUM zos-${MODULES_VERSION}.tar.gz
+    download_file $MODULES_LINK $MODULES_CHECKSUM ${MODULES_PKGNAME}-${MODULES_VERSION}.tar.gz
 }
 
 extract_modules() {
-    if [ ! -d "zos-${MODULES_VERSION}" ]; then
-        echo "[+] extracting: zos-${MODULES_VERSION}"
-        tar -xf ${DISTFILES}/zos-${MODULES_VERSION}.tar.gz -C .
+    if [ ! -d "${MODULES_PKGNAME}-${MODULES_VERSION}" ]; then
+        progress "extracting: ${MODULES_PKGNAME}-${MODULES_VERSION}"
+        tar -xf ${DISTFILES}/${MODULES_PKGNAME}-${MODULES_VERSION}.tar.gz -C .
     fi
 }
 
-prepare_modules() {
-    echo "[+] prepare modules"
-}
-
 compile_modules() {
-    echo "[+] building zos bootstrap"
+    progress "compiling: ${MODULES_PKGNAME}"
 
     export GO111MODULE=on
 
@@ -33,7 +30,8 @@ compile_modules() {
 }
 
 install_modules() {
-    echo "[+] installing zos bootstrap"
+    progress "installing: ${MODULES_VERSION}"
+
     mkdir -p ${ROOTDIR}/etc/zinit/
     mkdir -p ${ROOTDIR}/bin
     mkdir -p ${ROOTDIR}/sbin
@@ -47,9 +45,8 @@ install_modules() {
 }
 
 build_modules() {
-    pushd ${WORKDIR}/zos-${MODULES_VERSION}
+    pushd ${WORKDIR}/${MODULES_PKGNAME}-${MODULES_VERSION}
 
-    prepare_modules
     compile_modules
     install_modules
 

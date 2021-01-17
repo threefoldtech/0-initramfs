@@ -1,3 +1,4 @@
+XFSPROGS_PKGNAME="xfsprogs"
 XFSPROGS_VERSION="5.4.0"
 XFSPROGS_CHECKSUM="61232b1cc453780517d9b0c12ff1699b"
 XFSPROGS_LINK="https://mirrors.edge.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-${XFSPROGS_VERSION}.tar.xz"
@@ -7,29 +8,34 @@ download_xfsprogs() {
 }
 
 extract_xfsprogs() {
-    if [ ! -d "xfsprogs-${XFSPROGS_VERSION}" ]; then
-        echo "[+] extracting: xfsprogs-${XFSPROGS_VERSION}"
-        tar -xf ${DISTFILES}/xfsprogs-${XFSPROGS_VERSION}.tar.xz -C .
+    if [ ! -d "${XFSPROGS_PKGNAME}-${XFSPROGS_VERSION}" ]; then
+        progress "extracting: ${XFSPROGS_PKGNAME}-${XFSPROGS_VERSION}"
+        tar -xf ${DISTFILES}/${XFSPROGS_PKGNAME}-${XFSPROGS_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_xfsprogs() {
-    echo "[+] configuring xfsprogs"
+    progress "configuring: ${XFSPROGS_PKGNAME}"
+
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST}
 }
 
 compile_xfsprogs() {
+    progress "compiling: ${XFSPROGS_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_xfsprogs() {
+    progress "installing: ${XFSPROGS_PKGNAME}"
+
     make DESTDIR="${ROOTDIR}" install
 }
 
 build_xfsprogs() {
-    pushd "${WORKDIR}/xfsprogs-${XFSPROGS_VERSION}"
+    pushd "${WORKDIR}/${XFSPROGS_PKGNAME}-${XFSPROGS_VERSION}"
 
     prepare_xfsprogs
     compile_xfsprogs

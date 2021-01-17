@@ -12,11 +12,11 @@ extract_zinit() {
 }
 
 prepare_zinit() {
-    echo "[+] loading source code: zinit"
+    progress "loading source code: zinit"
 }
 
 compile_zinit() {
-    echo "[+] compiling zinit"
+    progress "compiling zinit"
     # cargo build --release --target=x86_64-unknown-linux-musl
 
     export CC_arm_unknown_linux_gnueabi="${BUILDHOST}-gcc"
@@ -25,7 +25,7 @@ compile_zinit() {
 }
 
 install_zinit() {
-    echo "[+] copying binaries"
+    progress "copying binaries"
     # cp -a target/x86_64-unknown-linux-musl/release/zinit "${ROOTDIR}/sbin/"
     cp -a target/arm-unknown-linux-gnueabi/release/zinit "${ROOTDIR}/sbin/"
 }

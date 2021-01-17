@@ -1,3 +1,4 @@
+IPROUTE2_PKGNAME="iproute2"
 IPROUTE2_VERSION="5.4.0"
 IPROUTE2_CHECKSUM="54d86cadb4cd1d19fd7114b4e53adf51"
 IPROUTE2_LINK="https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-${IPROUTE2_VERSION}.tar.xz"
@@ -7,20 +8,15 @@ download_iproute2() {
 }
 
 extract_iproute2() {
-    if [ ! -d "iproute2-${IPROUTE2_VERSION}" ]; then
-        echo "[+] extracting: iproute2-${IPROUTE2_VERSION}"
-        tar -xf ${DISTFILES}/iproute2-${IPROUTE2_VERSION}.tar.xz -C .
+    if [ ! -d "${IPROUTE2_PKGNAME}-${IPROUTE2_VERSION}" ]; then
+        progress "extracting: ${IPROUTE2_PKGNAME}-${IPROUTE2_VERSION}"
+        tar -xf ${DISTFILES}/${IPROUTE2_PKGNAME}-${IPROUTE2_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_iproute2() {
-    echo "[+] preparing iproute2"
+    progress "preparing: ${IPROUTE2_PKGNAME}"
 
-    make distclean
-
-    # drop libmnl libcap libelf
-
-    export CC=${BUILDHOST}-gcc
     ./configure
 
     # disable selinux, not needed
@@ -29,12 +25,13 @@ prepare_iproute2() {
 }
 
 compile_iproute2() {
-    echo "[+] compiling iproute2"
+    progress "compiling: ${IPROUTE2_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_iproute2() {
-    echo "[+] installing iproute2"
+    progress "installing: ${IPROUTE2_PKGNAME}"
 
     # replace busybox symlink with the real binary
     rm -f "${ROOTDIR}"/sbin/ip
@@ -44,7 +41,7 @@ install_iproute2() {
 }
 
 build_iproute2() {
-    pushd "${WORKDIR}/iproute2-${IPROUTE2_VERSION}"
+    pushd "${WORKDIR}/${IPROUTE2_PKGNAME}-${IPROUTE2_VERSION}"
 
     prepare_iproute2
     compile_iproute2

@@ -1,3 +1,4 @@
+PARTED_PKGNAME="parted"
 PARTED_VERSION="3.3"
 PARTED_CHECKSUM="090655d05f3c471aa8e15a27536889ec"
 PARTED_LINK="http://ftp.gnu.org/gnu/parted/parted-${PARTED_VERSION}.tar.xz"
@@ -7,14 +8,15 @@ download_parted() {
 }
 
 extract_parted() {
-    if [ ! -d "parted-${PARTED_VERSION}" ]; then
-        echo "[+] extracting: parted-${PARTED_VERSION}"
-        tar -xf ${DISTFILES}/parted-${PARTED_VERSION}.tar.xz -C .
+    if [ ! -d "${PARTED_PKGNAME}-${PARTED_VERSION}" ]; then
+        progress "extracting: ${PARTED_PKGNAME}-${PARTED_VERSION}"
+        tar -xf ${DISTFILES}/${PARTED_PKGNAME}-${PARTED_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_parted() {
-    echo "[+] configuring parted"
+    progress "configuring: ${PARTED_PKGNAME}"
+
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
@@ -22,15 +24,19 @@ prepare_parted() {
 }
 
 compile_parted() {
+    progress "compiling: ${PARTED_PKGNAME}"
+
     make LDFLAGS="-L${ROOTDIR}/lib -lblkid -luuid" ${MAKEOPTS}
 }
 
 install_parted() {
+    progress "installing: ${PARTED_PKGNAME}"
+
     make DESTDIR=${ROOTDIR} install
 }
 
 build_parted() {
-    pushd "${WORKDIR}/parted-${PARTED_VERSION}"
+    pushd "${WORKDIR}/${PARTED_PKGNAME}-${PARTED_VERSION}"
 
     prepare_parted
     compile_parted

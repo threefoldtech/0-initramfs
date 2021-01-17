@@ -1,3 +1,4 @@
+KMOD_PKGNAME="kmod"
 KMOD_VERSION="26"
 KMOD_CHECKSUM="1129c243199bdd7db01b55a61aa19601"
 KMOD_LINK="https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-${KMOD_VERSION}.tar.xz"
@@ -7,14 +8,14 @@ download_kmod() {
 }
 
 extract_kmod() {
-    if [ ! -d "kmod-${KMOD_VERSION}" ]; then
-        echo "[+] extracting: kmod-${KMOD_VERSION}"
-        tar -xf ${DISTFILES}/kmod-${KMOD_VERSION}.tar.xz -C .
+    if [ ! -d "${KMOD_PKGNAME}-${KMOD_VERSION}" ]; then
+        progress "extracting: ${KMOD_PKGNAME}-${KMOD_VERSION}"
+        tar -xf ${DISTFILES}/${KMOD_PKGNAME}-${KMOD_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_kmod() {
-    echo "[+] preparing kmod"
+    progress "preparing: ${KMOD_PKGNAME}"
 
     ./configure --prefix=/usr \
         --with-sysroot=${ROOTDIR}/lib \
@@ -25,12 +26,14 @@ prepare_kmod() {
 }
 
 compile_kmod() {
-    echo "[+] compiling kmod"
+    progress "compiling: ${KMOD_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_kmod() {
-    echo "[+] installing kmod"
+    progress "installing: ${KMOD_PKGNAME}"
+
     make DESTDIR="${ROOTDIR}" install
 
     pushd "${ROOTDIR}"
@@ -42,7 +45,7 @@ install_kmod() {
 }
 
 build_kmod() {
-    pushd "${WORKDIR}/kmod-${KMOD_VERSION}"
+    pushd "${WORKDIR}/${KMOD_PKGNAME}-${KMOD_VERSION}"
 
     prepare_kmod
     compile_kmod

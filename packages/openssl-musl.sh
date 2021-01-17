@@ -9,23 +9,27 @@ download_openssl_musl() {
 
 extract_openssl_musl() {
     if [ ! -d "${OPENSSL_MUSL_PKGNAME}-${OPENSSL_MUSL_VERSION}" ]; then
-        echo "[+] extracting: ${OPENSSL_MUSL_PKGNAME}-${OPENSSL_MUSL_VERSION}"
+        progress "extracting: ${OPENSSL_MUSL_PKGNAME}-${OPENSSL_MUSL_VERSION}"
         tar -xf ${DISTFILES}/${OPENSSL_MUSL_PKGNAME}-${OPENSSL_MUSL_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_openssl_musl() {
-    echo "[+] preparing: ${OPENSSL_MUSL_PKGNAME}"
-    CC="musl-gcc" ./Configure --prefix=/ linux-x86_64 no-shared
+    progress "preparing: ${OPENSSL_MUSL_PKGNAME}"
+
+    # CC="${MUSLSYSDIR}/bin/musl-gcc" ./Configure --prefix=/ linux-x86_64 no-shared
+    CC="${MUSLSYSDIR}/bin/musl-gcc" ./Configure --prefix=/ linux-armv4 no-shared
 }
 
 compile_openssl_musl() {
-    echo "[+] compiling: ${OPENSSL_MUSL_PKGNAME}"
+    progress "compiling: ${OPENSSL_MUSL_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_openssl_musl() {
-    echo "[+] installing: ${OPENSSL_MUSL_PKGNAME}"
+    progress "installing: ${OPENSSL_MUSL_PKGNAME}"
+
     make DESTDIR="${MUSLROOTDIR}" install_sw
 }
 

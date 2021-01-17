@@ -9,23 +9,27 @@ download_netcat() {
 
 extract_netcat() {
     if [ ! -d "nc${NETCAT_MAJOR}" ]; then
-        echo "[+] extracting: netcat-${NETCAT_MAJOR}"
+        progress "extracting: netcat-${NETCAT_MAJOR}"
         tar -xf ${DISTFILES}/nc${NETCAT_MAJOR}.${NETCAT_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_netcat() {
+    progress "configuring: netcat"
+
     sed -i -e '/#define HAVE_BIND/s:#define:#undef:' netcat.c
     sed -i -e '/#define FD_SETSIZE 16/s:16:1024: #34250' netcat.c
 }
 
 compile_netcat() {
-    echo "[+] building: netcat"
+    progress "building: netcat"
+
     make CC=$CC nc
 }
 
 install_netcat() {
-    echo "[+] installing: netcat"
+    progress "installing: netcat"
+
     cp -avL nc "${ROOTDIR}/usr/bin/"
 }
 

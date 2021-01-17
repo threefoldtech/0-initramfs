@@ -1,3 +1,4 @@
+OPENSSL_PKGNAME="openssl"
 OPENSSL_VERSION="1.1.1d"
 OPENSSL_CHECKSUM="3be209000dbc7e1b95bcdf47980a3baa"
 OPENSSL_LINK="https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz"
@@ -7,24 +8,28 @@ download_openssl() {
 }
 
 extract_openssl() {
-    if [ ! -d "openssl-${OPENSSL_VERSION}" ]; then
-        echo "[+] extracting: openssl-${OPENSSL_VERSION}"
-        tar -xf ${DISTFILES}/openssl-${OPENSSL_VERSION}.tar.gz -C .
+    if [ ! -d "${OPENSSL_PKGNAME}-${OPENSSL_VERSION}" ]; then
+        progress "extracting: ${OPENSSL_PKGNAME}-${OPENSSL_VERSION}"
+        tar -xf ${DISTFILES}/${OPENSSL_PKGNAME}-${OPENSSL_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_openssl() {
-    echo "[+] preparing openssl"
+    progress "preparing: ${OPENSSL_PKGNAME}"
+
     # ./config --prefix=/usr shared
     ./Configure --prefix=/usr shared linux-armv4
 }
 
 compile_openssl() {
-    echo "[+] compiling openssl"
+    progress "compiling: ${OPENSSL_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_openssl() {
+    progress "installing: ${OPENSSL_PKGNAME}"
+
     make DESTDIR="${ROOTDIR}" install_sw
 
     # Removing useless ssl extra files
@@ -32,7 +37,7 @@ install_openssl() {
 }
 
 build_openssl() {
-    pushd "${WORKDIR}/openssl-${OPENSSL_VERSION}"
+    pushd "${WORKDIR}/${OPENSSL_PKGNAME}-${OPENSSL_VERSION}"
 
     prepare_openssl
     compile_openssl

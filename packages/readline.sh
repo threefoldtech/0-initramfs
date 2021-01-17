@@ -9,13 +9,13 @@ download_readline() {
 
 extract_readline() {
     if [ ! -d "${READLINE_PKGNAME}-${READLINE_VERSION}" ]; then
-        echo "[+] extracting: ${READLINE_PKGNAME}-${READLINE_VERSION}"
+        progress "extracting: ${READLINE_PKGNAME}-${READLINE_VERSION}"
         tar -xf ${DISTFILES}/${READLINE_PKGNAME}-${READLINE_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_readline() {
-    echo "[+] configuring: ${READLINE_PKGNAME}"
+    progress "configuring: ${READLINE_PKGNAME}"
 
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
@@ -23,13 +23,13 @@ prepare_readline() {
 }
 
 compile_readline() {
-    echo "[+] compiling: ${READLINE_PKGNAME}"
+    progress "compiling: ${READLINE_PKGNAME}"
 
     make ${MAKEOPTS}
 }
 
 install_readline() {
-    echo "[+] installing: ${READLINE_PKGNAME}"
+    progress "installing: ${READLINE_PKGNAME}"
 
     make DESTDIR="${ROOTDIR}" install
 }

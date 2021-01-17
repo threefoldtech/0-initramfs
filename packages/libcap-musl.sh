@@ -9,13 +9,13 @@ download_libcap_musl() {
 
 extract_libcap_musl() {
     if [ ! -d "${LIBCAP_MUSL_PKGNAME}-${LIBCAP_MUSL_VERSION}" ]; then
-        echo "[+] extracting: ${LIBCAP_MUSL_PKGNAME}-${LIBCAP_MUSL_VERSION}"
+        progress "extracting: ${LIBCAP_MUSL_PKGNAME}-${LIBCAP_MUSL_VERSION}"
         tar -xf ${DISTFILES}/${LIBCAP_MUSL_PKGNAME}-${LIBCAP_MUSL_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_libcap_musl() {
-    echo "[+] configuring: ${LIBCAP_MUSL_PKGNAME}"
+    progress "configuring: ${LIBCAP_MUSL_PKGNAME}"
 
     # disable shared lib
     sed -i 's/all: $(MINLIBNAME)/all:/' libcap/Makefile
@@ -26,13 +26,19 @@ prepare_libcap_musl() {
 }
 
 compile_libcap_musl() {
-    echo "[+] compiling: ${LIBCAP_MUSL_PKGNAME}"
+    progress "compiling: ${LIBCAP_MUSL_PKGNAME}"
 
-    make ${MAKEOPTS} CC=musl-gcc LD=musl-gcc GOLANG=no prefix=/
+    # build 'makenames' with default local compiler
+    pushd libcap
+    make _makenames
+    popd
+
+    # build libcap with target compiler (for cross compilation)
+    make ${MAKEOPTS} CC=${MUSLSYSDIR}/bin/musl-gcc LD=${MUSLSYSDIR}/bin/musl-gcc GOLANG=no prefix=/
 }
 
 install_libcap_musl() {
-    echo "[+] installing: ${LIBCAP_MUSL_PKGNAME}"
+    progress "installing: ${LIBCAP_MUSL_PKGNAME}"
 
     make DESTDIR="${MUSLROOTDIR}" GOLANG=no prefix=/ install
 }

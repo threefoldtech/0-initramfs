@@ -1,3 +1,4 @@
+REDIS_PKGNAME="redis"
 REDIS_VERSION="5.0.5"
 REDIS_CHECKSUM="2d2c8142baf72e6543174fc7beccaaa1"
 REDIS_LINK="http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz"
@@ -7,29 +8,27 @@ download_redis() {
 }
 
 extract_redis() {
-    if [ ! -d "redis-${REDIS_VERSION}" ]; then
-        echo "[+] extracting: redis-${REDIS_VERSION}"
-        tar -xf ${DISTFILES}/redis-${REDIS_VERSION}.tar.gz -C .
+    if [ ! -d "${REDIS_PKGNAME}-${REDIS_VERSION}" ]; then
+        progress "extracting: ${REDIS_PKGNAME}-${REDIS_VERSION}"
+        tar -xf ${DISTFILES}/${REDIS_PKGNAME}-${REDIS_VERSION}.tar.gz -C .
     fi
 }
 
-prepare_redis() {
-    echo "[+] preparing redis"
-    make distclean
-}
-
 compile_redis() {
+    progress "compiling: ${REDIS_PKGNAME}"
+
     make MALLOC=libc LDFLAGS=-latomic ${MAKEOPTS}
 }
 
 install_redis() {
+    progress "installing: ${REDIS_PKGNAME}"
+
     cp -avL src/redis-server "${ROOTDIR}/usr/bin/"
 }
 
 build_redis() {
-    pushd "${WORKDIR}/redis-${REDIS_VERSION}"
+    pushd "${WORKDIR}/${REDIS_PKGNAME}-${REDIS_VERSION}"
 
-    prepare_redis
     compile_redis
     install_redis
 

@@ -9,39 +9,33 @@ download_corex_musl() {
 
 extract_corex_musl() {
     if [ ! -d "${COREX_MUSL_PKGNAME}-${COREX_MUSL_VERSION}" ]; then
-        echo "[+] extracting: ${COREX_MUSL_PKGNAME}-${COREX_MUSL_VERSION}"
+        progress "extracting: ${COREX_MUSL_PKGNAME}-${COREX_MUSL_VERSION}"
         tar -xf ${DISTFILES}/${COREX_MUSL_PKGNAME}-${COREX_MUSL_VERSION}.tar.gz -C .
     fi
 }
 
-prepare_corex_musl() {
-    echo "[+] preparing: corex"
-}
-
 compile_corex_musl() {
-    echo "[+] compiling: corex"
+    progress "compiling: corex"
+
     pushd src
 
-    export CFLAGS="-I${MUSLROOTDIR}/include -I${MUSLROOTDIR}/include/json-c"
-    export LDFLAGS="-L${MUSLROOTDIR}/lib"
-
-    CC="musl-gcc" make ${MAKEOPTS}
-
-    unset CFLAGS
-    unset LDFLAGS
+    CFLAGS="-I${MUSLROOTDIR}/include -I${MUSLROOTDIR}/include/json-c" \
+    LDFLAGS="-L${MUSLROOTDIR}/lib" \
+    CC="${MUSLSYSDIR}/bin/musl-gcc" \
+        make ${MAKEOPTS}
 
     popd
 }
 
 install_corex_musl() {
-    echo "[+] installing: corex"
+    progress "installing: corex"
+
     cp -avL src/corex "${ROOTDIR}/usr/bin/"
 }
 
 build_corex_musl() {
     pushd "${MUSLWORKDIR}/${COREX_MUSL_PKGNAME}-${COREX_MUSL_VERSION}"
 
-    prepare_corex_musl
     compile_corex_musl
     install_corex_musl
 

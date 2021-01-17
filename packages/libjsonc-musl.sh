@@ -9,25 +9,29 @@ download_jsonc_musl() {
 
 extract_jsonc_musl() {
     if [ ! -d "${JSONC_MUSL_PKGNAME}-json-c-${JSONC_MUSL_VERSION}" ]; then
-        echo "[+] extracting: ${JSONC_MUSL_PKGNAME}-${JSONC_MUSL_PKGNAME}-${JSONC_MUSL_VERSION}"
+        progress "extracting: ${JSONC_MUSL_PKGNAME}-${JSONC_MUSL_PKGNAME}-${JSONC_MUSL_VERSION}"
         tar -xf ${DISTFILES}/${JSONC_MUSL_PKGNAME}-${JSONC_MUSL_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_jsonc_musl() {
-    echo "[+] configuring: ${JSONC_MUSL_PKGNAME}"
+    progress "configuring: ${JSONC_MUSL_PKGNAME}"
 
-    CC="musl-gcc" ./configure --disable-shared --enable-static --prefix=/
+    CC="${MUSLSYSDIR}/bin/musl-gcc" ./configure --prefix=/ \
+        --build=${BUILDCOMPILE} \
+        --host=${BUILDHOST} \
+        --disable-shared \
+        --enable-static
 }
 
 compile_jsonc_musl() {
-    echo "[+] compiling: ${JSONC_MUSL_PKGNAME}"
+    progress "compiling: ${JSONC_MUSL_PKGNAME}"
 
     make ${MAKEOPTS}
 }
 
 install_jsonc_musl() {
-    echo "[+] installing: ${JSONC_MUSL_PKGNAME}"
+    progress "installing: ${JSONC_MUSL_PKGNAME}"
 
     make DESTDIR="${MUSLROOTDIR}" install
 }

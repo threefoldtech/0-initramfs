@@ -9,13 +9,13 @@ download_blake2() {
 
 extract_blake2() {
     if [ ! -d "${BLAKE2_PKGNAME}-${BLAKE2_VERSION}" ]; then
-        echo "[+] extracting: ${BLAKE2_PKGNAME}-${BLAKE2_VERSION}"
+        progress "extracting: ${BLAKE2_PKGNAME}-${BLAKE2_VERSION}"
         tar -xf ${DISTFILES}/${BLAKE2_PKGNAME}-${BLAKE2_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_blake2() {
-    echo "[+] configuring: ${BLAKE2_PKGNAME}"
+    progress "configuring: ${BLAKE2_PKGNAME}"
 
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
@@ -23,13 +23,13 @@ prepare_blake2() {
 }
 
 compile_blake2() {
-    echo "[+] compiling: ${BLAKE2_PKGNAME}"
+    progress "compiling: ${BLAKE2_PKGNAME}"
 
     make ${MAKEOPTS}
 }
 
 install_blake2() {
-    echo "[+] installing: ${BLAKE2_PKGNAME}"
+    progress "installing: ${BLAKE2_PKGNAME}"
 
     make DESTDIR="${ROOTDIR}" install
 }

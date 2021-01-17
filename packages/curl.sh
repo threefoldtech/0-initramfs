@@ -1,3 +1,4 @@
+CURL_PKGNAME="curl"
 CURL_VERSION="7_65_1"
 CURL_CHECKSUM="651706b87c501317030ec317dd84f3ef"
 CURL_LINK="https://github.com/curl/curl/archive/curl-${CURL_VERSION}.tar.gz"
@@ -9,13 +10,13 @@ download_curl() {
 extract_curl() {
     # curl-curl is not a script mistake
     if [ ! -d "curl-curl-${CURL_VERSION}" ]; then
-        echo "[+] extracting: curl-${CURL_VERSION}"
-        tar -xf ${DISTFILES}/curl-${CURL_VERSION}.tar.gz -C .
+        progress "extracting: ${CURL_PKGNAME}-${CURL_VERSION}"
+        tar -xf ${DISTFILES}/${CURL_PKGNAME}-${CURL_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_curl() {
-    echo "[+] configuring curl"
+    progress "configuring: ${CURL_PKGNAME}"
 
     autoreconf -f -i -s
 
@@ -54,10 +55,14 @@ prepare_curl() {
 }
 
 compile_curl() {
+    progress "compiling: ${CURL_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_curl() {
+    progress "installing: ${CURL_PKGNAME}"
+
     make DESTDIR=${ROOTDIR} install
 }
 

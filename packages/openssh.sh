@@ -1,3 +1,4 @@
+OPENSSH_PKGNAME="openssh"
 OPENSSH_VERSION="8.0p1"
 OPENSSH_CHECKSUM="bf050f002fe510e1daecd39044e1122d"
 OPENSSH_LINK="https://ftp.fr.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${OPENSSH_VERSION}.tar.gz"
@@ -7,14 +8,15 @@ download_openssh() {
 }
 
 extract_openssh() {
-    if [ ! -d "openssh-${OPENSSH_VERSION}" ]; then
-        echo "[+] extracting: openssh-${OPENSSH_VERSION}"
-        tar -xf ${DISTFILES}/openssh-${OPENSSH_VERSION}.tar.gz -C .
+    if [ ! -d "${OPENSSH_PKGNAME}-${OPENSSH_VERSION}" ]; then
+        progress "extracting: ${OPENSSH_PKGNAME}-${OPENSSH_VERSION}"
+        tar -xf ${DISTFILES}/${OPENSSH_PKGNAME}-${OPENSSH_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_openssh() {
-    echo "[+] preparing openssh"
+    progress "preparing: ${OPENSSH_PKGNAME}"
+
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
@@ -33,12 +35,14 @@ prepare_openssh() {
 }
 
 compile_openssh() {
-    echo "[+] compiling openssh"
+    progress "compiling: ${OPENSSH_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_openssh() {
-    echo "[+] installing openssh"
+    progress "installing: ${OPENSSH_PKGNAME}"
+
     make DESTDIR="${ROOTDIR}" install-nokeys
 
     mkdir -p -m 700 "${ROOTDIR}"/root/.ssh

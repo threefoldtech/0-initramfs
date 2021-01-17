@@ -9,13 +9,13 @@ download_jansson() {
 
 extract_jansson() {
     if [ ! -d "${JANSSON_PKGNAME}-${JANSSON_VERSION}" ]; then
-        echo "[+] extracting: ${JANSSON_PKGNAME}-${JANSSON_VERSION}"
+        progress "extracting: ${JANSSON_PKGNAME}-${JANSSON_VERSION}"
         tar -xf ${DISTFILES}/${JANSSON_PKGNAME}-${JANSSON_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_jansson() {
-    echo "[+] configuring: ${JANSSON_PKGNAME}"
+    progress "configuring: ${JANSSON_PKGNAME}"
 
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
@@ -23,13 +23,13 @@ prepare_jansson() {
 }
 
 compile_jansson() {
-    echo "[+] compiling: ${JANSSON_PKGNAME}"
+    progress "compiling: ${JANSSON_PKGNAME}"
 
     make ${MAKEOPTS}
 }
 
 install_jansson() {
-    echo "[+] installing: ${JANSSON_PKGNAME}"
+    progress "installing: ${JANSSON_PKGNAME}"
 
     make DESTDIR="${ROOTDIR}" install
 }

@@ -9,25 +9,25 @@ download_zlib() {
 
 extract_zlib() {
     if [ ! -d "${ZLIB_PKGNAME}-${ZLIB_VERSION}" ]; then
-        echo "[+] extracting: ${ZLIB_PKGNAME}-${ZLIB_VERSION}"
+        progress "extracting: ${ZLIB_PKGNAME}-${ZLIB_VERSION}"
         tar -xf ${DISTFILES}/${ZLIB_PKGNAME}-${ZLIB_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_zlib() {
-    echo "[+] configuring: ${ZLIB_PKGNAME}"
+    progress "configuring: ${ZLIB_PKGNAME}"
 
     CC=${BUILDHOST}-gcc ./configure --prefix=/usr
 }
 
 compile_zlib() {
-    echo "[+] compiling: ${ZLIB_PKGNAME}"
+    progress "compiling: ${ZLIB_PKGNAME}"
 
     make ${MAKEOPTS}
 }
 
 install_zlib() {
-    echo "[+] installing: ${ZLIB_PKGNAME}"
+    progress "installing: ${ZLIB_PKGNAME}"
 
     make DESTDIR="${ROOTDIR}" install
 }

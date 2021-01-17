@@ -9,13 +9,13 @@ download_ncurses() {
 
 extract_ncurses() {
     if [ ! -d "${NCURSES_PKGNAME}-${NCURSES_VERSION}" ]; then
-        echo "[+] extracting: ${NCURSES_PKGNAME}-${NCURSES_VERSION}"
+        progress "extracting: ${NCURSES_PKGNAME}-${NCURSES_VERSION}"
         tar -xf ${DISTFILES}/${NCURSES_PKGNAME}-${NCURSES_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_ncurses() {
-    echo "[+] configuring: ${NCURSES_PKGNAME}"
+    progress "configuring: ${NCURSES_PKGNAME}"
 
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
@@ -30,13 +30,13 @@ prepare_ncurses() {
 }
 
 compile_ncurses() {
-    echo "[+] compiling: ${NCURSES_PKGNAME}"
+    progress "compiling: ${NCURSES_PKGNAME}"
 
     make ${MAKEOPTS}
 }
 
 install_ncurses() {
-    echo "[+] installing: ${NCURSES_PKGNAME}"
+    progress "installing: ${NCURSES_PKGNAME}"
 
     make DESTDIR="${ROOTDIR}" install
 }

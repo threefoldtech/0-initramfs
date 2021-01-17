@@ -2,10 +2,10 @@ ORK_VERSION="master"
 ORK_LINK="github.com/threefoldtech/0-ork"
 
 prepare_ork() {
-    echo "[+] loading source code: 0-ork"
+    progress "loading source code: 0-ork"
     go get -d -v "${ORK_LINK}"
 
-    echo "[+] ensure 0-ork to branch: ${ORK_VERSION}"
+    progress "ensure 0-ork to branch: ${ORK_VERSION}"
     pushd "$GOPATH/src/${ORK_LINK}"
     branch=$(git rev-parse --abbrev-ref HEAD)
     if [ "$branch" != "${ORK_VERSION}" ]; then
@@ -20,12 +20,12 @@ prepare_ork() {
 }
 
 compile_ork() {
-    echo "[+] compiling 0-ork"
+    progress "compiling 0-ork"
     go build
 }
 
 install_ork() {
-    echo "[+] copying binaries"
+    progress "copying binaries"
     cp -a 0-ork "${ROOTDIR}/sbin/"
 }
 

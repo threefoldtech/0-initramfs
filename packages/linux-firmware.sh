@@ -1,3 +1,4 @@
+FIRMWARE_PKGNAME="linux-firmware"
 FIRMWARE_VERSION="20191215"
 FIRMWARE_CHECKSUM="0d019854c8a0b0e81514bc968d1a56c7"
 FIRMWARE_LINK="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${FIRMWARE_VERSION}.tar.gz"
@@ -7,17 +8,17 @@ download_firmware() {
 }
 
 extract_firmware() {
-    if [ ! -d "linux-firmware-${FIRMWARE_VERSION}" ]; then
-        echo "[+] extracting: linux-firmware-${FIRMWARE_VERSION}"
-        tar -xf ${DISTFILES}/linux-firmware-${FIRMWARE_VERSION}.tar.gz -C .
+    if [ ! -d "${FIRMWARE_PKGNAME}-${FIRMWARE_VERSION}" ]; then
+        progress "extracting: ${FIRMWARE_PKGNAME}-${FIRMWARE_VERSION}"
+        tar -xf ${DISTFILES}/${FIRMWARE_PKGNAME}-${FIRMWARE_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_firmware() {
-    echo "[+] preparing linux-firmware"
+    progress "preparing: ${FIRMWARE_PKGNAME}"
     fcount=$(grep -E "^(File:|Link:)" WHENCE | wc -l)
 
-    echo "[+] building custom linux-firmware files list"
+    progress "building custom linux-firmware files list"
 
     # exclude rtiwifi driver
     exclude="rtlwifi"
@@ -34,13 +35,13 @@ prepare_firmware() {
 
     ccount=$(grep -E "^(File:|Link:)" WHENCE | wc -l)
 
-    echo "[+] original firmware found: ${fcount} files"
-    echo "[+] filtered firmware kept: ${ccount} files"
+    progress "original firmware found: ${fcount} files"
+    progress "filtered firmware kept: ${ccount} files"
 }
 
 
 install_firmware() {
-    echo "[+] installing custom linux-firmware"
+    progress "installing custom linux-firmware"
 
     # using original copy-firmware script but with our
     # custom WHENCE file modified
@@ -51,7 +52,7 @@ install_firmware() {
 }
 
 build_firmware() {
-    pushd "${WORKDIR}/linux-firmware-${FIRMWARE_VERSION}"
+    pushd "${WORKDIR}/${FIRMWARE_PKGNAME}-${FIRMWARE_VERSION}"
 
     # not needed for arm, afaik
     return

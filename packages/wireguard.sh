@@ -12,29 +12,29 @@ download_wireguard() {
 
 extract_wireguard() {
     if [ ! -d "wireguard-tools-${WIREGUARD_TOOLS_VERSION}" ]; then
-        echo "[+] extracting: wireguard-tools-${WIREGUARD_TOOLS_VERSION}"
+        progress "extracting: wireguard-tools-${WIREGUARD_TOOLS_VERSION}"
         tar -xf ${DISTFILES}/wireguard-tools-${WIREGUARD_TOOLS_VERSION}.tar.xz -C .
     fi
 
     if [ ! -d "wireguard-linux-compat-${WIREGUARD_MODULES_VERSION}" ]; then
-        echo "[+] extracting: wireguard-linux-compat-${WIREGUARD_MODULES_VERSION}"
+        progress "extracting: wireguard-linux-compat-${WIREGUARD_MODULES_VERSION}"
         tar -xf ${DISTFILES}/wireguard-linux-compat-${WIREGUARD_MODULES_VERSION}.tar.xz -C .
     fi
 }
 
 prepare_wireguard_modules() {
-    echo "[+] preparing wireguard (kernel module)"
+    progress "preparing wireguard (kernel module)"
     # link wireguard directory into kernel tree
     ./kernel-tree-scripts/jury-rig.sh ${WORKDIR}/linux-${KERNEL_VERSION}
 }
 
 compile_wireguard_tools() {
-    echo "[+] compiling wireguard (tools)"
+    progress "compiling wireguard (tools)"
     make V=1 ${MAKEOPTS}
 }
 
 install_wireguard_tools() {
-    echo "[+] installing wireguard (tools)"
+    progress "installing wireguard (tools)"
     make DESTDIR=${ROOTDIR} install
 }
 

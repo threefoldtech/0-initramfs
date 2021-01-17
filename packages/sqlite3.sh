@@ -9,13 +9,13 @@ download_sqlite3() {
 
 extract_sqlite3() {
     if [ ! -d "${SQLITE3_PKGNAME}-autoconf-${SQLITE3_VERSION}" ]; then
-        echo "[+] extracting: ${SQLITE3_PKGNAME}-${SQLITE3_VERSION}"
+        progress "extracting: ${SQLITE3_PKGNAME}-${SQLITE3_VERSION}"
         tar -xf ${DISTFILES}/${SQLITE3_PKGNAME}-autoconf-${SQLITE3_VERSION}.tar.gz
     fi
 }
 
 prepare_sqlite3() {
-    echo "[+] configuring: ${SQLITE3_PKGNAME}"
+    progress "configuring: ${SQLITE3_PKGNAME}"
 
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
@@ -23,12 +23,13 @@ prepare_sqlite3() {
 }
 
 compile_sqlite3() {
-    echo "[+] compiling: ${SQLITE3_PKGNAME}"
+    progress "compiling: ${SQLITE3_PKGNAME}"
+
     make ${MAKEOPTS}
 }
 
 install_sqlite3() {
-    echo "[+] installing: ${SQLITE3_PKGNAME}"
+    progress "installing: ${SQLITE3_PKGNAME}"
 
     make DESTDIR="${ROOTDIR}" install
 }

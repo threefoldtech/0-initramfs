@@ -9,16 +9,17 @@ download_libwebsockets_musl() {
 
 extract_libwebsockets_musl() {
     if [ ! -d "${LIBWEBSOCKETS_MUSL_PKGNAME}-${LIBWEBSOCKETS_MUSL_VERSION}" ]; then
-        echo "[+] extracting: ${LIBWEBSOCKETS_MUSL_PKGNAME}-${LIBWEBSOCKETS_MUSL_VERSION}"
+        progress "extracting: ${LIBWEBSOCKETS_MUSL_PKGNAME}-${LIBWEBSOCKETS_MUSL_VERSION}"
         tar -xf ${DISTFILES}/${LIBWEBSOCKETS_MUSL_PKGNAME}-${LIBWEBSOCKETS_MUSL_VERSION}.tar.gz -C .
     fi
 }
 
 prepare_libwebsockets_musl() {
-    echo "[+] configuring: ${LIBWEBSOCKETS_MUSL_PKGNAME}"
+    progress "configuring: ${LIBWEBSOCKETS_MUSL_PKGNAME}"
 
     mkdir -p build && cd build
-    CC="musl-gcc" cmake -DLWS_IPV6=ON \
+    CC="${MUSLSYSDIR}/bin/musl-gcc" cmake \
+        -DLWS_IPV6=ON \
         -DCMAKE_INSTALL_PREFIX=/ \
         -DLWS_UNIX_SOCK=ON \
         -DLWS_WITHOUT_TESTAPPS=ON \
@@ -28,13 +29,13 @@ prepare_libwebsockets_musl() {
 }
 
 compile_libwebsockets_musl() {
-    echo "[+] compiling: ${LIBWEBSOCKETS_MUSL_PKGNAME}"
+    progress "compiling: ${LIBWEBSOCKETS_MUSL_PKGNAME}"
 
     make ${MAKEOPTS}
 }
 
 install_libwebsockets_musl() {
-    echo "[+] installing: ${LIBWEBSOCKETS_MUSL_PKGNAME}"
+    progress "installing: ${LIBWEBSOCKETS_MUSL_PKGNAME}"
 
     make DESTDIR="${MUSLROOTDIR}" install
 }
