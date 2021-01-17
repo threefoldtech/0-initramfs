@@ -742,6 +742,8 @@ main() {
         build_btrfs
         build_dnsmasq
         build_jansson
+        build_libmnl
+        build_libnftnl
         build_nftables
         build_iproute2
         build_dmidecode
@@ -751,6 +753,7 @@ main() {
         build_netcat
         build_redis
         build_ethtool
+        build_librtinfo
         build_rtinfo
         build_seektime
         build_curl
@@ -759,23 +762,28 @@ main() {
         build_hiredis
         build_libtar
         build_blake2
+        build_capnpc
         build_zflist
         build_haveged
         build_wireguard
         build_dhcpcd
         build_bcache
+        build_libpcap
         build_tcpdump
         build_rscoreutils
         build_firmware
         build_xfsprogs
 
+        unset CFLAGS
+        unset LDFLAGS
+
         ## active musl packages
-        # build_zlib_musl
-        # build_libcap_musl
-        # build_jsonc_musl
-        # build_openssl_musl
-        # build_libwebsockets_musl
-        # build_corex_musl
+        build_zlib_musl
+        build_libcap_musl
+        build_jsonc_musl
+        build_openssl_musl
+        build_libwebsockets_musl
+        build_corex_musl
 
         ## disabled build
         # build_qemu
