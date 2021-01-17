@@ -9,6 +9,7 @@ DISTFILES="${PWD}/archives"
 WORKDIR="${PWD}/staging"
 CONFDIR="${PWD}/config"
 ROOTDIR="${PWD}/root"
+ROOTFSDIR="${PWD}/rootfs"
 TMPDIR="${PWD}/tmp"
 PKGDIR="${PWD}/packages"
 EXTENDIR="${PWD}/extensions"
@@ -465,10 +466,14 @@ mknod_die() {
     exit 1
 }
 
-clean_root() {
-    echo "[+] cleaning initramfs"
+build_rootfs() {
+    echo "[+] building rootfs directory"
+    rm -rf ${ROOTFSDIR}/*
+    cp -a ${ROOTDIR}/* ${ROOTFSDIR}/
 
-    pushd "${ROOTDIR}"
+    echo "[+] cleaning rootfs"
+
+    pushd "${ROOTFSDIR}"
     mkdir -p dev mnt proc root sys tmp
     rm -rf lib/*.a
     rm -rf lib/*.la
@@ -507,7 +512,7 @@ clean_staging() {
 }
 
 optimize_size() {
-    pushd "${ROOTDIR}"
+    pushd "${ROOTFSDIR}"
 
     echo "[+] preparing optimize environment"
     rm -rf "${TMPDIR}"/optimize
@@ -540,7 +545,7 @@ optimize_size() {
 clean_busybox_outdated() {
     echo "[+] removing busybox symlinks not needed anymore"
 
-    pushd "${ROOTDIR}"/usr
+    pushd "${ROOTFSDIR}"/usr
     for file in sbin/*; do
         # our script installs mostly everything under /usr
         # /sbin/ contains mainly busybox symlinks
@@ -808,7 +813,7 @@ main() {
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
         # ensure_libs
         ensure_glibc
-        # clean_root
+        build_rootfs
         optimize_size
         clean_busybox_outdated
         zero_os_root
