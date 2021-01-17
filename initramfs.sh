@@ -15,9 +15,6 @@ EXTENDIR="${PWD}/extensions"
 PATCHESDIR="${PWD}/patches"
 TOOLSDIR="${PWD}/tools"
 
-# musl subsystem
-MUSLWORKDIR="${PWD}/staging/musl"
-MUSLROOTDIR="${PWD}/staging/musl/root"
 
 # Cross Build
 BUILDCOMPILE="x86_64-linux-gnu"
@@ -31,6 +28,11 @@ export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig"
 export CFLAGS="-I${ROOTDIR}/usr/include"
 export LDFLAGS="-L${ROOTDIR}/usr/lib"
 export GOARCH=${BUILDARCH}
+
+# musl subsystem
+MUSLWORKDIR="${PWD}/staging/musl"
+MUSLROOTDIR="${PWD}/staging/musl/root"
+MUSLSYSDIR="/usr/local/armv6j-hardfloat-linux-musleabi/"
 
 # Download mirror repository
 MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
@@ -246,14 +248,18 @@ prepare_musl() {
     mkdir -p ${MUSLROOTDIR}
 
     # linking linux source kernel to musl path
-    ln -fs /usr/include/linux /usr/include/x86_64-linux-musl/
+    # ln -fs /usr/include/linux /usr/include/x86_64-linux-musl/
+    ln -fs /usr/include/linux ${MUSLSYSDIR}/include/
 
     # linking some specific headers
-    ln -fs /usr/include/asm-generic /usr/include/x86_64-linux-musl/
-    ln -fs /usr/include/x86_64-linux-gnu/asm /usr/include/x86_64-linux-musl/
+    # ln -fs /usr/include/asm-generic /usr/include/x86_64-linux-musl/
+    # ln -fs /usr/include/x86_64-linux-gnu/asm /usr/include/x86_64-linux-musl/
+    ln -fs /usr/include/asm-generic ${MUSLSYSDIR}/include/
+    ln -fs /usr/include/x86_64-linux-gnu/asm ${MUSLSYSDIR}/include/
 
     # linking sys/queue not shipped by musl
-    ln -fs /usr/include/x86_64-linux-gnu/sys/queue.h /usr/include/x86_64-linux-musl/sys/
+    # ln -fs /usr/include/x86_64-linux-gnu/sys/queue.h /usr/include/x86_64-linux-musl/sys/
+    ln -fs /usr/include/x86_64-linux-gnu/sys/queue.h ${MUSLSYSDIR}/include/sys/
 
     # linking lib64 to lib
     pushd ${MUSLROOTDIR}
