@@ -29,9 +29,10 @@ initramdeps() {
     # libssl-dev: kernel
     # cmake: snappy
     # xxd: corex-musl
+    # kmod: kernel module build (depmod)
     apt-get install -y pkg-config m4 bison flex autoconf libtool autogen \
         autopoint xsltproc gperf gettext docbook-xsl bsdmainutils \
-        libssl-dev cmake xxd
+        libssl-dev cmake xxd kmod
 }
 
 rustchain() {

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-depmod
-
 modprobe fuse
 modprobe btrfs
 modprobe tun
