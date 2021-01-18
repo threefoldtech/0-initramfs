@@ -39,7 +39,7 @@ install_kmod() {
     pushd "${ROOTDIR}"
     for target in depmod insmod lsmod modinfo modprobe rmmod; do
         rm -f sbin/$target
-        ln -sfv /bin/kmod sbin/$target
+        ln -sfv ../usr/bin/kmod sbin/$target
     done
     popd
 }
