@@ -440,14 +440,24 @@ ensure_glibc() {
 
     cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/ld-* ${ROOTDIR}/usr/lib/
     cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libns* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libm* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libatomic* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libc* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libpthread* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libdl* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libresolv* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libutil* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libm.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libm-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libgomp.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libatomic.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libc.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libc-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libcrypt.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libcrypt-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libpthread.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libpthread-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libdl.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libdl-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libresolv.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libresolv-* ${ROOTDIR}/usr/lib/
     cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libgcc* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/librt* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/librt.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/librt-* ${ROOTDIR}/usr/lib/
 
     mkdir -p ${ROOTDIR}/usr/local/armv6j-hardfloat-linux-gnueabi
     pushd ${ROOTDIR}/usr/local/armv6j-hardfloat-linux-gnueabi
