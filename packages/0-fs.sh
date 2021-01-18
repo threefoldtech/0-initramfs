@@ -23,7 +23,7 @@ compile_zfs() {
 
     pushd cmd
     zfs_goldflags="-w -s"
-    GO111MODULE=on go build -ldflags "${zfs_goldflags}" -o ../g8ufs
+    GO111MODULE=on CGO_ENABLED=1 go build -x -v -ldflags "${zfs_goldflags}" -o ../g8ufs
     popd
 }
 
