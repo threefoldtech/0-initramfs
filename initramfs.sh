@@ -823,10 +823,10 @@ main() {
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]] || [[ $DO_KMODULES == 1 ]]; then
         # ensure_libs
         ensure_glibc
+        zero_os_root
         build_rootfs
         optimize_size
         clean_busybox_outdated
-        zero_os_root
         build_kernel
         end_summary
     fi
