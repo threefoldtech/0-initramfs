@@ -1,6 +1,6 @@
 OPENSSL_PKGNAME="openssl"
-OPENSSL_VERSION="1.1.1d"
-OPENSSL_CHECKSUM="3be209000dbc7e1b95bcdf47980a3baa"
+OPENSSL_VERSION="1.1.1i"
+OPENSSL_CHECKSUM="08987c3cf125202e2b0840035efb392c"
 OPENSSL_LINK="https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz"
 
 download_openssl() {
