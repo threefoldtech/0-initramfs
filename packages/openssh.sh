@@ -1,6 +1,6 @@
 OPENSSH_PKGNAME="openssh"
-OPENSSH_VERSION="8.0p1"
-OPENSSH_CHECKSUM="bf050f002fe510e1daecd39044e1122d"
+OPENSSH_VERSION="8.4p1"
+OPENSSH_CHECKSUM="8f897870404c088e4aa7d1c1c58b526b"
 OPENSSH_LINK="https://ftp.fr.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${OPENSSH_VERSION}.tar.gz"
 
 download_openssh() {
@@ -16,6 +16,8 @@ extract_openssh() {
 
 prepare_openssh() {
     progress "preparing: ${OPENSSH_PKGNAME}"
+
+    make distclean
 
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
