@@ -17,8 +17,6 @@ extract_openssh() {
 prepare_openssh() {
     progress "preparing: ${OPENSSH_PKGNAME}"
 
-    make distclean
-
     ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
