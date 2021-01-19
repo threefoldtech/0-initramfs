@@ -17,7 +17,8 @@ extract_libpcap() {
 prepare_libpcap() {
     progress "preparing: ${LIBPCAP_PKGNAME}"
 
-    ./configure --prefix=/usr \
+    CFLAGS="$CFLAGS -I${ROOTDIR}/usr/include/libnl3" ./configure \
+        --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
         --enable-ipv6 \

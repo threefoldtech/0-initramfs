@@ -17,7 +17,8 @@ extract_tcpdump() {
 prepare_tcpdump() {
     progress "preparing: ${TCPDUMP_PKGNAME}"
 
-    ./configure --prefix=/usr \
+    LDFLAGS="$LDFLAGS -lnl-3 -lnl-genl-3" ./configure \
+        --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
         --disable-smb \
