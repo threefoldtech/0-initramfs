@@ -27,7 +27,7 @@ prepare_containerd() {
 compile_containerd() {
     progress "compiling: ${CONTAINERD_PKGNAME}"
 
-    pushd $GOPATH/src/github.com/containerd/containerd
+    pushd ${CONTAINERD_HOME}/containerd
     CGO_ENABLED=1 make CGO_CFLAGS="$CFLAGS" CGO_LDFLAGS="$LDFLAGS" ${MAKEOPTS}
     popd
 }
