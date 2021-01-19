@@ -39,6 +39,7 @@ echo "[+] setting environment"
 export PATH
 
 echo "[+] probing drivers"
+depmod
 udevadm hwdb --update
 
 udevd --daemon
