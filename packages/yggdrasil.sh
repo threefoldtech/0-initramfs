@@ -25,6 +25,7 @@ install_yggdrasil() {
     progress "installing: ${YGGDRASIL_PKGNAME}"
 
     cp -av yggdrasil "${ROOTDIR}/usr/bin/"
+    cp -av yggdrasilctl "${ROOTDIR}/usr/bin/"
 }
 
 build_yggdrasil() {
