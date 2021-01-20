@@ -30,7 +30,9 @@ compile_shimlogs() {
 install_shimlogs() {
     progress "installing: ${SHIMLOGS_PKGNAME}"
 
-    cp -a shim-logs "${ROOTDIR}"/usr/bin/
+    mkdir -p "${RUNDIR}/usr/bin"
+
+    cp -a shim-logs "${RUNDIR}"/usr/bin/
 }
 
 build_shimlogs() {

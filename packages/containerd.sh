@@ -35,7 +35,13 @@ compile_containerd() {
 install_containerd() {
     progress "installing: ${CONTAINERD_PKGNAME}"
 
-    cp -av bin/* "${ROOTDIR}/usr/bin/"
+    cp -av bin/* "${RUNDIR}/usr/bin/"
+
+    mkdir -p "${RUNDIR}/etc/containerd"
+    mkdir -p "${RUNDIR}/etc/zinit"
+
+    cp -av ${CONFDIR}/packages/${CONTAINERD_PKGNAME}/config.toml "${RUNDIR}/etc/containerd/"
+    cp -av ${CONFDIR}/packages/${CONTAINERD_PKGNAME}/containerd.yaml "${RUNDIR}/etc/zinit/"
 }
 
 build_containerd() {

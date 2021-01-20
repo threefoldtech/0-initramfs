@@ -35,7 +35,9 @@ compile_runc() {
 install_runc() {
     progress "installing: ${RUNC_PKGNAME}"
 
-    cp -av runc "${ROOTDIR}/usr/bin/"
+    mkdir -p "${RUNDIR}/usr/bin"
+
+    cp -av runc "${RUNDIR}/usr/bin/"
 }
 
 build_runc() {
