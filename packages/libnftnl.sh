@@ -1,6 +1,6 @@
 LIBNFTNL_PKGNAME="libnftnl"
-LIBNFTNL_VERSION="1.1.3"
-LIBNFTNL_CHECKSUM="e2a7af0a85c283b2cc837c09635b6bca"
+LIBNFTNL_VERSION="1.1.9"
+LIBNFTNL_CHECKSUM="e03cefd53f4b076d959abe36de5c38f8"
 LIBNFTNL_LINK="http://www.iptables.org/projects/libnftnl/files/libnftnl-${LIBNFTNL_VERSION}.tar.bz2"
 
 download_libnftnl() {

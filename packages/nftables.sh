@@ -1,6 +1,6 @@
 NFTABLES_PKGNAME="nftables"
-NFTABLES_VERSION="0.9.1"
-NFTABLES_CHECKSUM="e2facbcad6c5d9bd87a0bf5081a31522"
+NFTABLES_VERSION="0.9.8"
+NFTABLES_CHECKSUM="77bf0bd43e65e92212fc73139a2e47fc"
 NFTABLES_LINK="https://www.netfilter.org/projects/nftables/files/nftables-${NFTABLES_VERSION}.tar.bz2"
 
 download_nftables() {
@@ -23,11 +23,11 @@ prepare_nftables() {
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
         --disable-debug \
-        --with-cli \
         --with-json \
         --with-mini-gmp \
         --with-sysroot=${ROOTDIR} \
-        --disable-man-doc
+        --disable-man-doc \
+        --disable-python
 }
 
 compile_nftables() {
