@@ -12,6 +12,7 @@ ROOTDIR="${PWD}/root"
 ROOTFSDIR="${PWD}/rootfs"
 TMPDIR="${PWD}/tmp"
 PKGDIR="${PWD}/packages"
+RUNDIR="${PWD}/runtime"
 EXTENDIR="${PWD}/extensions"
 PATCHESDIR="${PWD}/patches"
 TOOLSDIR="${PWD}/tools"
@@ -46,7 +47,7 @@ MAKEOPTS="-j ${JOBS}"
 #
 # Flags
 #
-OPTS=$(getopt -o adbtckMeolmnzrh --long all,download,busybox,tools,cores,kernel,modules,extensions,ork,clean,mrproper,nomirror,compact,release,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o adbtckrMeolmnzrh --long all,download,busybox,tools,cores,runtime,kernel,modules,extensions,ork,clean,mrproper,nomirror,compact,release,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
@@ -68,6 +69,7 @@ if [ "$OPTS" != " --" ] && [ "$OPTS" != " --release --" ]; then
     DO_CLEAN=0
     DO_MRPROPER=0
     DO_ORK=0
+    DO_RUNTIME=0
     DO_COMPACT=0
 
     eval set -- "$OPTS"
@@ -84,6 +86,7 @@ while true; do
         -M | --modules)    DO_KMODULES=1;       shift ;;
         -e | --extensions) DO_EXTENSIONS=1;     shift ;;
         -o | --ork)        DO_ORK=1;            shift ;;
+        -r | --runtime)    DO_RUNTIME=1;        shift ;;
         -l | --clean)      DO_CLEAN=1;          shift ;;
         -z | --compact)    DO_COMPACT=1;        shift ;;
         -m | --mrproper)   DO_MRPROPER=1;       shift ;;
@@ -98,6 +101,7 @@ while true; do
             echo " -c --cores       only (re)build core0 and coreX"
             echo " -k --kernel      only (re)build kernel (vmlinuz, produce final image)"
             echo " -M --modules     only (re)build kernel modules"
+            echo " -r --runtime     only (re)build runtime packages"
             echo " -e --extensions  only (re)build extensions"
             echo " -o --ork         only (re)build ork protection"
             echo " -n --nomirror    don't use a mirror to download files (use upstream)"
@@ -740,13 +744,16 @@ main() {
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_TOOLS == 1 ]]; then
-        # active build
+        # active initramfs build
         build_zlib
         build_liblzo
         build_readline
         build_ncurses
         build_xz
         build_linuxutil
+        build_libnl
+        build_confuse
+        build_bmon
         build_kmod
         build_eudev
         build_fuse
@@ -763,6 +770,7 @@ main() {
         build_iproute2
         build_dmidecode
         build_unionfs
+        build_libseccomp
         build_openssh
         build_smartmon
         build_netcat
@@ -787,12 +795,11 @@ main() {
         build_tcpdump
         build_rscoreutils
         build_firmware
-        build_xfsprogs
 
         unset CFLAGS
         unset LDFLAGS
 
-        ## active musl packages
+        # active musl packages
         build_zlib_musl
         build_libcap_musl
         build_jsonc_musl
@@ -801,7 +808,17 @@ main() {
         build_corex_musl
 
         ## disabled build
+        # build_xfsprogs
         # build_qemu
+    fi
+
+    if [[ $DO_ALL == 1 ]] || [[ $DO_RUNTIME == 1 ]]; then
+        # active runtime build
+        build_yggdrasil
+        build_shimlogs
+        build_runc
+        build_containerd
+        build_modules_runtime
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
