@@ -2,15 +2,23 @@
 set -ex
 
 MAKEOPTS="-j24"
-BUILD_ARCH_GNU="armv6j-hardfloat-linux-gnueabi"
-BUILD_ARCH_MUSL="armv6j-hardfloat-linux-musleabi"
+TOOLCHAINSCR="${PWD}"
+# BUILD_ARCH_GNU="armv6j-hardfloat-linux-gnueabi"
+# BUILD_ARCH_MUSL="armv6j-hardfloat-linux-musl"
+BUILD_ARCH_GNU="armv7l-hardfloat-linux-gnueabi"
+BUILD_ARCH_MUSL="armv7l-hardfloat-linux-musl"
+# BUILD_ARCH_GNU="x86_64-pc-linux-gnu"
+# BUILD_ARCH_MUSL="x86_64-pc-linux-musl"
 BUILD_HOST="x86_64-pc-linux-gnu"
 BUILD_PREFIX="/usr/local"
 BUILD_ROOT_GNU="${BUILD_PREFIX}/${BUILD_ARCH_GNU}"
 BUILD_ROOT_MUSL="${BUILD_PREFIX}/${BUILD_ARCH_MUSL}"
+BUILD_TMPDIR="/mnt/ramfs/cross-compile"
 
-mkdir -p /opt/tmp/cross-compile
-pushd /opt/tmp/cross-compile
+mkdir -p "${BUILD_TMPDIR}"
+rm -rf "${BUILD_TMPDIR}/*"
+
+pushd "${BUILD_TMPDIR}"
 
 dependencies() {
     apt-get update
@@ -40,11 +48,15 @@ rustchain() {
     source $HOME/.cargo/env
     rustup default 1.46.0
     rustup target add arm-unknown-linux-gnueabi
+    rustup target add x86_64-unknown-linux-musl
 
     mkdir -p ~/.cargo
     echo '[build]' > ~/.cargo/config
     echo '[target.arm-unknown-linux-gnueabi]' >> ~/.cargo/config
-    echo 'linker = "armv6j-hardfloat-linux-gnueabi-gcc"' >> ~/.cargo/config
+    echo "linker = \"${BUILD_ARCH_GNU}-gcc\"" >> ~/.cargo/config
+    echo "" >> ~/.cargo/config
+    echo '[target.x86_64-unknown-linux-musl]' >> ~/.cargo/config
+    echo "linker = \"/usr/local/${BUILD_ARCH_MUSL}/bin/musl-gcc\"" >> ~/.cargo/config
 }
 
 gochain() {
@@ -57,8 +69,9 @@ gochain() {
 toolchain() {
     BINUTILS_VERSION="2.34"
     MPFR_VERSION="4.1.0"
+    # GCC_VERSION="10.2.0"
     GCC_VERSION="9.3.0"
-    GLIBC_VERSION="2.32"
+    GLIBC_VERSION="2.31"
     LIBTOOL_VERSION="2.4.6"
     MUSL_VERSION="1.2.2"
 
@@ -104,7 +117,8 @@ toolchain() {
         --host=${BUILD_HOST} \
         --build=${BUILD_HOST} \
         --target=${BUILD_ARCH_GNU} \
-        --with-sysroot=/
+        --with-sysroot=/ \
+        --disable-libsanitizer
 
     make ${MAKEOPTS} all-gcc
     make install-gcc
@@ -112,7 +126,8 @@ toolchain() {
 
     mkdir -p glibc-${GLIBC_VERSION}-build
     pushd glibc-${GLIBC_VERSION}-build
-    ../glibc-${GLIBC_VERSION}/configure --prefix=${BUILD_ROOT_GNU} \
+    ../glibc-${GLIBC_VERSION}/configure \
+        --prefix=${BUILD_ROOT_GNU} \
         --disable-multilib \
         --target=${BUILD_ARCH_GNU} \
         --host=${BUILD_ARCH_GNU} \
