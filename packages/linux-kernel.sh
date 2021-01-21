@@ -55,8 +55,17 @@ compile_kernel() {
 }
 
 install_kernel() {
-    cp arch/x86/boot/bzImage "${WORKDIR}"/vmlinuz.efi
-    progress "kernel installed: ${WORKDIR}/vmlinuz.efi"
+    target="${WORKDIR}/zos-image"
+
+    if [ "${BUILDARCH}" == "arm" ]; then
+        cp arch/${BUILDARCH}/boot/zImage "${target}"
+    fi
+
+    if [ "${BUILDARCH}" == "x86" ]; then
+        cp arch/${BUILDARCH}/boot/bzImage "${target}"
+    fi
+
+    progress "kernel installed: ${target}"
 }
 
 build_kernel() {
