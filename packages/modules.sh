@@ -28,7 +28,7 @@ compile_modules() {
     popd
 
     pushd bootstrap/bootstrap
-    cargo build --release --target=arm-unknown-linux-gnueabi --features vendored
+    cargo build --release --target=${BUILDRUST} --features vendored
     popd
 }
 
@@ -45,7 +45,8 @@ install_modules() {
 
     # install bootstrap
     cp -a bootstrap/etc ${ROOTDIR}
-    cp bootstrap/bootstrap/target/arm-unknown-linux-gnueabi/release/bootstrap ${ROOTDIR}/sbin/
+    # cp bootstrap/bootstrap/target/arm-unknown-linux-gnueabi/release/bootstrap ${ROOTDIR}/sbin/
+    cp bootstrap/bootstrap/target/${BUILDRUST}/release/bootstrap ${ROOTDIR}/sbin/
 
     # install debug service
     cp qemu/overlay/etc/zinit/bootstrap.yaml ${ROOTDIR}/etc/zinit/
