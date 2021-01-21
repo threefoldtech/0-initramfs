@@ -54,8 +54,10 @@ install_firmware() {
 build_firmware() {
     pushd "${WORKDIR}/${FIRMWARE_PKGNAME}-${FIRMWARE_VERSION}"
 
-    # not needed for arm, afaik
-    return
+    if [ "$BUILDARCH" != "x86_64" ]; then
+        echo "[-] ${FIRMWARE_PKGNAME}: build disabled, only made for x86_64"
+        return
+    fi
 
     prepare_firmware
     install_firmware
