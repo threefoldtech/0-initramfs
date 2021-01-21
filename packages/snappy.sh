@@ -17,11 +17,13 @@ extract_snappy() {
 prepare_snappy() {
     progress "configuring: ${SNAPPY_PKGNAME}"
 
-    cmake -DCMAKE_INSTALL_PREFIX=/usr \
+    CFLAGS="-fPIC" cmake -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_C_COMPILER=${BUILDHOST}-gcc \
         -DCMAKE_CXX_COMPILER=${BUILDHOST}-g++ \
         -DHAVE_LIBZ=NO \
-        -DHAVE_LIBLZO2=NO
+        -DHAVE_LIBLZO2=NO \
+        -DCMAKE_INSTALL_LIBDIR=/usr/lib \
+        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 }
 
 compile_snappy() {
