@@ -29,8 +29,10 @@ install_dmidecode() {
 build_dmidecode() {
     pushd "${WORKDIR}/${DMIDECODE_PKGNAME}-${DMIDECODE_VERSION}"
 
-    # not supported for arm
-    return
+    if [ "$BUILDARCH" != "x86_64" ]; then
+        echo "[-] ${DMIDECODE_PKGNAME}: build disabled, only made for x86_64"
+        return
+    fi
 
     compile_dmidecode
     install_dmidecode
