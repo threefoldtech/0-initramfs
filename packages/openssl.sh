@@ -17,8 +17,13 @@ extract_openssl() {
 prepare_openssl() {
     progress "preparing: ${OPENSSL_PKGNAME}"
 
-    # ./config --prefix=/usr shared
-    ./Configure --prefix=/usr shared linux-armv4
+    if [ "$BUILDARCH" == "x86" ]; then
+        ./config --prefix=/usr shared
+    fi
+
+    if [ "$BUILDARCH" == "arm" ]; then
+        ./Configure --prefix=/usr shared linux-armv4
+    fi
 }
 
 compile_openssl() {

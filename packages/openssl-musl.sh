@@ -17,8 +17,13 @@ extract_openssl_musl() {
 prepare_openssl_musl() {
     progress "preparing: ${OPENSSL_MUSL_PKGNAME}"
 
-    # CC="${MUSLSYSDIR}/bin/musl-gcc" ./Configure --prefix=/ linux-x86_64 no-shared
-    CC="${MUSLSYSDIR}/bin/musl-gcc" ./Configure --prefix=/ linux-armv4 no-shared
+    if [ "$BUILDARCH" == "x86" ]; then
+        CC="${MUSLSYSDIR}/bin/musl-gcc" ./Configure --prefix=/ linux-x86_64 no-shared
+    fi
+
+    if [ "$BUILDARCH" == "arm" ]; then
+        CC="${MUSLSYSDIR}/bin/musl-gcc" ./Configure --prefix=/ linux-armv4 no-shared
+    fi
 }
 
 compile_openssl_musl() {
