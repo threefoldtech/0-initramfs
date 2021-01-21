@@ -21,10 +21,15 @@ compile_rscoreutils() {
     # we need from library.
     pushd src/stdbuf/libstdbuf
 
-    export CXX_arm_unknown_linux_gnueabi="${BUILDHOST}-g++"
-    cargo build --release --target=${BUILDRUST}
-    unset CXX_arm_unknown_linux_gnueabi
+    # save current flag
+    export XBUILDRUST=${BUILDRUST}
 
+    if [ "${BUILDARCH}" == "x86" ]; then
+        # do not use musl as target
+        export BUILDRUST="x86_64-unknown-linux-gnu"
+    fi
+
+    cargo build --release --target=${BUILDRUST}
     popd
 }
 
@@ -32,6 +37,9 @@ install_rscoreutils() {
     progress "installing: rscoreutils"
 
     cp -va target/${BUILDRUST}/release/liblibstdbuf.so "${ROOTDIR}/lib/libstdbuf.so"
+
+    # restore previous flag
+    export BUILDRUST=${XBUILDRUST}
 }
 
 build_rscoreutils() {
