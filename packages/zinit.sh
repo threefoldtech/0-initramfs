@@ -17,17 +17,16 @@ prepare_zinit() {
 
 compile_zinit() {
     progress "compiling zinit"
-    # cargo build --release --target=x86_64-unknown-linux-musl
 
-    export CC_arm_unknown_linux_gnueabi="${BUILDHOST}-gcc"
     cargo build --release --target=${BUILDRUST}
-    unset CC_arm_unknown_linux_gnueabi
 }
 
 install_zinit() {
     progress "copying binaries"
+
     # cp -a target/x86_64-unknown-linux-musl/release/zinit "${ROOTDIR}/sbin/"
-    cp -a target/arm-unknown-linux-gnueabi/release/zinit "${ROOTDIR}/sbin/"
+    # cp -a target/arm-unknown-linux-gnueabi/release/zinit "${ROOTDIR}/sbin/"
+    cp -a target/${BUILDRUST}/release/zinit "${ROOTDIR}/sbin/"
 }
 
 build_zinit() {
