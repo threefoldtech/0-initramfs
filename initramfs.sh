@@ -19,22 +19,35 @@ TOOLSDIR="${PWD}/tools"
 
 
 # Cross Build
+# BUILDCOMPILE="x86_64-linux-gnu"
+# BUILDHOST="x86_64-pc-linux-gnu"
+# BUILDARCH="x86"
+# BUILDRUST="x86_64-unknown-linux-musl"
+# BUILDGO="amd64"
+# MUSLSYSDIR="/usr/local/x86_64-pc-linux-musl"
+
 BUILDCOMPILE="x86_64-linux-gnu"
-BUILDHOST="armv6j-hardfloat-linux-gnueabi"
+BUILDTARGET="armv7l-hardfloat-linux"
 BUILDARCH="arm"
 BUILDRUST="arm-unknown-linux-gnueabi"
+BUILDGO="arm"
+BUILDHOST="${BUILDTARGET}-gnueabi"
+MUSLSYSDIR="/usr/local/${BUILDTARGET}-musl"
 
 export CC=${BUILDHOST}-gcc
 export CXX=${BUILDHOST}-g++
 export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig"
 export CFLAGS="-I${ROOTDIR}/usr/include"
 export LDFLAGS="-L${ROOTDIR}/usr/lib"
-export GOARCH=${BUILDARCH}
+export GOARCH=$BUILDGO
 
-# musl subsystem
+# Rust toolchain
+export CC_arm_unknown_linux_gnueabi="${BUILDHOST}-gcc"
+export CC_x86_64_unknown_linux_musl="${MUSLSYSDIR}/bin/musl-gcc"
+
+# Specific musl initramfs subsystem
 MUSLWORKDIR="${PWD}/staging/musl"
 MUSLROOTDIR="${PWD}/staging/musl/root"
-MUSLSYSDIR="/usr/local/armv6j-hardfloat-linux-musleabi/"
 
 # Download mirror repository
 MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
@@ -442,29 +455,39 @@ ensure_glibc() {
     # patchelf --set-interpreter /lib/ld-linux.so.3 --set-rpath /lib ${ROOTDIR}/usr/lib/libc-2.32.so
     # patchelf --set-interpreter /lib/ld-linux.so.3 ${ROOTDIR}/usr/lib/libc-2.32.so
 
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/ld-* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libns* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libutil* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libm.* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libm-* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libgomp.* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libatomic.* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libc.* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libc-* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libcrypt.* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libcrypt-* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libpthread.* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libpthread-* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libdl.* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libdl-* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libresolv.* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libresolv-* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/libgcc* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/librt.* ${ROOTDIR}/usr/lib/
-    cp -a /usr/local/armv6j-hardfloat-linux-gnueabi/lib/librt-* ${ROOTDIR}/usr/lib/
+    if [ ! -d /usr/local/${BUILDHOST} ]; then
+        echo "[-] /usr/local/${BUILDHOST}: directory not found"
+        echo "[-]   please check if toolchain is correctly installed and"
+        echo "[-]   settings are corrects, could not go further"
+        exit 1
+    fi
 
-    mkdir -p ${ROOTDIR}/usr/local/armv6j-hardfloat-linux-gnueabi
-    pushd ${ROOTDIR}/usr/local/armv6j-hardfloat-linux-gnueabi
+    cp -a /usr/local/${BUILDHOST}/lib/ld-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libns* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libutil* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libm.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libm-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libgomp.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libatomic.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libc.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libc-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libcrypt.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libcrypt-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libpthread.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libpthread-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libdl.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libdl-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libresolv.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libresolv-* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/libgcc* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/librt.* ${ROOTDIR}/usr/lib/
+    cp -a /usr/local/${BUILDHOST}/lib/librt-* ${ROOTDIR}/usr/lib/
+
+    # FIXME: should be fixed by patchelf, but doesn't works for
+    #        some unknown reason, this is a workaround to get linker
+    #        found on the running machine
+    mkdir -p ${ROOTDIR}/usr/local/${BUILDHOST}
+    pushd ${ROOTDIR}/usr/local/${BUILDHOST}
     ln -fs ../../lib lib
     popd
 }
@@ -672,10 +695,12 @@ get_size() {
 
 end_summary() {
     root_size=$(get_size "${ROOTDIR}")
-    kernel_size=$(get_size "${WORKDIR}"/vmlinuz.efi)
+    rootfs_size=$(get_size "${ROOTFSDIR}")
+    kernel_size=$(get_size "${WORKDIR}"/zos-image)
 
     success "[+] --- initramfs ready ---"
-    echo "[+] initramfs root size: $root_size"
+    echo "[+] build root size: $root_size"
+    echo "[+] rootfs size: $rootfs_size"
     echo "[+] kernel size: $kernel_size"
 }
 
@@ -693,7 +718,13 @@ remove_root() {
     echo "[+] cleaning ${ROOTDIR}"
     rm -rf "${ROOTDIR}"/*
 
-    echo "[+] root cleared"
+    echo "[+] cleaning ${ROOTFSDIR}"
+    rm -rf "${ROOTFSDIR}"/*
+
+    echo "[+] cleaning ${RUNDIR}"
+    rm -rf "${RUNDIR}"/*
+
+    echo "[+] environment cleaned"
 }
 
 title() {
