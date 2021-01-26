@@ -1,6 +1,6 @@
 DNSMASQ_PKGNAME="dnsmasq"
-DNSMASQ_VERSION="2.80"
-DNSMASQ_CHECKSUM="e040e72e6f377a784493c36f9e788502"
+DNSMASQ_VERSION="2.84"
+DNSMASQ_CHECKSUM="1875b70e98569f5d0abd84b78b816d31"
 DNSMASQ_LINK="http://www.thekelleys.org.uk/dnsmasq/dnsmasq-${DNSMASQ_VERSION}.tar.xz"
 
 download_dnsmasq() {
