@@ -65,6 +65,10 @@ install_kernel() {
         cp arch/${BUILDARCH}/boot/bzImage "${target}"
     fi
 
+    if [ "${BUILDARCH}" == "arm64" ]; then
+        cp arch/arm64/boot/Image.gz "${target}"
+    fi
+
     progress "kernel installed: ${target}"
 }
 
