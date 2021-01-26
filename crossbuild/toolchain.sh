@@ -5,10 +5,11 @@ MAKEOPTS="-j24"
 TOOLCHAINSCR="${PWD}"
 # BUILD_ARCH_GNU="armv6j-hardfloat-linux-gnueabi"
 # BUILD_ARCH_MUSL="armv6j-hardfloat-linux-musl"
-BUILD_ARCH_GNU="armv7l-hardfloat-linux-gnueabi"
-BUILD_ARCH_MUSL="armv7l-hardfloat-linux-musl"
+BUILD_ARCH_GNU="aarch64-linux-gnu"
+BUILD_ARCH_MUSL="aarch64-linux-musl"
 # BUILD_ARCH_GNU="x86_64-pc-linux-gnu"
 # BUILD_ARCH_MUSL="x86_64-pc-linux-musl"
+BUILD_ARCH="arm64"
 BUILD_HOST="x86_64-pc-linux-gnu"
 BUILD_PREFIX="/usr/local"
 BUILD_ROOT_GNU="${BUILD_PREFIX}/${BUILD_ARCH_GNU}"
@@ -40,7 +41,7 @@ initramdeps() {
     # kmod: kernel module build (depmod)
     apt-get install -y pkg-config m4 bison flex autoconf libtool autogen \
         autopoint xsltproc gperf gettext docbook-xsl bsdmainutils \
-        libssl-dev cmake xxd kmod
+        libssl-dev cmake xxd kmod rsync
 }
 
 rustchain() {
@@ -48,6 +49,7 @@ rustchain() {
     source $HOME/.cargo/env
     rustup default 1.46.0
     rustup target add arm-unknown-linux-gnueabi
+    rustup target add aarch64-unknown-linux-gnu
     rustup target add x86_64-unknown-linux-musl
 
     mkdir -p ~/.cargo
@@ -57,6 +59,9 @@ rustchain() {
     echo "" >> ~/.cargo/config
     echo '[target.x86_64-unknown-linux-musl]' >> ~/.cargo/config
     echo "linker = \"/usr/local/${BUILD_ARCH_MUSL}/bin/musl-gcc\"" >> ~/.cargo/config
+    echo "" >> ~/.cargo/config
+    echo '[target.aarch64-unknown-linux-gnu]' >> ~/.cargo/config
+    echo "linker = \"${BUILD_ARCH_GNU}-gcc\"" >> ~/.cargo/config
 }
 
 gochain() {
@@ -74,6 +79,7 @@ toolchain() {
     GLIBC_VERSION="2.31"
     LIBTOOL_VERSION="2.4.6"
     MUSL_VERSION="1.2.2"
+    KERNEL_VERSION="5.10.10"
 
     rm -rf binutils-${BINUTILS_VERSION}
     rm -rf mpfr-${MPFR_VERSION}
@@ -83,23 +89,24 @@ toolchain() {
     rm -rf glibc-${GLIBC_VERSION}-build
     rm -rf libtool-${LIBTOOL_VERSION}
     rm -rf musl-${MUSL_VERSION}
+    rm -rf linux-${KERNEL_VERSION}
 
     wget -c http://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.xz
     wget -c http://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.xz
     wget -c http://ftp.gnu.org/gnu/libc/glibc-${GLIBC_VERSION}.tar.xz
-    wget -c https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.9.35.tar.xz
+    wget -v https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-${KERNEL_VERSION}.tar.xz
     wget -c https://ftpmirror.gnu.org/libtool/libtool-${LIBTOOL_VERSION}.tar.gz
     wget -c https://musl.libc.org/releases/musl-${MUSL_VERSION}.tar.gz
 
     tar -xf binutils-${BINUTILS_VERSION}.tar.xz
     tar -xf gcc-${GCC_VERSION}.tar.xz
     tar -xf glibc-${GLIBC_VERSION}.tar.xz
-    tar -xf linux-4.9.35.tar.xz
+    tar -xf linux-${KERNEL_VERSION}.tar.xz
     tar -xf libtool-${LIBTOOL_VERSION}.tar.gz
     tar -xf musl-${MUSL_VERSION}.tar.gz
 
-    pushd linux-4.9.35
-    make ARCH=arm INSTALL_HDR_PATH=${BUILD_ROOT_GNU} headers_install
+    pushd linux-${KERNEL_VERSION}
+    make ARCH=${BUILD_ARCH} INSTALL_HDR_PATH=${BUILD_ROOT_GNU} headers_install
     popd
 
     pushd binutils-${BINUTILS_VERSION}
