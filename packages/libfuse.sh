@@ -1,6 +1,6 @@
 FUSE_PKGNAME="libfuse-fuse"
-FUSE_VERSION="2.9.7"
-FUSE_CHECKSUM="91c97e5ae0a40312115dfecc4887bd9d"
+FUSE_VERSION="2.9.9"
+FUSE_CHECKSUM="23009734faca2f62d337e3a59be4c280"
 FUSE_LINK="https://github.com/libfuse/libfuse/archive/fuse-${FUSE_VERSION}.tar.gz"
 
 download_fuse() {
@@ -16,6 +16,14 @@ extract_fuse() {
 
 prepare_fuse() {
     progress "preparing: ${FUSE_PKGNAME}"
+
+    if [ "${BUILDARCH}" == "arm64" ]; then
+        if [ ! -f .patched_libfuse-arm64-uint64.patch ]; then
+            progress "patching: ${FUSE_PKGNAME}"
+            patch -p1 < ${PATCHESDIR}/libfuse-arm64-uint64.patch
+            touch .patched_libfuse-arm64-uint64.patch
+        fi
+    fi
 
     ./makeconf.sh
     ./configure --prefix=/usr \
