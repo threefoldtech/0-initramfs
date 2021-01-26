@@ -24,6 +24,10 @@ prepare_openssl_musl() {
     if [ "$BUILDARCH" == "arm" ]; then
         CC="${MUSLSYSDIR}/bin/musl-gcc" ./Configure --prefix=/ linux-armv4 no-shared
     fi
+
+    if [ "$BUILDARCH" == "arm64" ]; then
+        CC="${MUSLSYSDIR}/bin/musl-gcc" ./Configure --prefix=/ linux-aarch64 no-shared
+    fi
 }
 
 compile_openssl_musl() {

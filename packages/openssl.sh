@@ -24,6 +24,10 @@ prepare_openssl() {
     if [ "$BUILDARCH" == "arm" ]; then
         ./Configure --prefix=/usr shared linux-armv4
     fi
+
+    if [ "$BUILDARCH" == "arm64" ]; then
+        ./Configure --prefix=/usr shared linux-aarch64
+    fi
 }
 
 compile_openssl() {
