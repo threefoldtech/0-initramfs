@@ -17,7 +17,7 @@ extract_ncurses() {
 prepare_ncurses() {
     progress "configuring: ${NCURSES_PKGNAME}"
 
-    ./configure --prefix=/usr \
+    CFLAGS="$CFLAGS -fPIC" ./configure --prefix=/usr \
         --build=${BUILDCOMPILE} \
         --host=${BUILDHOST} \
         --disable-stripping \
