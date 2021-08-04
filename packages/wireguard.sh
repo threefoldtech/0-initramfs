@@ -40,7 +40,7 @@ install_wireguard_tools() {
 
 build_wireguard() {
     pushd "${WORKDIR}/wireguard-linux-compat-${WIREGUARD_MODULES_VERSION}"
-    prepare_wireguard_modules
+    # prepare_wireguard_modules
     popd
 
     pushd "${WORKDIR}/wireguard-tools-${WIREGUARD_TOOLS_VERSION}/src"
