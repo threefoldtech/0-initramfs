@@ -1,5 +1,5 @@
-KERNEL_VERSION="5.4.10"
-KERNEL_CHECKSUM="2b1fd3696fdef9960a1b03a6d84e36c9"
+KERNEL_VERSION="5.10.55"
+KERNEL_CHECKSUM="10d3f47caac28cf126e6d98ad977b2bb"
 KERNEL_LINK="https://www.kernel.org/pub/linux/kernel/v5.x/linux-${KERNEL_VERSION}.tar.xz"
 
 download_kernel() {
