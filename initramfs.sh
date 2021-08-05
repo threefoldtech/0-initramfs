@@ -360,7 +360,7 @@ extract_all() {
 # Dynamic libraries management
 #
 resolv_libs() {
-    paths=$(grep -hr ^/ /etc/ld.so.conf*)
+    paths=$(grep -hr ^/ /etc/ld.so.conf* | grep -v lib32)
     for path in $paths; do
         if [ ! -e "$path/libresolv.so.2" ]; then
             continue
