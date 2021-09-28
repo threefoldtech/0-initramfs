@@ -1,5 +1,5 @@
 ZINIT_REPOSITORY="https://github.com/threefoldtech/zinit"
-ZINIT_VERSION="master"
+ZINIT_VERSION="v2"
 
 download_zinit() {
     download_git ${ZINIT_REPOSITORY} ${ZINIT_VERSION}
