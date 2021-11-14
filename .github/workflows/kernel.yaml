@@ -1,75 +1,69 @@
 name: Kernel
-on: 
+on:
   push:
     branches:
-      - '*'
+      - "*"
     tags-ignore:
       - v*
 
 jobs:
   kernel:
-    name: 'Zero-OS Kernel Image'
+    name: "Zero-OS Kernel Image"
     runs-on: ubuntu-18.04
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v1
+      - name: Checkout code
+        uses: actions/checkout@v1
 
-    - name: Extract branch name
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: runbranch
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: runbranch
 
-    - name: 'Install: go'
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.14
-      id: go
+      - name: "Install: go"
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.14
+        id: go
 
-    - name: 'Install: rust'
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        target: x86_64-unknown-linux-musl
-        default: true
+      - name: "Install: rust"
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-musl
+          default: true
 
-    - name: 'Install: requirements'
-      run: |
-        sudo bash ./autobuild/tf-build-deps-clean.sh
+      - name: "Install: requirements"
+        run: |
+          sudo bash ./autobuild/tf-build-deps-clean.sh
 
-    - name: 'Fetch: sources'
-      run: |
-        export INTERACTIVE="false"
-        sudo --preserve-env=PATH bash initramfs.sh --download
+      - name: "Fetch: sources"
+        run: |
+          export INTERACTIVE="false"
+          sudo --preserve-env=PATH bash initramfs.sh --download
 
-    - name: 'Fetch: extensions'
-      run: |
-        cd extensions
-        git clone https://github.com/zero-os/initramfs-gig
+      - name: "Build: busybox"
+        run: |
+          sudo --preserve-env=PATH bash initramfs.sh --busybox
 
-    - name: 'Build: busybox'
-      run: |
-        sudo --preserve-env=PATH bash initramfs.sh --busybox
+      - name: "Build: userland"
+        run: |
+          sudo --preserve-env=PATH bash initramfs.sh --tools
 
-    - name: 'Build: userland'
-      run: |
-        sudo --preserve-env=PATH bash initramfs.sh --tools
+      - name: "Build: extensions"
+        run: |
+          sudo --preserve-env=PATH bash initramfs.sh --extensions
 
-    - name: 'Build: extensions'
-      run: |
-        sudo --preserve-env=PATH bash initramfs.sh --extensions
+      - name: "Build: cores"
+        run: |
+          sudo --preserve-env=PATH bash initramfs.sh --cores
 
-    - name: 'Build: cores'
-      run: |
-        sudo --preserve-env=PATH bash initramfs.sh --cores
+      - name: "Build: kernel"
+        run: |
+          sudo --preserve-env=PATH bash initramfs.sh --kernel --modules
 
-    - name: 'Build: kernel'
-      run: |
-        sudo --preserve-env=PATH bash initramfs.sh --kernel --modules
-
-    - name: 'Upload: kernel'
-      env:
-        BOOTSTRAP_TOKEN: ${{ secrets.BOOTSTRAP_TOKEN }}
-        IMAGE_BRANCH: ${{ steps.runbranch.outputs.branch }}
-      run: |
-        bash ./autobuild/tf-build-upload.sh
-
+      - name: "Upload: kernel"
+        env:
+          BOOTSTRAP_TOKEN: ${{ secrets.BOOTSTRAP_TOKEN }}
+          IMAGE_BRANCH: ${{ steps.runbranch.outputs.branch }}
+        run: |
+          bash ./autobuild/tf-build-upload.sh
