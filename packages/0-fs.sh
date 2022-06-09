@@ -1,46 +1,25 @@
-ZFS_VERSION="2.0.6"
-ZFS_CHECKSUM="06368fd114642373c1bb024bad2d419e"
-ZFS_LINK="https://github.com/threefoldtech/0-fs/archive/v${ZFS_VERSION}.tar.gz"
+ZFS_VERSION="0.2.6"
+ZFS_HASH="0eb065fbb26a838d1bf6e534a9885c16"
+ZFS_BINARY="https://github.com/threefoldtech/rfs/releases/download/v${ZFS_VERSION}/rfs"
 
 download_zfs() {
-    download_file $ZFS_LINK $ZFS_CHECKSUM 0-fs-${ZFS_VERSION}.tar.gz
-}
-
-extract_zfs() {
-    if [ ! -d "0-fs-${ZFS_VERSION}" ]; then
-        echo "[+] extracting: 0-fs-${ZFS_VERSION}"
-        tar -xf ${DISTFILES}/0-fs-${ZFS_VERSION}.tar.gz -C .
-    fi
-}
-
-prepare_zfs() {
-    echo "[+] preparing 0-fs"
-}
-
-compile_zfs() {
-    echo "[+] compiling 0-fs"
-    GO111MODULE=on make
+    download_file ${ZFS_BINARY} ${ZFS_HASH} "zinit-${ZFS_VERSION}"
 }
 
 install_zfs() {
     echo "[+] copying binaries"
-    # the binary name is still called g8ufs
-    cp -av g8ufs "${ROOTDIR}/sbin/"
+    filepath="${DISTFILES}/rfs-${ZFS_VERSION}"
+    chmod +x ${filepath}
+    # we keep the legacy name g8ufs
+    cp -a "${filepath}" "${ROOTDIR}/sbin/g8ufs"
 }
 
 build_zfs() {
-    pushd "${WORKDIR}/0-fs-${ZFS_VERSION}"
-
-    prepare_zfs
-    compile_zfs
     install_zfs
-
-    popd
 }
 
 registrar_zfs() {
     DOWNLOADERS+=(download_zfs)
-    EXTRACTORS+=(extract_zfs)
 }
 
 registrar_zfs
