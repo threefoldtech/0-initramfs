@@ -1,9 +1,9 @@
 ZFS_VERSION="0.2.6"
-ZFS_HASH="0eb065fbb26a838d1bf6e534a9885c16"
+ZFS_HASH="8d576939d75b12613abdfc1bd18204f6"
 ZFS_BINARY="https://github.com/threefoldtech/rfs/releases/download/v${ZFS_VERSION}/rfs"
 
 download_zfs() {
-    download_file ${ZFS_BINARY} ${ZFS_HASH} "zinit-${ZFS_VERSION}"
+    download_file ${ZFS_BINARY} ${ZFS_HASH} "rfs-${ZFS_VERSION}"
 }
 
 install_zfs() {
