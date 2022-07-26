@@ -707,6 +707,7 @@ main() {
         build_rscoreutils
         build_firmware
         build_xfsprogs
+        build_tpm
 
         ## active musl packages
         # build_zlib_musl
