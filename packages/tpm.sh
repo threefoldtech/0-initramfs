@@ -1,5 +1,5 @@
 TPM_VERSION="5.2"
-TPM_CHECKSUM="bf050f002fe510e1daecd39044e1122d"
+TPM_CHECKSUM="0057615ef43b9322d4577fc3bde0e8d6"
 TPM_LINK="https://github.com/tpm2-software/tpm2-tools/releases/download/${TPM_VERSION}/tpm2-tools-${TPM_VERSION}.tar.gz"
 
 download_tpm() {
