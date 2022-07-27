@@ -25,7 +25,7 @@ compile_tss() {
 
 install_tss() {
     echo "[+] installing tpm-tss"
-    make install
+    make DESTDIR="${ROOTDIR}" install
 }
 
 build_tss() {

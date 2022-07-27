@@ -25,15 +25,23 @@ compile_tpm() {
 
 install_tpm() {
     echo "[+] installing tpm"
-    make install
+    make DESTDIR="${ROOTDIR}" install
 }
 
 build_tpm() {
     pushd "${WORKDIR}/tpm2-tools-${TPM_VERSION}"
 
+    export PKG_CONFIG_PATH="${ROOTDIR}/usr/lib/pkgconfig/"
+    export CFLAGS="-I${ROOTDIR}/usr/include"
+    export LDFLAGS="-L${ROOTDIR}/usr/lib"
+
     prepare_tpm
     compile_tpm
     install_tpm
+
+    unset PKG_CONFIG_PATH
+    unset CFLAGS
+    unset LDFLAGS
 
     popd
 }
