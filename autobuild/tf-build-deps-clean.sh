@@ -1,7 +1,17 @@
 #!/bin/bash
 
-# install dependencies for building
 apt-get update
+
+# ubuntu image hotfix
+apt-get install wget
+
+wget http://archive.ubuntu.com/ubuntu/pool/main/s/systemd/libudev1_237-3ubuntu10_amd64.deb
+wget http://archive.ubuntu.com/ubuntu/pool/main/s/systemd/libudev-dev_237-3ubuntu10_amd64.deb
+dpkg -i libudev1_237-3ubuntu10_amd64.deb
+dpkg -i libudev-dev_237-3ubuntu10_amd64.deb
+rm -f *deb
+
+# install dependencies for building
 apt-get install -y asciidoc xmlto --no-install-recommends
 
 # toolchain dependencies
