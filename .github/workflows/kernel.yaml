@@ -28,7 +28,7 @@ jobs:
 
       - name: "Install: requirements"
         run: |
-          sudo bash ./autobuild/tf-build-deps-clean.sh
+          bash ./autobuild/tf-build-deps-clean.sh
  
       - name: "Install: rust"
         uses: actions-rs/toolchain@v1
