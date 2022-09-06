@@ -3,7 +3,7 @@
 apt-get update
 
 # ubuntu image hotfix
-apt-get install wget
+apt-get -y install wget
 
 wget http://archive.ubuntu.com/ubuntu/pool/main/s/systemd/libudev1_237-3ubuntu10_amd64.deb
 wget http://archive.ubuntu.com/ubuntu/pool/main/s/systemd/libudev-dev_237-3ubuntu10_amd64.deb
