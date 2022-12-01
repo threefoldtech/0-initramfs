@@ -9,7 +9,8 @@ on:
 jobs:
   kernel:
     name: "Zero-OS Kernel Image"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
+    container: ubuntu:18.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
@@ -25,6 +26,10 @@ jobs:
           go-version: 1.14
         id: go
 
+      - name: "Install: requirements"
+        run: |
+          bash ./autobuild/tf-build-deps-clean.sh
+ 
       - name: "Install: rust"
         uses: actions-rs/toolchain@v1
         with:
@@ -32,34 +37,30 @@ jobs:
           target: x86_64-unknown-linux-musl
           default: true
 
-      - name: "Install: requirements"
-        run: |
-          sudo bash ./autobuild/tf-build-deps-clean.sh
-
       - name: "Fetch: sources"
         run: |
           export INTERACTIVE="false"
-          sudo --preserve-env=PATH bash initramfs.sh --download
+          bash initramfs.sh --download
 
       - name: "Build: busybox"
         run: |
-          sudo --preserve-env=PATH bash initramfs.sh --busybox
+          bash initramfs.sh --busybox
 
       - name: "Build: userland"
         run: |
-          sudo --preserve-env=PATH bash initramfs.sh --tools
+          bash initramfs.sh --tools
 
       - name: "Build: extensions"
         run: |
-          sudo --preserve-env=PATH bash initramfs.sh --extensions
+          bash initramfs.sh --extensions
 
       - name: "Build: cores"
         run: |
-          sudo --preserve-env=PATH bash initramfs.sh --cores
+          bash initramfs.sh --cores
 
       - name: "Build: kernel"
         run: |
-          sudo --preserve-env=PATH bash initramfs.sh --kernel --modules
+          bash initramfs.sh --kernel --modules
 
       - name: "Upload: kernel"
         env:

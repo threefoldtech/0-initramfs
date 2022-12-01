@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# install dependencies for building
 apt-get update
+
+# install dependencies for building
 apt-get install -y asciidoc xmlto --no-install-recommends
 
 # toolchain dependencies
