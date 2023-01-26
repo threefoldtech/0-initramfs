@@ -1,11 +1,5 @@
 # Zero-OS Initramfs Builder
-This repository contains all that is needed to build the Zero-OS-kernel and initramfs to start our root filesystem.
-
-# Branches
-- [master](https://github.com/threefoldtech/0-core/tree/master): production code
-- [development](https://github.com/threefoldtech/0-core/tree/development): staging code but should not be broken
-- `development-xxx`: staging feature, with risk of broken stuff
-- [release-threefold-edge.nodes-0001](https://github.com/threefoldtech/0-core/tree/release-threefold-edge.nodes-0001): threefold nodes (blockchain) kernel release
+This repository contains all that is needed to build the Zero-OS kernel and initramfs to start our root filesystem.
 
 # Dependencies
 In order to compile all the initramfs without issues, you'll need to install build-time dependencies.
@@ -19,10 +13,16 @@ If you want to install dependencies required inside an ubuntu 18.04 docker, you 
 
 The first script will install dependencies, the second one will source and export needed variables.
 
+There is a special `autobuild/tf-build-deps-clean.sh` which doesn't install Go nor Rust.
+Use it if you installed them already.
+
 ## Privileges
+
 You need to have root privilege to be able to execute all the scripts.
 
 Some parts need to `chown/setuid/chmod/mknod` files as root.
+
+Not running it as root will fails the build process.
 
 # What does this script do ?
  - First, download and check checksum of all archives needed
@@ -66,6 +66,7 @@ Some parts need to `chown/setuid/chmod/mknod` files as root.
 Just type: `bash initramfs.sh` and everything should be done in one shot.
 
 ## Custom way
+
 The `initramfs.sh` script accepts multiple options:
 ```
  -d --download    only download and extract archives
@@ -85,6 +86,8 @@ The `initramfs.sh` script accepts multiple options:
 The option `--kernel` is useful if you changes something on the root directory and want to rebuild the kernel (with the initramfs).
 
 This will produce a new image with the latest changes.
+
+In order to see how to use theses steps in a maintained way, please check GitHub Action build: `.github/workflows/kernel.yaml` file.
 
 ## Build mode
 By default, initramfs will compiles in `debug` mode, which contains some extra debug options.
