@@ -25,13 +25,13 @@ jobs:
       - name: "Install: go"
         uses: actions/setup-go@v1
         with:
-          go-version: 1.14
+          go-version: 1.19
         id: go
 
       - name: "Install: requirements"
         run: |
           bash ./autobuild/tf-build-deps-clean.sh
- 
+
       - name: "Install: rust"
         uses: actions-rs/toolchain@v1
         with:
