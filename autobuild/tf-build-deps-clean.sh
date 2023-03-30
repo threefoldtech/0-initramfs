@@ -27,6 +27,7 @@ deps+=(liblzo2-dev libbison-dev flex)
 deps+=(libglib2.0-dev libfuse-dev libxml2-dev libpciaccess-dev)
 deps+=(libyajl-dev liblz4-dev libbz2-dev)
 deps+=(libcap-dev autopoint comerr-dev)
+deps+=(libjson-c-dev)
 
 # udev and modules
 deps+=(gperf libelf-dev libkmod-dev liblzma-dev kmod)
