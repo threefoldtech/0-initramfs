@@ -8,7 +8,7 @@ Please check the build process and use the dependencies listed there (see `autob
 If you want to install dependencies required inside an ubuntu 18.04 docker, you can use theses helpers:
 ```
 . autobuild/tf-build-deps.sh
-. autobuild/tf-build-setting.sh
+. autobuild/tf-build-settings.sh
 ```
 
 The first script will install dependencies, the second one will source and export needed variables.
