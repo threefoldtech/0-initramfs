@@ -24,7 +24,7 @@ MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
 
 # By default, we compile with (number of cpu threads + 1)
 # you can changes this to reduce computer load
-JOBS=$(($(grep -c 'bogomips' /proc/cpuinfo) + 1))
+JOBS=$(($(grep -i -c 'bogomips' /proc/cpuinfo) + 1))
 MAKEOPTS="-j ${JOBS}"
 
 #
