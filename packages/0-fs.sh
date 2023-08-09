@@ -1,5 +1,5 @@
-ZFS_VERSION="0.2.6"
-ZFS_HASH="8d576939d75b12613abdfc1bd18204f6"
+ZFS_VERSION="1.1.1"
+ZFS_HASH="974b8dc45ae9c1b00238a79b0f4fc9de"
 ZFS_BINARY="https://github.com/threefoldtech/rfs/releases/download/v${ZFS_VERSION}/rfs"
 
 download_zfs() {
