@@ -1,5 +1,5 @@
-FIRMWARE_VERSION="20230515"
-FIRMWARE_CHECKSUM="fa8477de02a7c16ebf0ed599c6a03367"
+FIRMWARE_VERSION="20230804"
+FIRMWARE_CHECKSUM="bc60c0972db75e4cd46bf0dca7bd9347"
 FIRMWARE_LINK="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${FIRMWARE_VERSION}.tar.gz"
 
 download_firmware() {
