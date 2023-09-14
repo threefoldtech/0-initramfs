@@ -46,4 +46,7 @@ deps+=(libseccomp-dev)
 # install musl
 deps+=(musl musl-tools)
 
+# bmon dependencies
+deps+=(libconfuse-dev ncurses-bin)
+
 apt-get install -y ${deps[@]}

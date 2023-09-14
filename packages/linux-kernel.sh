@@ -1,6 +1,6 @@
-KERNEL_VERSION="5.10.55"
-KERNEL_CHECKSUM="10d3f47caac28cf126e6d98ad977b2bb"
-KERNEL_LINK="https://www.kernel.org/pub/linux/kernel/v5.x/linux-${KERNEL_VERSION}.tar.xz"
+KERNEL_VERSION="6.1.52"
+KERNEL_CHECKSUM="6f6f230d1d109c1b308d359e4effc307"
+KERNEL_LINK="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KERNEL_VERSION}.tar.xz"
 
 download_kernel() {
     download_file $KERNEL_LINK $KERNEL_CHECKSUM

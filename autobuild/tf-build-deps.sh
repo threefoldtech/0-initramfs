@@ -45,10 +45,13 @@ deps+=(libseccomp-dev)
 # install musl
 deps+=(musl musl-tools)
 
+# bmon dependencies
+deps+=(libconfuse-dev ncurses-bin)
+
 apt-get install -y ${deps[@]}
 
 # install go
-GOVER="1.14.1"
+GOVER="1.21.0"
 curl -L https://dl.google.com/go/go${GOVER}.linux-amd64.tar.gz > /tmp/go${GOVER}.linux-amd64.tar.gz
 tar -C /usr/local -xzf /tmp/go${GOVER}.linux-amd64.tar.gz
 mkdir -p /gopath

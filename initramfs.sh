@@ -565,6 +565,9 @@ zero_os_root() {
     # Debugfs tool
     cp -a "${CONFDIR}"/debugfs/debugfs "${ROOTDIR}"/usr/sbin/
     cp -a "${CONFDIR}"/debugfs/ssh-add-github-key "${ROOTDIR}"/usr/sbin/
+
+    # Ensure ncurses terminfo are available (needed for bmon)
+    cp -ar /lib/terminfo ${ROOTDIR}/lib/
 }
 
 #
@@ -707,6 +710,7 @@ main() {
         build_rscoreutils
         build_firmware
         build_xfsprogs
+        build_bmon
 
         ## active musl packages
         # build_zlib_musl
