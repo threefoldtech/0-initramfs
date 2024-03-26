@@ -17,6 +17,9 @@ prepare_kernel() {
     echo "[+] copying kernel configuration"
     cp "${CONFDIR}/build/kernel-config-generic" .config
 
+    # patching .config to add local version
+    sed -i "/CONFIG_LOCALVERSION=/c\CONFIG_LOCALVERSION=\"Zero-OS-${LOCALVERSION}\"" .config
+
     # Restore original file (in case of a patch was made)
     # This behavior is useful when mixing release/debug build
     if [ -f arch/x86/mm/init_64.c.orig ]; then
@@ -35,9 +38,6 @@ prepare_kernel() {
         patch -b -p0 < ${PATCHESDIR}/linux-4.9-secureboot-restriction.patch
         touch .patched_linux-4.9-secureboot-restriction.patch
     fi
-
-    # patching .config to add local version
-    sed -i "/CONFIG_LOCALVERSION=/c\CONFIG_LOCALVERSION=\"Zero-OS-${LOCALVERSION}\"" .config
 }
 
 compile_kernel() {

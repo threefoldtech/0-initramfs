@@ -28,10 +28,10 @@ JOBS=$(($(grep -i -c 'bogomips' /proc/cpuinfo) + 1))
 MAKEOPTS="-j ${JOBS}"
 
 if [ -z ${GITHUB_SHA+x} ]; then
-    LOCALVERSION=$(git describe --abbrev=8 --always)
+    LOCALVERSION="$(git describe --abbrev=8 --always)"
 else
     # extract version from github environment
-    LOCALVERSION=${GITHUB_SHA:0:10}
+    LOCALVERSION="${GITHUB_SHA:0:10}"
 fi
 
 #
