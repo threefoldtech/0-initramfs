@@ -27,8 +27,11 @@ MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
 JOBS=$(($(grep -i -c 'bogomips' /proc/cpuinfo) + 1))
 MAKEOPTS="-j ${JOBS}"
 
-if [ -z ${LOCALVERSION+x} ]; then
+if [ -z ${GITHUB_SHA+x} ]; then
     LOCALVERSION=$(git describe --abbrev=8 --always)
+else
+    # extract version from github environment
+    LOCALVERSION=${GITHUB_SHA:0:10}
 fi
 
 #
