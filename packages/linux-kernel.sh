@@ -18,7 +18,7 @@ prepare_kernel() {
     cp "${CONFDIR}/build/kernel-config-generic" .config
 
     # patching .config to add local version
-    sed -i "/CONFIG_LOCALVERSION=/c\CONFIG_LOCALVERSION=\"Zero-OS-${LOCALVERSION}\"" .config
+    sed -i "/CONFIG_LOCALVERSION=/c\CONFIG_LOCALVERSION=\"-Zero-OS-${LOCALVERSION}\"" .config
 
     # Restore original file (in case of a patch was made)
     # This behavior is useful when mixing release/debug build
