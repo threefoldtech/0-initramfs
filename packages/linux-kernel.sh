@@ -35,6 +35,9 @@ prepare_kernel() {
         patch -b -p0 < ${PATCHESDIR}/linux-4.9-secureboot-restriction.patch
         touch .patched_linux-4.9-secureboot-restriction.patch
     fi
+
+    # patching .config to add local version
+    sed -i "/CONFIG_LOCALVERSION=/c\CONFIG_LOCALVERSION=\"Zero-OS-${LOCALVERSION}\"" .config
 }
 
 compile_kernel() {
@@ -45,7 +48,7 @@ compile_kernel() {
         echo "[+] compiling the kernel (modules)"
         make ${MAKEOPTS} modules
         make INSTALL_MOD_PATH="${ROOTDIR}" modules_install
-        depmod -a -b "${ROOTDIR}" "${KERNEL_VERSION}-Zero-OS"
+        depmod -a -b "${ROOTDIR}" "${KERNEL_VERSION}-Zero-OS-${LOCALVERSION}"
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_KERNEL == 1 ]]; then

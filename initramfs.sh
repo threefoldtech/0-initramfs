@@ -27,6 +27,8 @@ MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
 JOBS=$(($(grep -i -c 'bogomips' /proc/cpuinfo) + 1))
 MAKEOPTS="-j ${JOBS}"
 
+LOCALVERSION=$(git describe --abbrev=8 --always)
+
 #
 # Flags
 #
