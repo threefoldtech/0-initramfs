@@ -195,6 +195,8 @@ prepare() {
     cargover=$(cargo version)
     echo "[+] cargo version: ${cargover}"
 
+    echo "[+] local version: ${LOCALVERSION}"
+
     echo "[+] setting up local system"
     echo "[+] building mode: ${BUILDMODE}"
     echo "[+] ${modules} submodules loaded"
