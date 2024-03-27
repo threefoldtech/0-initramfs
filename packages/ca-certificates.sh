@@ -1,5 +1,5 @@
-CERTS_VERSION="20190110"
-CERTS_CHECKSUM="e19d56b1ec337f0841c8af944b509537"
+CERTS_VERSION="20240203"
+CERTS_CHECKSUM="fd662659da07100af860d720ca35df27"
 CERTS_LINK="http://ftp.fr.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_${CERTS_VERSION}_all.deb"
 
 download_certs() {
