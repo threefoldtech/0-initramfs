@@ -1,2 +1,0 @@
-exec: sh /etc/zinit/init/ntpd-setup.sh
-oneshot: true

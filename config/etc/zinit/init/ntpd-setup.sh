@@ -15,3 +15,5 @@ if [ -n "$ntp_flags" ]; then
     mv $temp_file /etc/ntp.conf
   fi
 fi
+
+exec ntpd -n
