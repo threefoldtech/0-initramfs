@@ -1,1 +1,1 @@
-exec: sh /etc/zinit/init/ntpd-setup.sh
+exec: sh /etc/zinit/init/ntpd.sh
