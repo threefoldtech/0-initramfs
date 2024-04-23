@@ -1,1 +1,3 @@
-exec: ntpd -n
+exec: sh /etc/zinit/init/ntpd.sh
+after:
+  - internet
