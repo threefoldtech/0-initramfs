@@ -49,4 +49,7 @@ deps+=(musl musl-tools)
 # bmon dependencies
 deps+=(libconfuse-dev ncurses-bin)
 
+# bcachefs dependencies
+deps+=(libsodium-dev liburcu-dev libudev-dev udev libclang-dev clang)
+
 apt-get install -y ${deps[@]}
