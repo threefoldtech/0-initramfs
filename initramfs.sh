@@ -292,9 +292,9 @@ download_file() {
 
     # Download the file
     if [ "${INTERACTIVE}" == "false" ]; then
-        curl -L -k -o "${output}" $fileurl
+        curl -f -L -k -o "${output}" $fileurl
     else
-        curl -L -k --progress-bar -C - -o "${output}" $fileurl
+        curl -f -L -k --progress-bar -C - -o "${output}" $fileurl
     fi
 
     # Checksum the downloaded file
