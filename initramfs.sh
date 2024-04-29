@@ -719,6 +719,12 @@ main() {
         build_xfsprogs
         build_bmon
 
+        # bcachefs dependencies
+        build_libaio
+        build_zstd
+        build_keyutils
+        build_bcachefs_tools
+
         ## active musl packages
         # build_zlib_musl
         # build_libcap_musl
