@@ -19,6 +19,10 @@ compile_zstd() {
 
 install_zstd() {
     make PREFIX=/usr install
+
+    # copy this zstd version to initramfs root
+    # to avoid confusion with local zstd possibly installed
+    make DESTDIR=${ROOTDIR} PREFIX=/usr install
 }
 
 build_zstd() {
