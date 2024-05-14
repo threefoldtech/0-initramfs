@@ -292,9 +292,9 @@ download_file() {
 
     # Download the file
     if [ "${INTERACTIVE}" == "false" ]; then
-        curl -L -k -o "${output}" $fileurl
+        curl -f -L -k -o "${output}" $fileurl
     else
-        curl -L -k --progress-bar -C - -o "${output}" $fileurl
+        curl -f -L -k --progress-bar -C - -o "${output}" $fileurl
     fi
 
     # Checksum the downloaded file
@@ -718,6 +718,12 @@ main() {
         build_firmware
         build_xfsprogs
         build_bmon
+
+        # bcachefs dependencies
+        build_libaio
+        build_zstd
+        build_keyutils
+        build_bcachefs_tools
 
         ## active musl packages
         # build_zlib_musl
