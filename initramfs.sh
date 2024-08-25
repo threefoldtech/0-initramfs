@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+#
+# internal version: 4.0.0
+#
+
 # Initramfs Building mode, possible values are: debug, release
 BUILDMODE="debug"
 
