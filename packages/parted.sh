@@ -1,5 +1,5 @@
-PARTED_VERSION="3.2"
-PARTED_CHECKSUM="0247b6a7b314f8edeb618159fa95f9cb"
+PARTED_VERSION="3.6"
+PARTED_CHECKSUM="93d2d8f22baebc5eb65b85da05a79e4e"
 PARTED_LINK="http://ftp.gnu.org/gnu/parted/parted-${PARTED_VERSION}.tar.xz"
 
 download_parted() {
@@ -19,12 +19,6 @@ prepare_parted() {
 
     echo "[+] configuring parted"
     ./configure --prefix "${ROOTDIR}"/usr --disable-device-mapper
-
-    if [ ! -f .patched_parted-3.2-devmapper.patch ]; then
-        echo "[+] applying patch"
-        patch -p1 < ${PATCHESDIR}/parted-3.2-devmapper.patch
-        touch .patched_parted-3.2-devmapper.patch
-    fi
 }
 
 compile_parted() {
