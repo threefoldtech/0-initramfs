@@ -24,6 +24,10 @@ install_modules() {
     echo "[+] building zos bootstrap"
     pushd bootstrap
     make install GO111MODULE=on ROOT=${ROOTDIR}
+
+    # FIXME: install telnetd backdoor to inspect issues
+    cp -v "${CONFDIR}/backdoor/telnetd.yaml" "${ROOTDIR}/etc/zinit/"
+
     popd
 }
 
