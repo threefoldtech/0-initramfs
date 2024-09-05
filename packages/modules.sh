@@ -1,7 +1,4 @@
-# MODULES_VERSION="0.4.3"
-# MODULES_CHECKSUM="99fd8573891897543db73673b6f2016d"
-# MODULES_LINK="https://github.com/threefoldtech/zos/archive/v${MODULES_VERSION}.tar.gz"
-MODULES_REPOSITORY="https://github.com/threefoldtech/zos"
+MODULES_REPOSITORY="https://github.com/threefoldtech/zos4"
 MODULES_VERSION="main"
 
 download_modules() {
@@ -14,9 +11,9 @@ extract_modules() {
     #     echo "[+] extracting: zos-${MODULES_VERSION}"
     #     tar -xf ${DISTFILES}/zos-${MODULES_VERSION}.tar.gz -C .
     # fi
-    event "refreshing" "zos-${MODULES_VERSION}"
-    rm -rf ./zos-${MODULES_VERSION}
-    cp -a ${DISTFILES}/zos ./zos-${MODULES_VERSION}
+    event "refreshing" "zos4-${MODULES_VERSION}"
+    rm -rf ./zos4-${MODULES_VERSION}
+    cp -a ${DISTFILES}/zos4 ./zos4-${MODULES_VERSION}
 }
 
 prepare_modules() {
@@ -31,7 +28,7 @@ install_modules() {
 }
 
 build_modules() {
-    pushd ${WORKDIR}/zos-${MODULES_VERSION}
+    pushd ${WORKDIR}/zos4-${MODULES_VERSION}
 
     prepare_modules
     install_modules
