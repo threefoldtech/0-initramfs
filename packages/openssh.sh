@@ -40,12 +40,31 @@ compile_openssh() {
 
 install_openssh() {
     echo "[+] installing openssh"
+
+    # remove possible leftover configuration
+    # otherwise 'make install' will not overwrite them
+    rm -rf "${ROOTDIR}/etc/ssh"
+
     make DESTDIR="${ROOTDIR}" install-nokeys
 
-    mkdir -p -m 700 "${ROOTDIR}"/root/.ssh
+    mkdir -p -m 700 "${ROOTDIR}/root/.ssh"
 
-    # configuring openssh
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' "${ROOTDIR}"/etc/ssh/sshd_config
+    if [ "${BUILDMODE}" == "release" ]; then
+        echo "[+] hardening openssh server settings"
+
+        # hardening authentication
+        sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/g' "${ROOTDIR}"/etc/ssh/sshd_config
+        sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' "${ROOTDIR}"/etc/ssh/sshd_config
+        sed -i 's/#KbdInteractiveAuthentication yes/KbdInteractiveAuthentication no/g' "${ROOTDIR}"/etc/ssh/sshd_config
+        sed -i 's/#UsePAM no/UsePAM no/g' "${ROOTDIR}"/etc/ssh/sshd_config
+    else
+        echo "[+] enable debug ssh settings"
+
+        # keep debugging mode more permissive
+        sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' "${ROOTDIR}"/etc/ssh/sshd_config
+        sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' "${ROOTDIR}"/etc/ssh/sshd_config
+        sed -i 's/#KbdInteractiveAuthentication yes/KbdInteractiveAuthentication yes/g' "${ROOTDIR}"/etc/ssh/sshd_config
+    fi
 
     unset CFLAGS
     unset LDFLAGS
