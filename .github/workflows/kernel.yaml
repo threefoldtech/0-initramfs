@@ -8,6 +8,24 @@ on:
     paths-ignore:
       - README.md
 
+# define global buildmode variable used by initramfs
+# and by tf-build-upload script to specify if we trigger
+# a 'debug' or 'release' (production) image
+#
+# mode release:
+#   set by default here, theses images are the most
+#   secure and are production ready, does not ship debugging
+#   tools and have hardened security
+#
+# mode debug:
+#   only set if branch name starts with 'debug-' prefix, theses
+#   images contains easy remote access and extra debugging tools
+#
+# -- DEBUG IMAGE SHOULD NEVER BE USED IN A PRODUCTION --
+#
+env:
+  BUILDMODE: release
+
 jobs:
   kernel:
     name: "Zero-OS Kernel Image"
@@ -21,6 +39,10 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: runbranch
+
+      - name: Update buildmode for debugging image
+        if: ${{ contains(github.ref, '-zos-v4-debug-'') }}
+        run: echo "BUILDMODE=debug" >> $GITHUB_ENV
 
       - name: "Install: go"
         uses: actions/setup-go@v1
