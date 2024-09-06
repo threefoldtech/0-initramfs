@@ -541,12 +541,6 @@ zero_os_root() {
     cp "${CONFDIR}/init/init" "${ROOTDIR}/init"
     chmod +x "${ROOTDIR}/init"
 
-    if [ "${BUILDMODE}" = "debug" ]; then
-        echo "[+] installing debug init script"
-        cp "${CONFDIR}/init/init-debug" "${ROOTDIR}/init-debug"
-        chmod +x "${ROOTDIR}/init-debug"
-    fi
-
     # Ensure minimal system directories and symlinks
     echo "[+] creating default directories and files"
     mkdir -p "${ROOTDIR}"/mnt/root
@@ -587,6 +581,15 @@ zero_os_root() {
 
     # Ensure ncurses terminfo are available (needed for bmon)
     cp -ar /lib/terminfo ${ROOTDIR}/lib/
+
+    # Copy debugging helpers
+    if [ "${BUILDMODE}" = "debug" ]; then
+        echo "[+] installing debugging helpers"
+        cp "${CONFDIR}/init/init-debug" "${ROOTDIR}/init-debug"
+        chmod +x "${ROOTDIR}/init-debug"
+
+        cp -a "${CONFDIR}"/etc-debug/* "${ROOTDIR}"/etc/
+    fi
 }
 
 #
