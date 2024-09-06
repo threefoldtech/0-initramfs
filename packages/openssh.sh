@@ -1,5 +1,5 @@
-OPENSSH_VERSION="8.0p1"
-OPENSSH_CHECKSUM="bf050f002fe510e1daecd39044e1122d"
+OPENSSH_VERSION="9.8p1"
+OPENSSH_CHECKSUM="bc04ff77796758c0b37bd0bc9314cd3f"
 OPENSSH_LINK="https://ftp.fr.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${OPENSSH_VERSION}.tar.gz"
 
 download_openssh() {
@@ -17,6 +17,7 @@ prepare_openssh() {
     echo "[+] preparing openssh"
     export CFLAGS="-I${ROOTDIR}/include"
     export LDFLAGS="-L${ROOTDIR}/lib"
+
     ./configure --prefix=/usr \
         --sysconfdir=/etc/ssh \
         --without-kerberos5 \
@@ -45,6 +46,9 @@ install_openssh() {
 
     # configuring openssh
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' "${ROOTDIR}"/etc/ssh/sshd_config
+
+    unset CFLAGS
+    unset LDFLAGS
 }
 
 build_openssh() {
