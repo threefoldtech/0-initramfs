@@ -41,7 +41,7 @@ jobs:
         id: runbranch
 
       - name: Update buildmode for debugging image
-        if: ${{ contains(github.ref, '-zos-v4-debug-'') }}
+        if: ${{ contains(github.ref, '-zos-v4-debug-') }}
         run: echo "BUILDMODE=debug" >> $GITHUB_ENV
 
       - name: "Install: go"
