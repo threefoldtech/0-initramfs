@@ -40,7 +40,7 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: runbranch
 
-      - name: Update buildmode for debugging image
+      - name: Update global build mode for debugging
         if: ${{ contains(github.ref, '-zos-v4-debug-') }}
         run: echo "BUILDMODE=debug" >> $GITHUB_ENV
 
