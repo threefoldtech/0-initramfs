@@ -6,7 +6,7 @@ set -e
 #
 
 # Initramfs Building mode, possible values are: debug, release
-BUILDMODE="debug"
+BUILDMODE="${BUILDMODE:-debug}"
 
 # You need to use absolutes path
 DISTFILES="${PWD}/archives"
