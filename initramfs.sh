@@ -197,8 +197,19 @@ prepare() {
     echo "[+] cargo version: ${cargover}"
 
     echo "[+] setting up local system"
-    echo "[+] building mode: ${BUILDMODE}"
     echo "[+] ${modules} submodules loaded"
+
+    if [ "${BUILDMODE}" == "debug" ]; then
+        warning "[!] building development debug image"
+        echo "[+] never use this build image on a production node"
+
+    elif [ "${BUILDMODE}" == "release" ]; then
+        success "[+] building production image"
+
+    else
+        echo "[-] build mode '${BUILDMODE}' unsupported"
+        exit 1
+    fi
 
     if [ $UID != 0 ]; then
         warning "[-]"
