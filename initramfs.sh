@@ -6,7 +6,7 @@ set -e
 #
 
 # Initramfs Building mode, possible values are: debug, release
-BUILDMODE="debug"
+BUILDMODE="${BUILDMODE:-debug}"
 
 # You need to use absolutes path
 DISTFILES="${PWD}/archives"
@@ -41,7 +41,7 @@ fi
 #
 # Flags
 #
-OPTS=$(getopt -o adbtckMeolmnzrh --long all,download,busybox,tools,cores,kernel,modules,extensions,ork,clean,mrproper,nomirror,compact,release,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o adbtckMelmnzrh --long all,download,busybox,tools,cores,kernel,modules,extensions,clean,mrproper,nomirror,compact,release,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
@@ -62,7 +62,6 @@ if [ "$OPTS" != " --" ] && [ "$OPTS" != " --release --" ]; then
     DO_EXTENSIONS=0
     DO_CLEAN=0
     DO_MRPROPER=0
-    DO_ORK=0
     DO_COMPACT=0
 
     eval set -- "$OPTS"
@@ -78,7 +77,6 @@ while true; do
         -k | --kernel)     DO_KERNEL=1;         shift ;;
         -M | --modules)    DO_KMODULES=1;       shift ;;
         -e | --extensions) DO_EXTENSIONS=1;     shift ;;
-        -o | --ork)        DO_ORK=1;            shift ;;
         -l | --clean)      DO_CLEAN=1;          shift ;;
         -z | --compact)    DO_COMPACT=1;        shift ;;
         -m | --mrproper)   DO_MRPROPER=1;       shift ;;
@@ -94,7 +92,6 @@ while true; do
             echo " -k --kernel      only (re)build kernel (vmlinuz, produce final image)"
             echo " -M --modules     only (re)build kernel modules"
             echo " -e --extensions  only (re)build extensions"
-            echo " -o --ork         only (re)build ork protection"
             echo " -n --nomirror    don't use a mirror to download files (use upstream)"
             echo " -l --clean       only clean staging files (extracted sources)"
             echo " -m --mrproper    only remove staging files and clean the root"
@@ -200,8 +197,19 @@ prepare() {
     echo "[+] cargo version: ${cargover}"
 
     echo "[+] setting up local system"
-    echo "[+] building mode: ${BUILDMODE}"
     echo "[+] ${modules} submodules loaded"
+
+    if [ "${BUILDMODE}" == "debug" ]; then
+        warning "[!] building development debug image"
+        echo "[+] never use this build image on a production node"
+
+    elif [ "${BUILDMODE}" == "release" ]; then
+        success "[+] building production image"
+
+    else
+        echo "[-] build mode '${BUILDMODE}' unsupported"
+        exit 1
+    fi
 
     if [ $UID != 0 ]; then
         warning "[-]"
@@ -533,12 +541,6 @@ zero_os_root() {
     cp "${CONFDIR}/init/init" "${ROOTDIR}/init"
     chmod +x "${ROOTDIR}/init"
 
-    if [ "${BUILDMODE}" = "debug" ]; then
-        echo "[+] installing debug init script"
-        cp "${CONFDIR}/init/init-debug" "${ROOTDIR}/init-debug"
-        chmod +x "${ROOTDIR}/init-debug"
-    fi
-
     # Ensure minimal system directories and symlinks
     echo "[+] creating default directories and files"
     mkdir -p "${ROOTDIR}"/mnt/root
@@ -579,6 +581,15 @@ zero_os_root() {
 
     # Ensure ncurses terminfo are available (needed for bmon)
     cp -ar /lib/terminfo ${ROOTDIR}/lib/
+
+    # Copy debugging helpers
+    if [ "${BUILDMODE}" = "debug" ]; then
+        echo "[+] installing debugging helpers"
+        cp "${CONFDIR}/init/init-debug" "${ROOTDIR}/init-debug"
+        chmod +x "${ROOTDIR}/init-debug"
+
+        cp -a "${CONFDIR}"/etc-debug/* "${ROOTDIR}"/etc/
+    fi
 }
 
 #
@@ -733,11 +744,7 @@ main() {
 
         ## disabled build
         # build_qemu
-    fi
-
-    if [[ $DO_ALL == 1 ]] || [[ $DO_ORK == 1 ]]; then
-        # build_ork
-        build_restic
+        # build_restic
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then

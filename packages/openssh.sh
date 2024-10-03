@@ -1,5 +1,5 @@
-OPENSSH_VERSION="8.0p1"
-OPENSSH_CHECKSUM="bf050f002fe510e1daecd39044e1122d"
+OPENSSH_VERSION="9.8p1"
+OPENSSH_CHECKSUM="bc04ff77796758c0b37bd0bc9314cd3f"
 OPENSSH_LINK="https://ftp.fr.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${OPENSSH_VERSION}.tar.gz"
 
 download_openssh() {
@@ -17,6 +17,7 @@ prepare_openssh() {
     echo "[+] preparing openssh"
     export CFLAGS="-I${ROOTDIR}/include"
     export LDFLAGS="-L${ROOTDIR}/lib"
+
     ./configure --prefix=/usr \
         --sysconfdir=/etc/ssh \
         --without-kerberos5 \
@@ -39,12 +40,34 @@ compile_openssh() {
 
 install_openssh() {
     echo "[+] installing openssh"
+
+    # remove possible leftover configuration
+    # otherwise 'make install' will not overwrite them
+    rm -rf "${ROOTDIR}/etc/ssh"
+
     make DESTDIR="${ROOTDIR}" install-nokeys
 
-    mkdir -p -m 700 "${ROOTDIR}"/root/.ssh
+    mkdir -p -m 700 "${ROOTDIR}/root/.ssh"
 
-    # configuring openssh
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' "${ROOTDIR}"/etc/ssh/sshd_config
+    if [ "${BUILDMODE}" == "release" ]; then
+        echo "[+] hardening openssh server settings"
+
+        # hardening authentication
+        sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/g' "${ROOTDIR}"/etc/ssh/sshd_config
+        sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' "${ROOTDIR}"/etc/ssh/sshd_config
+        sed -i 's/#KbdInteractiveAuthentication yes/KbdInteractiveAuthentication no/g' "${ROOTDIR}"/etc/ssh/sshd_config
+        sed -i 's/#UsePAM no/UsePAM no/g' "${ROOTDIR}"/etc/ssh/sshd_config
+    else
+        echo "[+] enable debug ssh settings"
+
+        # keep debugging mode more permissive
+        sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' "${ROOTDIR}"/etc/ssh/sshd_config
+        sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' "${ROOTDIR}"/etc/ssh/sshd_config
+        sed -i 's/#KbdInteractiveAuthentication yes/KbdInteractiveAuthentication yes/g' "${ROOTDIR}"/etc/ssh/sshd_config
+    fi
+
+    unset CFLAGS
+    unset LDFLAGS
 }
 
 build_openssh() {

@@ -8,7 +8,7 @@ apt-get update
 apt-get install -y asciidoc xmlto --no-install-recommends
 
 # toolchain dependencies
-deps=(pkg-config make m4 autoconf)
+deps=(pkg-config make m4 autoconf zstd)
 
 # system tools and libs
 deps+=(libssl-dev dnsmasq git curl bc wget)
