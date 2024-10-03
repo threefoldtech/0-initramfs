@@ -4,7 +4,7 @@ mkdir -m 700 -p "${ROOTDIR}/root/.ssh"
 rm -f "${ROOTDIR}/root/.ssh/authorized_keys"
 
 if [ "${BUILDMODE}" == "debug" ]; then
-    for user in muhamadazmy delandtj maxux LeeSmet coesensbert; do
+    for user in muhamadazmy delandtj maxux LeeSmet coesensbert ashraffouda atefnazmy; do
         echo "[+] authorizing ssh key: ${user}"
 
         key=$(curl -s https://github.com/${user}.keys | tail -1)
