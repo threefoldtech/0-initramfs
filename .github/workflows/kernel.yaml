@@ -18,7 +18,7 @@ on:
 #   tools and have hardened security
 #
 # mode debug:
-#   only set if branch name starts with 'debug-' prefix, theses
+#   only set if branch name starts with 'development-' prefix, theses
 #   images contains easy remote access and extra debugging tools
 #
 # -- DEBUG IMAGE SHOULD NEVER BE USED IN A PRODUCTION --
@@ -41,7 +41,7 @@ jobs:
         id: runbranch
 
       - name: Update global build mode for debugging
-        if: ${{ contains(github.ref, '-zos-v4-debug-') }}
+        if: ${{ contains(github.ref, 'development-') }}
         run: echo "BUILDMODE=debug" >> $GITHUB_ENV
 
       - name: "Install: go"
