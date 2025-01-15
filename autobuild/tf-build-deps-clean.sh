@@ -55,11 +55,3 @@ deps+=(libconfuse-dev ncurses-bin)
 deps+=(libsodium-dev liburcu-dev libudev-dev udev libclang-dev clang)
 
 apt-get install -y ${deps[@]}
-
-# re-introduce manual go setup, github action is broken
-# with our requirement of ubuntu 18.04 workaround
-GOVER="1.21.0"
-curl -L https://dl.google.com/go/go${GOVER}.linux-amd64.tar.gz > /tmp/go${GOVER}.linux-amd64.tar.gz
-tar -C /usr/local -xzf /tmp/go${GOVER}.linux-amd64.tar.gz
-mkdir -p /gopath
-
