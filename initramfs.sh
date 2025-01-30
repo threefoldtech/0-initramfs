@@ -599,7 +599,8 @@ zero_os_root() {
     cp -a "${CONFDIR}"/debugfs/ssh-add-github-key "${ROOTDIR}"/usr/sbin/
 
     # Ensure ncurses terminfo are available (needed for bmon)
-    cp -ar /lib/terminfo ${ROOTDIR}/lib/
+    cp -ar /usr/share/terminfo ${ROOTDIR}/lib/
+    cp -ar /usr/share/terminfo ${ROOTDIR}/usr/share/
 
     # Copy debugging helpers
     if [ "${BUILDMODE}" = "debug" ]; then
