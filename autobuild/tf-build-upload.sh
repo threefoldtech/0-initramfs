@@ -13,5 +13,5 @@ echo "[+] branch: ${linkname}"
 
 cp vmlinuz.efi "${kernel}"
 
-curl -b "token=${BOOTSTRAP_TOKEN}" -X POST -F "kernel=@${kernel}" "https://bootstrap.grid.tf/api/kernel"
-curl -b "token=${BOOTSTRAP_TOKEN}" "https://bootstrap.grid.tf/api/symlink/${linkname}/${kernel}"
+curl -b "token=${BOOTSTRAP_TOKEN}" -X POST -F "kernel=@${kernel}" "https://v4.bootstrap.grid.tf/api/kernel"
+curl -b "token=${BOOTSTRAP_TOKEN}" "https://v4.bootstrap.grid.tf/api/symlink/${linkname}/${kernel}"

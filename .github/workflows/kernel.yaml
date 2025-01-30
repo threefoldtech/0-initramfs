@@ -2,7 +2,8 @@ name: Kernel
 on:
   push:
     branches:
-      - "*"
+      - "*-v4"
+      - "*-v4-*"
     tags-ignore:
       - v*
     paths-ignore:
@@ -28,9 +29,9 @@ env:
 
 jobs:
   kernel:
-    name: "Zero-OS Kernel Image"
+    name: "Zero-OS Kernel Image (v4)"
     runs-on: ubuntu-latest
-    container: ubuntu:20.04
+    container: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
