@@ -1,9 +1,13 @@
 MODULES_REPOSITORY="https://github.com/threefoldtech/zos4"
 MODULES_VERSION="main"
 
+MODULES_BASE_REPOSITORY="https://github.com/threefoldtech/zosbase"
+MODULES_BASE_VERSION="main"
+
 download_modules() {
     # download_file $MODULES_LINK $MODULES_CHECKSUM zos-${MODULES_VERSION}.tar.gz
     download_git ${MODULES_REPOSITORY} ${MODULES_VERSION}
+    download_git ${MODULES_BASE_REPOSITORY} ${MODULES_BASE_VERSION}
 }
 
 extract_modules() {
@@ -14,6 +18,13 @@ extract_modules() {
     event "refreshing" "zos4-${MODULES_VERSION}"
     rm -rf ./zos4-${MODULES_VERSION}
     cp -a ${DISTFILES}/zos4 ./zos4-${MODULES_VERSION}
+
+    event "refreshing" "zosbase-${MODULES_BASE_VERSION}"
+    rm -rf ./zosbase-${MODULES_BASE_VERSION}
+    cp -a ${DISTFILES}/zosbase ./zosbase-${MODULES_BASE_VERSION}
+
+    rm -rf ./zos4-${MODULES_VERSION}/boostrap
+    cp -a ./zosbase-${MODULES_BASE_VERSION}/bootstrap ./zos4-${MODULES_VERSION}
 }
 
 prepare_modules() {
