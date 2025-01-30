@@ -17,11 +17,12 @@ prepare_curl() {
     echo "[+] configuring curl"
 
     autoreconf -f -i -s
-    ./configure --disable-debug --enable-optimize --disable-curldebug --disable-symbol-hiding --disable-rt \
+    ./configure --prefix=${ROOTDIR}/usr \
+        --disable-debug --enable-optimize --disable-curldebug --disable-symbol-hiding --disable-rt \
         --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict \
         --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher \
-        --disable-manual --disable-libcurl-option --disable-sspi --disable-ntlm-wb --without-brotli --without-librtmp --without-winidn \
-        --disable-threaded-resolver --without-libpsl \
+        --disable-manual --disable-libcurl-option --disable-sspi --without-brotli --without-librtmp --without-winidn \
+        --disable-threaded-resolver --without-libpsl --without-zstd \
         --with-openssl
 }
 
@@ -34,7 +35,6 @@ install_curl() {
 }
 
 build_curl() {
-    # curl-curl is not a script mistake
     pushd "${WORKDIR}/curl-${CURL_VERSION}"
 
     prepare_curl
