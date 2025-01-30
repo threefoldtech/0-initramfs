@@ -499,12 +499,28 @@ optimize_size() {
 
     echo "[+] optimizing binaries size"
 
-    for file in $(find ./bin ./sbin ./libexec ./usr/bin ./usr/sbin ./usr/libexec ./usr/lib -type f); do
+    excludes=("./usr/lib/libc.so.6" "./usr/lib/libz.so.1.2.11" "./usr/lib/libzstd.so.1")
+
+    for file in $(find ./bin ./sbin ./usr/bin ./usr/sbin ./usr/libexec ./usr/lib -type f); do
+        skipfile=0
+
+        for ex in "${excludes[@]}"; do
+            if [ "${file}" == "${ex}" ]; then
+                echo "[+] strip: skipping ${file}"
+                skipfile=1
+            fi
+        done
+
+        if [ $skipfile -eq 1 ]; then
+            continue
+        fi
+
         # dumping 4 first bytes
         header=$(dd if=$file bs=1 count=4 2> /dev/null | hexdump -e '/1 "%02X"')
 
         # checking if it's a ELF file
         if [ "$header" == "7F454C46" ]; then
+            # echo "[+] strip: ${file}"
             strip --strip-debug $file || true
         fi
     done
