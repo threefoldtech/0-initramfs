@@ -740,7 +740,6 @@ main() {
         build_netcat
         build_redis
         build_ethtool
-        build_rtinfo
         build_seektime
         build_curl
         build_zflist
