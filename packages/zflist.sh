@@ -35,11 +35,12 @@ build_capnpc() {
 prepare_zflist() {
     echo "[+] preparing zflist"
     make mrproper
-
-    sed -i s/'-lcurl -lssl'/'-lcurl -lzstd -lssl'/g zflist/Makefile
 }
 
 compile_zflist() {
+    export CFLAGS="-I${ROOTDIR}/usr/include"
+    export LDFLAGS="-L${ROOTDIR}/usr/lib"
+
     cd libflist
     make ${MAKEOPTS}
     cd ..
@@ -47,6 +48,9 @@ compile_zflist() {
     cd zflist
     make production
     cd ..
+
+    unset CFLAGS
+    unset LDFLAGS
 }
 
 install_zflist() {

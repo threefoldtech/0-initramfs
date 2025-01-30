@@ -46,6 +46,9 @@ compile_rtinfo() {
 install_rtinfo() {
     echo "[+] installing rtinfo (client)"
     cp -a rtinfo-client "${ROOTDIR}"/usr/bin/
+
+    unset CFLAGS
+    unset LDFLAGS
 }
 
 build_rtinfo() {
