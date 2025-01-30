@@ -35,6 +35,8 @@ build_capnpc() {
 prepare_zflist() {
     echo "[+] preparing zflist"
     make mrproper
+
+    sed -i s/'-lcurl -lssl'/'-lcurl -lzstd -lssl'/g zflist/Makefile
 }
 
 compile_zflist() {
