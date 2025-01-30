@@ -1,5 +1,5 @@
-KERNEL_VERSION="6.6.51"
-KERNEL_CHECKSUM="8d702a8a604c0d588c045dfe51105df4"
+KERNEL_VERSION="6.6.74"
+KERNEL_CHECKSUM="eb78e6bad6819a21d5f107e08c136a8c"
 KERNEL_LINK="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KERNEL_VERSION}.tar.xz"
 
 download_kernel() {
