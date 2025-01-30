@@ -1,5 +1,5 @@
-XFSPROGS_VERSION="5.4.0"
-XFSPROGS_CHECKSUM="61232b1cc453780517d9b0c12ff1699b"
+XFSPROGS_VERSION="6.12.0"
+XFSPROGS_CHECKSUM="c2f1ddf241f2ce7ea2669de595a4f766"
 XFSPROGS_LINK="https://mirrors.edge.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/xfsprogs-${XFSPROGS_VERSION}.tar.xz"
 
 download_xfsprogs() {

@@ -51,4 +51,7 @@ deps+=(musl musl-tools)
 # bmon dependencies
 deps+=(libconfuse-dev ncurses-bin)
 
+# xfsprogs dependencies
+deps+=(libinih-dev liburcu-dev)
+
 apt-get install -y ${deps[@]}
