@@ -38,6 +38,9 @@ prepare_zflist() {
 }
 
 compile_zflist() {
+    export CFLAGS="-I${ROOTDIR}/usr/include"
+    export LDFLAGS="-L${ROOTDIR}/usr/lib"
+
     cd libflist
     make ${MAKEOPTS}
     cd ..
@@ -45,6 +48,9 @@ compile_zflist() {
     cd zflist
     make production
     cd ..
+
+    unset CFLAGS
+    unset LDFLAGS
 }
 
 install_zflist() {

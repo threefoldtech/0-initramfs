@@ -50,10 +50,13 @@ deps+=(musl musl-tools)
 # bmon dependencies
 deps+=(libconfuse-dev ncurses-bin)
 
+# xfsprogs dependencies
+deps+=(libinih-dev liburcu-dev)
+
 apt-get install -y ${deps[@]}
 
 # install go
-GOVER="1.21.0"
+GOVER="1.23.4"
 curl -L https://dl.google.com/go/go${GOVER}.linux-amd64.tar.gz > /tmp/go${GOVER}.linux-amd64.tar.gz
 tar -C /usr/local -xzf /tmp/go${GOVER}.linux-amd64.tar.gz
 mkdir -p /gopath

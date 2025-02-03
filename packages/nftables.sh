@@ -76,6 +76,11 @@ compile_nftables() {
 install_nftables() {
     echo "[+] installing nftables"
     make DESTDIR=${ROOTDIR} install
+
+    unset LIBMNL_CFLAGS
+    unset LIBMNL_LIBS
+    unset LIBNFTNL_CFLAGS
+    unset LIBNFTNL_LIBS
 }
 
 build_nftables() {

@@ -41,7 +41,7 @@ fi
 #
 # Flags
 #
-OPTS=$(getopt -o adbtckMelmnzrh --long all,download,busybox,tools,cores,kernel,modules,extensions,clean,mrproper,nomirror,compact,release,help -n 'parse-options' -- "$@")
+OPTS=$(getopt -o adbtfckMelmnzrh --long all,download,busybox,tools,firmwares,cores,kernel,modules,extensions,clean,mrproper,nomirror,compact,release,help -n 'parse-options' -- "$@")
 if [ $? != 0 ]; then
     echo "Failed parsing options." >&2
     exit 1
@@ -56,6 +56,7 @@ if [ "$OPTS" != " --" ] && [ "$OPTS" != " --release --" ]; then
     DO_DOWNLOAD=0
     DO_BUSYBOX=0
     DO_TOOLS=0
+    DO_FIRMWARES=0
     DO_CORES=0
     DO_KERNEL=0
     DO_KMODULES=0
@@ -73,6 +74,7 @@ while true; do
         -d | --download)   DO_DOWNLOAD=1;       shift ;;
         -b | --busybox)    DO_BUSYBOX=1;        shift ;;
         -t | --tools)      DO_TOOLS=1;          shift ;;
+        -f | --firmwares)  DO_FIRMWARES=1;      shift ;;
         -c | --cores)      DO_CORES=1;          shift ;;
         -k | --kernel)     DO_KERNEL=1;         shift ;;
         -M | --modules)    DO_KMODULES=1;       shift ;;
@@ -88,6 +90,7 @@ while true; do
             echo " -d --download    only download and extract archives"
             echo " -b --busybox     only (re)build busybox"
             echo " -t --tools       only (re)build tools (ssl, fuse, ...)"
+            echo " -f --firmwares   only (re)build linux-firmwares"
             echo " -c --cores       only (re)build core0 and coreX"
             echo " -k --kernel      only (re)build kernel (vmlinuz, produce final image)"
             echo " -M --modules     only (re)build kernel modules"
@@ -496,12 +499,28 @@ optimize_size() {
 
     echo "[+] optimizing binaries size"
 
-    for file in $(find ./bin ./sbin ./libexec ./usr/bin ./usr/sbin ./usr/libexec ./usr/lib -type f); do
+    excludes=("./usr/lib/libc.so.6" "./usr/lib/libz.so.1.2.11" "./usr/lib/libzstd.so.1")
+
+    for file in $(find ./bin ./sbin ./usr/bin ./usr/sbin ./usr/libexec ./usr/lib -type f); do
+        skipfile=0
+
+        for ex in "${excludes[@]}"; do
+            if [ "${file}" == "${ex}" ]; then
+                echo "[+] strip: skipping ${file}"
+                skipfile=1
+            fi
+        done
+
+        if [ $skipfile -eq 1 ]; then
+            continue
+        fi
+
         # dumping 4 first bytes
         header=$(dd if=$file bs=1 count=4 2> /dev/null | hexdump -e '/1 "%02X"')
 
         # checking if it's a ELF file
         if [ "$header" == "7F454C46" ]; then
+            # echo "[+] strip: ${file}"
             strip --strip-debug $file || true
         fi
     done
@@ -580,7 +599,8 @@ zero_os_root() {
     cp -a "${CONFDIR}"/debugfs/ssh-add-github-key "${ROOTDIR}"/usr/sbin/
 
     # Ensure ncurses terminfo are available (needed for bmon)
-    cp -ar /lib/terminfo ${ROOTDIR}/lib/
+    cp -ar /usr/share/terminfo ${ROOTDIR}/lib/
+    cp -ar /usr/share/terminfo ${ROOTDIR}/usr/share/
 
     # Copy debugging helpers
     if [ "${BUILDMODE}" = "debug" ]; then
@@ -720,7 +740,6 @@ main() {
         build_netcat
         build_redis
         build_ethtool
-        build_rtinfo
         build_seektime
         build_curl
         build_zflist
@@ -730,7 +749,6 @@ main() {
         build_bcache
         build_tcpdump
         build_rscoreutils
-        build_firmware
         build_xfsprogs
         build_bmon
 
@@ -745,6 +763,11 @@ main() {
         ## disabled build
         # build_qemu
         # build_restic
+        # build_rtinfo
+    fi
+
+    if [[ $DO_ALL == 1 ]] || [[ $DO_FIRMWARES == 1 ]]; then
+        build_firmware
     fi
 
     if [[ $DO_ALL == 1 ]] || [[ $DO_CORES == 1 ]]; then
