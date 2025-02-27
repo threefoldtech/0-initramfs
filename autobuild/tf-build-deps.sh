@@ -33,7 +33,7 @@ deps+=(libcap-dev autopoint comerr-dev)
 deps+=(gperf libelf-dev libkmod-dev liblzma-dev kmod)
 
 # nftables
-deps+=(libnl-3-dev libnl-route-3-dev libmnl-dev xtables-addons-source)
+deps+=(libnl-3-dev libnl-route-3-dev libmnl-dev xtables-addons-source libedit-dev)
 
 # zflist
 deps+=(libhiredis-dev libpixman-1-dev libb2-dev libsqlite3-dev libtar-dev libjansson-dev libsnappy-dev)

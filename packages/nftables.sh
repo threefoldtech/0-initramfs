@@ -1,13 +1,13 @@
-NFTABLES_VERSION="0.9.1"
-NFTABLES_CHECKSUM="e2facbcad6c5d9bd87a0bf5081a31522"
-NFTABLES_LINK="https://www.netfilter.org/projects/nftables/files/nftables-${NFTABLES_VERSION}.tar.bz2"
+NFTABLES_VERSION="1.1.1"
+NFTABLES_CHECKSUM="f0a71bcd8c112be7594851b39d4a45c3"
+NFTABLES_LINK="https://www.netfilter.org/projects/nftables/files/nftables-${NFTABLES_VERSION}.tar.xz"
 
-LIBNFTNL_VERSION="1.1.3"
-LIBNFTNL_CHECKSUM="e2a7af0a85c283b2cc837c09635b6bca"
-LIBNFTNL_LINK="http://www.iptables.org/projects/libnftnl/files/libnftnl-${LIBNFTNL_VERSION}.tar.bz2"
+LIBNFTNL_VERSION="1.2.8"
+LIBNFTNL_CHECKSUM="b0517646bbf47a8cf6ce67aeaeb201c4"
+LIBNFTNL_LINK="http://www.iptables.org/projects/libnftnl/files/libnftnl-${LIBNFTNL_VERSION}.tar.xz"
 
-LIBMNL_VERSION="1.0.4"
-LIBMNL_CHECKSUM="be9b4b5328c6da1bda565ac5dffadb2d"
+LIBMNL_VERSION="1.0.5"
+LIBMNL_CHECKSUM="0bbb70573119ec5d49435114583e7a49"
 LIBMNL_LINK="https://netfilter.org/projects/libmnl/files/libmnl-${LIBMNL_VERSION}.tar.bz2"
 
 download_nftables() {
@@ -19,12 +19,12 @@ download_nftables() {
 extract_nftables() {
     if [ ! -d "nftables-${NFTABLES_VERSION}" ]; then
         echo "[+] extracting: nftables-${NFTABLES_VERSION}"
-        tar -xf ${DISTFILES}/nftables-${NFTABLES_VERSION}.tar.bz2 -C .
+        tar -xf ${DISTFILES}/nftables-${NFTABLES_VERSION}.tar.xz -C .
     fi
 
     if [ ! -d "libnftnl-${LIBNFTNL_VERSION}" ]; then
         echo "[+] extracting: libnftnl-${LIBNFTNL_VERSION}"
-        tar -xf ${DISTFILES}/libnftnl-${LIBNFTNL_VERSION}.tar.bz2 -C .
+        tar -xf ${DISTFILES}/libnftnl-${LIBNFTNL_VERSION}.tar.xz -C .
     fi
 
     if [ ! -d "libmnl-${LIBMNL_VERSION}" ]; then
@@ -62,7 +62,6 @@ prepare_nftables() {
 
     ./configure --prefix="/usr" \
         --disable-debug \
-        --with-cli \
         --with-json \
         --with-mini-gmp \
         --disable-man-doc
