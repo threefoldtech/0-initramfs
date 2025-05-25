@@ -1,5 +1,5 @@
-ZINIT_VERSION="0.2.11"
-ZINIT_HASH="e1d6a6f0ff604e58735cd7bd127e5c78"
+ZINIT_VERSION="0.2.14"
+ZINIT_HASH="2617c4d62e7b33e34c1836e39a3be93e"
 ZINIT_BINARY="https://github.com/threefoldtech/zinit/releases/download/v${ZINIT_VERSION}/zinit"
 
 download_zinit() {
