@@ -708,6 +708,7 @@ main() {
         build_rtinfo
         build_seektime
         build_curl
+        build_lshw
         build_zflist
         build_haveged
         build_wireguard
