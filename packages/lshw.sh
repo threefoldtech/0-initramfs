@@ -9,7 +9,7 @@ download_lshw() {
 extract_lshw() {
     if [ ! -d "lshw-${LSHW_VERSION}" ]; then
         echo "[+] extracting: lshw-${LSHW_VERSION}"
-        tar -xf ${DISTFILES}/lshw-${LSHW_VERSION}.tar.gz -C .
+        tar -xf ${DISTFILES}/${LSHW_VERSION}.tar.gz -C .
     fi
 }
 
@@ -23,14 +23,13 @@ prepare_lshw() {
 
 compile_lshw() {
     pushd src
-    make ${MAKEOPTS}
+    make
     popd
 }
 
 install_lshw() {
-    pushd src
-    make install
-    popd
+    echo "[+] installing lshw to initramfs"
+    install -D -m 755 src/lshw "${ROOTDIR}/usr/bin/lshw"
 }
 
 build_lshw() {
