@@ -20,7 +20,7 @@ MUSLWORKDIR="${PWD}/staging/musl"
 MUSLROOTDIR="${PWD}/staging/musl/root"
 
 # Download mirror repository
-MIRRORSRC="https://download.grid.tf/initramfs-mirror/"
+MIRRORSRC="https://download.threefold.me/initramfs-mirror/"
 
 # By default, we compile with (number of cpu threads + 1)
 # you can changes this to reduce computer load
