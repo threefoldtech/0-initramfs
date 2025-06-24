@@ -3,33 +3,40 @@ LSHW_CHECKSUM="5805eba5f31886582fff673c5dccdb3b"
 LSHW_LINK="https://github.com/lyonel/lshw/archive/refs/tags/${LSHW_VERSION}.tar.gz"
 
 download_lshw() {
-    download_file $LSHW_LINK $LSHW_CHECKSUM
+    download_file $LSHW_LINK $LSHW_CHECKSUM lshw-${LSHW_VERSION}.tar.gz
 }
 
 extract_lshw() {
     if [ ! -d "lshw-${LSHW_VERSION}" ]; then
         echo "[+] extracting: lshw-${LSHW_VERSION}"
-        tar -xf ${DISTFILES}/${LSHW_VERSION}.tar.gz -C .
+        tar -xf ${DISTFILES}/lshw-${LSHW_VERSION}.tar.gz -C . 
     fi
 }
 
 prepare_lshw() {
     echo "[+] configuring lshw"
-    export CC="${CC:-gcc}"
-    export CXX="${CXX:-g++}"
-    export CFLAGS="${CFLAGS:--Os -fomit-frame-pointer}"
-    export CXXFLAGS="${CXXFLAGS:--Os -fomit-frame-pointer}"
 }
 
 compile_lshw() {
     pushd src
-    make
+    make ${MAKEOPTS}
     popd
 }
 
 install_lshw() {
     echo "[+] installing lshw to initramfs"
+    
+    # Install the lshw binary
     install -D -m 755 src/lshw "${ROOTDIR}/usr/bin/lshw"
+    
+    # Install the ID files to the proper location
+    mkdir -p "${ROOTDIR}/usr/share/lshw"
+    install -p -m 0644 pci.ids "${ROOTDIR}/usr/share/lshw/"
+    install -p -m 0644 usb.ids "${ROOTDIR}/usr/share/lshw/"
+    install -p -m 0644 oui.txt "${ROOTDIR}/usr/share/lshw/"
+    install -p -m 0644 manuf.txt "${ROOTDIR}/usr/share/lshw/"
+    install -p -m 0644 pnp.ids "${ROOTDIR}/usr/share/lshw/"
+    install -p -m 0644 pnpid.txt "${ROOTDIR}/usr/share/lshw/"
 }
 
 build_lshw() {
