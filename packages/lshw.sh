@@ -26,17 +26,7 @@ compile_lshw() {
 install_lshw() {
     echo "[+] installing lshw to initramfs"
     
-    # Install the lshw binary
-    install -D -m 755 src/lshw "${ROOTDIR}/usr/bin/lshw"
-    
-    # Install the ID files to the proper location
-    mkdir -p "${ROOTDIR}/usr/share/lshw"
-    install -p -m 0644 pci.ids "${ROOTDIR}/usr/share/lshw/"
-    install -p -m 0644 usb.ids "${ROOTDIR}/usr/share/lshw/"
-    install -p -m 0644 oui.txt "${ROOTDIR}/usr/share/lshw/"
-    install -p -m 0644 manuf.txt "${ROOTDIR}/usr/share/lshw/"
-    install -p -m 0644 pnp.ids "${ROOTDIR}/usr/share/lshw/"
-    install -p -m 0644 pnpid.txt "${ROOTDIR}/usr/share/lshw/"
+    make DESTDIR="${ROOTDIR}" install
 }
 
 build_lshw() {
