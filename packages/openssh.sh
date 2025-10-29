@@ -53,6 +53,7 @@ install_openssh() {
         echo "[+] hardening openssh server settings"
 
         # hardening authentication
+        sed -i 's/#Port 22/Port 34022/g' "${ROOTDIR}"/etc/ssh/sshd_config
         sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/g' "${ROOTDIR}"/etc/ssh/sshd_config
         sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' "${ROOTDIR}"/etc/ssh/sshd_config
         sed -i 's/#KbdInteractiveAuthentication yes/KbdInteractiveAuthentication no/g' "${ROOTDIR}"/etc/ssh/sshd_config
