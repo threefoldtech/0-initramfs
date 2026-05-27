@@ -143,7 +143,7 @@ docker run -ti --name zero-os-builder ubuntu:18.04 /bin/bash
 
 Requirements:
 - Use `ubuntu:18.04` (the only supported base image)
-- Mount this repository at `/0-initramfs`
+- Mount this repository at `/zos_initramfs`
 - Run `autobuild/tf-build.sh` to install dependencies and build everything
 - The result is located at `staging/vmlinuz.efi`
 
