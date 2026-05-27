@@ -1,10 +1,10 @@
-# 0-Initramfs
+# ZOS Initramfs
 
 Build tooling that assembles the initial RAM filesystem and bootable kernel image used to bring up Zero-OS nodes before the root filesystem is available.
 
 ## What this is
 
-0-Initramfs contains scripts and configuration to compile the Zero-OS kernel and build the initramfs image. It downloads, verifies, extracts, and compiles third-party software into a compressed initial RAM filesystem, then bundles it into an EFI-bootable kernel image.
+ZOS Initramfs contains scripts and configuration to compile the Zero-OS kernel and build the initramfs image. It downloads, verifies, extracts, and compiles third-party software into a compressed initial RAM filesystem, then bundles it into an EFI-bootable kernel image.
 
 This component is essential for the early boot stage of nodes: it provides the minimal user-space environment needed to initialize hardware, set up networking, and transition to the full operating system.
 
@@ -24,7 +24,7 @@ This component is essential for the early boot stage of nodes: it provides the m
 
 ZOS, also known as Zero-OS, is the operating system layer used to run and manage nodes. It provides the low-level runtime environment for workloads, networking, storage, and automation.
 
-0-Initramfs produces the kernel and initramfs that ZOS boots from. The resulting `vmlinuz.efi` is an EFI-bootable image containing the compressed initramfs, early user-space utilities, kernel modules, and initialization scripts required to start the node.
+ZOS Initramfs produces the kernel and initramfs that ZOS boots from. The resulting `vmlinuz.efi` is an EFI-bootable image containing the compressed initramfs, early user-space utilities, kernel modules, and initialization scripts required to start the node.
 
 ## Relation to ThreeFold
 
