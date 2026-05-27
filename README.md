@@ -1,259 +1,236 @@
-# Zero-OS Initramfs Builder
-This repository contains all that is needed to build the Zero-OS kernel and initramfs to start our root filesystem.
+# 0-Initramfs
 
-# Dependencies
-In order to compile all the initramfs without issues, you'll need to install build-time dependencies.
+Build tooling that assembles the initial RAM filesystem and bootable kernel image used to bring up Zero-OS nodes before the root filesystem is available.
 
-Please check the build process and use the dependencies listed there (see `autobuild` directory).
-If you want to install dependencies required inside an ubuntu 18.04 docker, you can use theses helpers:
-```
+## What this is
+
+0-Initramfs contains scripts and configuration to compile the Zero-OS kernel and build the initramfs image. It downloads, verifies, extracts, and compiles third-party software into a compressed initial RAM filesystem, then bundles it into an EFI-bootable kernel image.
+
+This component is essential for the early boot stage of nodes: it provides the minimal user-space environment needed to initialize hardware, set up networking, and transition to the full operating system.
+
+## What this repository contains
+
+- `initramfs.sh` — main build orchestration script
+- `autobuild/` — automated build helpers and dependency scripts
+- `extensions/` — custom extension scripts for additional build steps
+- Kernel configuration based on Arch Linux defaults with customizations for the target environment
+- Build support for debug and release modes
+- Mirror support for faster, reproducible builds
+- Static build support via musl libc for select binaries
+
+## Role in the stack
+
+## ZOS / Zero-OS
+
+ZOS, also known as Zero-OS, is the operating system layer used to run and manage nodes. It provides the low-level runtime environment for workloads, networking, storage, and automation.
+
+0-Initramfs produces the kernel and initramfs that ZOS boots from. The resulting `vmlinuz.efi` is an EFI-bootable image containing the compressed initramfs, early user-space utilities, kernel modules, and initialization scripts required to start the node.
+
+## Relation to ThreeFold
+
+This technology is used within the ThreeFold ecosystem and was first deployed on the ThreeFold Grid. The component itself is designed as reusable infrastructure technology and should be understood by its technical function first, independent of any specific deployment.
+
+## Ownership
+
+This repository is owned and maintained by TF-Tech NV, a Belgian company responsible for the development and maintenance of this technology.
+
+## Dependencies
+
+To compile the initramfs, install the build-time dependencies. See the `autobuild/` directory for helper scripts.
+
+On Ubuntu 18.04 inside a Docker container:
+
+```bash
 . autobuild/tf-build-deps.sh
 . autobuild/tf-build-settings.sh
 ```
 
-The first script will install dependencies, the second one will source and export needed variables.
+The first script installs dependencies; the second exports needed variables.
 
-There is a special `autobuild/tf-build-deps-clean.sh` which doesn't install Go nor Rust.
-Use it if you installed them already.
+Use `autobuild/tf-build-deps-clean.sh` if Go and Rust are already installed and should not be reinstalled.
 
 ## Privileges
 
-You need to have root privilege to be able to execute all the scripts.
+Root privileges are required. Some parts need to `chown`, `setuid`, `chmod`, and `mknod` files. Not running as root will fail the build.
 
-Some parts need to `chown/setuid/chmod/mknod` files as root.
+## What the build does
 
-Not running it as root will fails the build process.
+1. Download and verify checksums of all required archives
+2. Extract the archives
+3. Compile third-party software:
+   - busybox (full base system)
+   - fuse (library and userland tools)
+   - openssl and CA certificates
+   - util-linux
+   - e2fs-progs
+   - redis (server only)
+   - btrfs-progs
+   - libvirt and qemu
+   - parted
+   - dnsmasq (DHCP for containers)
+   - nftables (firewalling and routing)
+   - iproute2 (network namespace support)
+   - unionfs-fuse (internal fuse layers)
+   - eudev and kmod (hardware and module management)
+   - smartmontools (S.M.A.R.T monitoring)
+   - dmidecode (optional, for libvirt and management)
+   - openssh (client and server, for debug)
+   - netcat6 (libvirt migration)
+   - curl (libcurl for zflist)
+   - zflist (0-flist for on-the-fly flist creation)
+   - restic (container backup and upload)
+   - rtinfo (realtime monitoring)
+   - seektime (disk type detection)
+   - wireguard (VPN modules and userland tools)
+   - zlib (compression library)
+4. Integrate core components:
+   - Compile `0-fs`
+   - Compile `corex` (container remote control)
+5. Clean, remove unnecessary files, and strip binaries
+6. Copy system configuration and init scripts
+7. Compile the kernel (bundling the initramfs inside)
 
-# What does this script do ?
- - First, download and check checksum of all archives needed
- - Extract the archives
- - Compiles third-party software:
-    - busybox (for full base system)
-    - fuse (library and userland tools)
-    - openssl and ssl certificates (ca-certificates)
-    - util-linux (for `lsblk`, ...)
-    - e2fs-progs (for recent mkfs, etc.)
-    - redis (only the server is used)
-    - btrfs (btrfs-progs)
-    - libvirt and qemu
-    - parted (partition management)
-    - dnsmasq (used for dhcp on containers)
-    - nftables (used for firewalling and routing)
-    - iproute2 (used for network namespace support)
-    - unionfs-fuse (used for internal fuse layers)
-    - eudev and kmod (used for hardware and modules management)
-    - smartmontools (used for S.M.A.R.T monitoring)
-    - dmidecode (optional dependency for libvirt and management)
-    - openssh (client and server, for debug purpose)
-    - netcat6 (needed by libvirt migration)
-    - curl (needed for libcurl by zflist)
-    - zflist (0-flist for flist on-the-fly creation)
-    - restic (for container backup and upload)
-    - rtinfo (for realtime monitoring out-of-box)
-    - seektime (small tool to detect disk type)
-    - wireguard (netgen vpn, modules and userland tools)
-    - zlib (compression library)
- - Integrate core stuff:
-    - Compile `0-fs`
-    - Compile `corex` (container remote control)
- - Clean, remove useless files, optimize (strip) files
- - Copy system's configuration and init script
- - Compile the kernel (and bundles initramfs in the kernel)
+## Usage
 
+### Easy build
 
-# How to use it ?
-## Easy
-Just type: `bash initramfs.sh` and everything should be done in one shot.
-
-## Custom way
-
-The `initramfs.sh` script accepts multiple options:
-```
- -d --download    only download and extract archives
- -b --busybox     only (re)build busybox
- -t --tools       only (re)build tools (ssl, fuse, ...)
- -c --cores       only (re)build core0 and coreX
- -k --kernel      only (re)build kernel (produce final image)
- -M --modules     only (re)build kernel modules
- -e --extensions  only (re)build extensions
- -n --nomirror    don't use a mirror to download files (use upstream)
- -l --clean       only clean staging files (extracted sources)
- -m --mrproper    only remove staging files and clean the root
- -r --release     force a release build
- -h --help        display this help message
+```bash
+bash initramfs.sh
 ```
 
-The option `--kernel` is useful if you changes something on the root directory and want to rebuild the kernel (with the initramfs).
+### Custom build options
 
-This will produce a new image with the latest changes.
+```
+-d --download    only download and extract archives
+-b --busybox     only (re)build busybox
+-t --tools       only (re)build tools (ssl, fuse, ...)
+-c --cores       only (re)build core0 and coreX
+-k --kernel      only (re)build kernel (produce final image)
+-M --modules     only (re)build kernel modules
+-e --extensions  only (re)build extensions
+-n --nomirror    don't use a mirror to download files
+-l --clean       only clean staging files
+-m --mrproper    remove staging files and clean the root
+-r --release     force a release build
+-h --help        display help
+```
 
-In order to see how to use theses steps in a maintained way, please check GitHub Action build: `.github/workflows/kernel.yaml` file.
+The `--kernel` option is useful when you have changed something in the root directory and want to rebuild the kernel with the updated initramfs.
+
+See `.github/workflows/kernel.yaml` for a maintained CI build example.
 
 ## Build mode
-By default, initramfs will compiles in `debug` mode, which contains some extra debug options.
 
-To produce a `release` (aka **production** build), there is two options:
-- Using `--release` option during build
-- Override `BUILDMODE` variable defined on the top of `initramfs.sh`
+By default, the build runs in `debug` mode with extra debug options.
 
-This is obvious but, **do not use a debug version in a production environment.**
+To produce a `release` (production) build:
+- Use the `--release` flag
+- Or override the `BUILDMODE` variable at the top of `initramfs.sh`
+
+Do not use a debug build in production.
 
 ## Mirror
-By default, all files (except git upstream repositories) use a mirror to download files.
-This mirror url is set on the initramfs.sh script itself.
 
-You can use the `--nomirror` flag to disable mirror and use upstream website. If you want to build
-your own mirror, you can simply use this flag to create your local mirror (`--download --nomirror` flags).
+By default, archives use a mirror for faster downloads. The mirror URL is set in `initramfs.sh`.
 
-You just need to expose the `archives` directory to a via a http server to provide a mirror.
+Use `--nomirror` to download from upstream directly. To create your own mirror, run `--download --nomirror` and expose the `archives` directory via HTTP.
 
-## Build using a docker container
+## Docker build
 
-Create a docker container
-```shell
+```bash
 docker run -ti --name zero-os-builder ubuntu:18.04 /bin/bash
 ```
 
-- You need to use `ubuntu:18.04`, this is the only image we supports
-- Ensure to have the repository available on `/0-initramfs`
-- Run `autobuild/tf-build.sh` script. This script will install dependencies and build everything
-- The result of the build will be located in `staging/vmlinuz.efi`
+Requirements:
+- Use `ubuntu:18.04` (the only supported base image)
+- Mount this repository at `/0-initramfs`
+- Run `autobuild/tf-build.sh` to install dependencies and build everything
+- The result is located at `staging/vmlinuz.efi`
 
-**Warning:** if you don't use Ubuntu 18.04 (at least for now), some build _and_ runtime issue can occures.
+## Testing the kernel
 
-# I have the kernel, what can I do with it ?
-Just boot it. The kernel image is EFI bootable.
+### QEMU
 
-If you have an EFI Shell, just run the kernel like any EFI executable.
-If you don't have the shell or want to boot it automaticaly, put the kernel in `/EFI/BOOT/BOOTX64.EFI` in a FAT partition.
-
-## How to test the kernel with QEMU
-You can run the kernel and get the kernel output on your console from qemu directly
-```
-qemu-system-x86_64 -kernel vmlinuz.efi -m 2048 -enable-kvm -cpu host -net nic,model=e1000 -net bridge,br=vm0 -nographic -serial null -serial mon:stdio -append console=ttyS1,115200n8
+```bash
+qemu-system-x86_64 -kernel vmlinuz.efi -m 2048 -enable-kvm -cpu host \
+    -net nic,model=e1000 -net bridge,br=vm0 -nographic -serial null \
+    -serial mon:stdio -append console=ttyS1,115200n8
 ```
 
-## How to test the kernel with xhyve (OSX - no Apple Silicon chips)
-Install [xhyve](https://github.com/mist64/xhyve#installation).
-```
-xhyve -m 1G -c 2 -s 0:0,hostbridge -s 31,lpc -l com1 -l com2,stdio -s 2:0,virtio-net -f kexec,vmlinuz.efi,,earlyprintk=serial console=ttyS1 acpi=off
+### xhyve (macOS, Intel only)
+
+```bash
+xhyve -m 1G -c 2 -s 0:0,hostbridge -s 31,lpc -l com1 -l com2,stdio \
+    -s 2:0,virtio-net -f kexec,vmlinuz.efi,,earlyprintk=serial console=ttyS1 acpi=off
 ```
 
+### Creating a bootable EFI image
 
-## How to create a 'bootable' (EFI) image
-```shell
+```bash
 dd if=/dev/zero of=/tmp/zero-os.img bs=1M count=256
-mkfs.vfat /tmp/zero-os.iso
+mkfs.vfat /tmp/zero-os.img
 mkdir -p /mnt/zero-os-iso
-mount Zero-OS.iso /mnt/zero-os-iso
+mount /tmp/zero-os.img /mnt/zero-os-iso
 mkdir -p /mnt/zero-os-iso/EFI/BOOT
-cp staging/vmlinuz.efi /mnt/EFI/BOOT/BOOTX64.EFI
+cp staging/vmlinuz.efi /mnt/zero-os-iso/EFI/BOOT/BOOTX64.EFI
 umount /mnt/zero-os-iso
 ```
 
-# Extensions
+## Extensions
 
-You can add your own building extension-scripts to customize the initramfs.
+Custom build extensions can be added under the `extensions/` directory. During the build, after the `cores` step and before the `kernel` step, each extension directory is parsed and its `extension-name.sh` script is sourced (not forked), giving it access to all build variables.
 
-During the build process, after `cores` and before `kernel` process, all directories under `extensions` folder will be
-parsed and executed. To make a working extension, you just need a `extension-name.sh` script on the root directory of your extension.
+Useful variables available in extensions:
+- `DISTFILES` — downloaded source archives
+- `WORKDIR` — extracted and compiled sources
+- `ROOTDIR` — target root directory (initramfs contents)
 
-Exemple:
-```
-extensions/
-  my-extension/
-    some-stuff/
-    another-stuff/
-    my-extension.sh
-  another-extension/
-    README.md
-    another-extension.sh
+Rebuild extensions with:
+
+```bash
+initramfs.sh --extensions
 ```
 
-During the extension build phase, your extension script will be `sourced`, not forked, which means that you have access
-to all the variables used during the build script process.
+## Hot debug (inject files without rebuilding)
 
-You can use this extension way to copy extra configuration files, edit some default value on files, etc.
+In debug mode, you can override root filesystem files without rebuilding `vmlinuz.efi`.
 
-Here are some useful variables you can use on your extension, they all points to a directory:
-```
-DISTFILES  - sources archive downloaded
-WORKDIR    - extracted (and compiled) sources
-ROOTDIR    - the target root directory (contains the initramfs contents)
-```
-
-**Be careful, you could override some variable used by `initramfs.sh` itself and break the build process.**
-
-You can rebuild extensions by calling `initramfs.sh --extensions`
-
-# 'Hot' debug (inject files without rebuilding the vmlinuz)
-Rebuilding the vmlinuz can take relatively long time, when you want to only change one config file
-or do some small changes to the root image, this can become really painful to rebuild it each time.
-
-In debug mode (enabled by default now), you can override the root filesystem, the step before `core0` starts, which
-means that you can even overwrite `core0` binary.
-
-The `/init-debug` script is executed just before `/init` does the `switch_root` to the real filesystem, this script
-will search if `/dev/sda1` exists, if it exists, mounting it as `vfat` filesystem in read-only mode, checking for debug
-files then copying them.
-
-## Requirement
+Requirements:
 - A `vfat` filesystem on `/dev/sda1`
-- A file called `.zero-os-debug` on the root of `/dev/sda1`
-- The whole content of `/dev/sda1` will be copied (overwriting existing files) on the real root
+- A file called `.zero-os-debug` on the root of that filesystem
+- The entire contents of `/dev/sda1` are copied over the real root
 
-## QEMU
-This way enable you to easily overwrite the system with your debug file from your local machine, with qemu.
+With QEMU, add the debug drive as the **first** drive:
 
-Add `-drive file=fat:/debug-files,format=raw` as **first** drive argument to your qemu command line.
-
-### Quick help
+```bash
+qemu-system-x86_64 -drive file=fat:rw:/tmp/zero-os-debug,format=raw ...
 ```
+
+Quick setup:
+
+```bash
 mkdir /tmp/zero-os-debug/
 touch /tmp/zero-os-debug/.zero-os-debug
 echo World > /tmp/zero-os-debug/hello
-
-qemu-system-x86_64 -drive file=fat:rw:/tmp/zero-os-debug,format=raw $QEMU_CMD_LINE
 ```
-This will add `/hello` to your running Zero-OS.
 
 ## Static build
-To simplify some binaries update and compatibility for some container, some binaries (like `corex`) needs
-to be compiled as fully static. The best way to get a well-working static binary is using, eg, musl as
-libc to staticly compile the binary. We now support this.
 
-There are some special packages compiled using musl, theses packages ends with `-musl` name and a special
-root directory (defined by `MUSLROOTDIR`) create a root directory where a musl subsystem can be used.
+Some binaries (e.g., `corex`) are compiled as fully static using musl libc. Packages ending in `-musl` are compiled into a separate root directory (`MUSLROOTDIR`) for the musl subsystem. See `corex-musl` and `zlib-musl` as examples.
 
-You can take a look at `corex-musl` or `zlib-musl` to understand how this works.
+## Kernel configuration
 
-## Kernel Configuration
-Kernel configuration is based on Arch Linux default kernel config file.
-
-Here is what we changed:
-- Default kernel command line customized
-- Initramfs is compressed using XZ
+The kernel config is based on Arch Linux defaults with the following changes:
+- Custom default kernel command line
+- Initramfs compressed with XZ
 - Default hostname set to `zero-os`
 - Build version name set to `Zero-OS`
-- Change default initramfs path to `../../root` to include our root system
-- All `Sound drivers` disabled
-- All `Multimedia drivers` disabled
-- Inputs `Mice`, `Joystick`, `Touchscreen`, `Tablets` and `Miscellaneous devices` disabled
-- All `Special HID drivers`
-- All `CAN bus subsystem` disabled
-- All `Amateur Radio support` disabled
-- All `IrDA (infrared)` and `NFC subsystem` disabled
-- All `Bluetooth` and `CAIF` disabled
-- All `Wireless`, `WiMAX` and `RF switch` disabled
-- All `Data acquision support (comedi)` disabled
-- Filesystems `ext4`, `Raiserfs`, `JFS`, `XFS`, `GFS2`, `OCFS2`, `NILFS2`, `F2FS`, `NTFS` disabled
+- Initramfs path adjusted to `../../root`
+- Sound, multimedia, mice, joystick, touchscreen, tablet, HID, CAN bus, amateur radio, IrDA, NFC, Bluetooth, CAIF, wireless, WiMAX, RF switch, and comedi drivers disabled
+- Filesystems `ext4`, `Reiserfs`, `JFS`, `XFS`, `GFS2`, `OCFS2`, `NILFS2`, `F2FS`, `NTFS` disabled
 - Modules are not compressed
-
-# Repository Owner
-- [Maxime Daniel](https://github.com/maxux), Telegram: [@maxux](http://t.me/maxux)
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-Copyright (c) TFTech NV.
-
+This project is licensed under the Apache License 2.0 — see the [LICENSE](LICENSE) file for details.
+Copyright (c) TF-Tech NV.
