@@ -1,6 +1,6 @@
 ZFS_VERSION="1.1.1"
 ZFS_HASH="974b8dc45ae9c1b00238a79b0f4fc9de"
-ZFS_BINARY="https://github.com/threefoldtech/zos_rfs/releases/download/v${ZFS_VERSION}/rfs"
+ZFS_BINARY="https://github.com/threefoldtech/rfs/releases/download/v${ZFS_VERSION}/rfs"
 
 download_zfs() {
     download_file ${ZFS_BINARY} ${ZFS_HASH} "rfs-${ZFS_VERSION}"
