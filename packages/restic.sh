@@ -1,5 +1,5 @@
-RESTIC_VERSION="0.9.2"
-RESTIC_CHECKSUM="dd08f71f2df5901d6b3e3faf3b4f6d2a"
+RESTIC_VERSION="0.9.3"
+RESTIC_CHECKSUM="6818e3744cec489a7f0da4f0e3beafeb"
 RESTIC_LINK="https://github.com/restic/restic/archive/v${RESTIC_VERSION}.tar.gz"
 
 download_restic() {
